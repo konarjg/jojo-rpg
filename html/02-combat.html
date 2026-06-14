@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chapter 2 — Combat</title>
+  <link rel="stylesheet" href="../css/rulebook.css">
+</head>
+<body>
+  <div class="nav-bar">
+    <span>INTRO</span> | <span>CORE RULES</span> | <span class="active">COMBAT</span> | <span>CHARACTER</span> | <span>EQUIPMENT</span> | <span>SURVIVAL</span> | <span>GM</span> | <span>NPCs</span>
+  </div>
+  <div class="chapter-marker">◆ Chapter Two ◆</div>
+  <h1 class="chapter-title">Combat</h1>
+
+  <h2>Combat Sequence</h2>
+  <ol class="rule-steps">
+    <li>Initiator takes one turn before round 1.</li>
+    <li>Order by Initiative (PER + AGI + modifiers), highest first.</li>
+    <li>Each combatant takes one turn per round (1 minor + 1 major action).</li>
+    <li>Repeat until conflict ends.</li>
+  </ol>
+
+  <h2>Defense</h2>
+  <p>Attack difficulty = target's <strong>Defense</strong> (+ range, stealth, called shot modifiers).</p>
+  <ul class="bullets">
+    <li>AGI 1–8: Defense = 1</li>
+    <li>AGI 9+: Defense = 2</li>
+  </ul>
+
+  <h2>Making an Attack</h2>
+  <ol class="rule-steps">
+    <li>Choose weapon and target (optional: called shot +1 difficulty).</li>
+    <li>Roll attribute + skill; difficulty = Defense (+ range for ranged).</li>
+    <li>On hit, roll hit location (1d20 table) unless location was called.</li>
+    <li>Roll weapon D/C damage; subtract DR for damage type and location.</li>
+    <li>Expend ammunition for ranged attacks as applicable.</li>
+  </ol>
+
+  <h3>Attack Skills</h3>
+  <table>
+    <tr><th>Attack</th><th>Test</th></tr>
+    <tr><td>Melee weapon</td><td>STR + Melee Weapons</td></tr>
+    <tr><td>Unarmed</td><td>STR + Unarmed</td></tr>
+    <tr><td>Small Guns</td><td>AGI + Small Guns</td></tr>
+    <tr><td>Big Guns</td><td>END + Big Guns</td></tr>
+    <tr><td>Energy Weapons</td><td>PER + Energy Weapons</td></tr>
+    <tr><td>Thrown</td><td>AGI + Throwing or PER + Explosives</td></tr>
+    <tr><td>Hamon</td><td>END + Hamon (energy)</td></tr>
+    <tr><td>Spin</td><td>AGI + Spin or STR + Spin</td></tr>
+    <tr><td>Stand (Power)</td><td>TN = Power (numeric)</td></tr>
+    <tr><td>Stand (Precision)</td><td>TN = Precision (numeric)</td></tr>
+  </table>
+
+  <h3>Range Modifiers</h3>
+  <p>Ranged and thrown attacks use the weapon's <strong>ideal range</strong> (Close, Medium, Long, or Extreme). Difficulty increases by <strong>+1 per range band</strong> away from ideal — whether the target is closer or farther.</p>
+  <table>
+    <tr><th>Weapon Range</th><th>Target at Close</th><th>Target at Medium</th><th>Target at Long</th><th>Target at Extreme</th></tr>
+    <tr><td><strong>Close</strong> (same zone)</td><td>+0</td><td>+1</td><td>+2</td><td>+3</td></tr>
+    <tr><td><strong>Medium</strong> (adjacent zone)</td><td>+1</td><td>+0</td><td>+1</td><td>+2</td></tr>
+    <tr><td><strong>Long</strong> (2 zones)</td><td>+2</td><td>+1</td><td>+0</td><td>+1</td></tr>
+    <tr><td><strong>Extreme</strong> (3+ zones)</td><td>+3</td><td>+2</td><td>+1</td><td>+0</td></tr>
+  </table>
+  <p>Add these modifiers to the attack difficulty (alongside Defense, cover, called shots, etc.).</p>
+  <p><strong>Reach:</strong> If an enemy is within Reach, non-melee ranged attacks and other non-melee tests against them gain <strong>+2 difficulty</strong> (stacks with the table above).</p>
+  <div class="example">
+    A hunting rifle (Long range) at Medium distance: +1 difficulty. The same rifle at Close range: +2 difficulty. A combat shotgun (Close range) at Long distance: +2 difficulty.
+  </div>
+
+  <h3>Hit Locations (d20)</h3>
+  <table>
+    <tr><th>Roll</th><th>Location</th></tr>
+    <tr><td>1–2</td><td>Head</td></tr>
+    <tr><td>3–8</td><td>Torso</td></tr>
+    <tr><td>9–11</td><td>Left Arm</td></tr>
+    <tr><td>12–14</td><td>Right Arm</td></tr>
+    <tr><td>15–17</td><td>Left Leg</td></tr>
+    <tr><td>18–20</td><td>Right Leg</td></tr>
+  </table>
+
+  <h2>Combat Dice (D/C)</h2>
+  <table>
+    <tr><th>d6</th><th>Result</th></tr>
+    <tr><td>1</td><td>1 damage</td></tr>
+    <tr><td>2</td><td>2 damage</td></tr>
+    <tr><td>3–4</td><td>Nothing</td></tr>
+    <tr><td>5–6</td><td>1 damage + trigger damage effects</td></tr>
+  </table>
+
+  <div class="rule-callout">
+    <h3>◆ Damage Types &amp; Resolution ◆</h3>
+    <table>
+      <tr><th>Type</th><th>Used For</th><th>DR Notes</th></tr>
+      <tr><td><strong>Physical</strong></td><td>Ballistics, blades, blunt force, most stand attacks</td><td>Reduced by physical DR on hit location</td></tr>
+      <tr><td><strong>Energy</strong></td><td>Lasers, plasma, fire, Hamon</td><td>Reduced by energy DR; Hamon ×2 vs vampires</td></tr>
+      <tr><td><strong>Poison</strong></td><td>Toxins, venom, contaminated hazards</td><td>Reduced by poison DR (body-wide on sheet)</td></tr>
+      <tr><td><strong>Sunlight</strong></td><td>Direct sun, Hamon bursts, sunlight-tagged attacks</td><td><strong>Energy subtype — ignores vampire DR</strong>; uses Sunlight DR track</td></tr>
+    </table>
+    <div class="rule-highlight">
+      <div class="highlight-box">
+        <strong>Critical Hit</strong>
+        5+ damage <em>after DR</em> on a location → <strong>injury</strong> on that location
+      </div>
+      <div class="highlight-box">
+        <strong>Dying</strong>
+        At <strong>0 HP</strong>: unconscious, no actions. Each turn: <strong>END + Survival</strong> (difficulty = number of injuries) or die
+      </div>
+    </div>
+  </div>
+
+  <h3>Damage Effects</h3>
+  <p>Weapon and stand attacks list <strong>damage effects</strong> (Burst, Vicious, etc.). When you roll damage D/C, each die showing an <strong>Effect</strong> (5–6) triggers every effect on that attack. Multiple Effects on one roll stack — two Effects on a Piercing 1 weapon ignore 2 DR. Full rules in <strong>Chapter 4 — Equipment</strong> and the appendices.</p>
+
+  <h2>Injuries &amp; Dying</h2>
+
+  <h3>Critical Hits &amp; Injuries</h3>
+  <p>If a single attack deals <strong>5 or more damage after DR</strong> to one hit location, that location suffers an <strong>injury</strong>. Injuries impose ongoing penalties until properly treated.</p>
+  <table>
+    <tr><th>Location</th><th>Injury Effect</th></tr>
+    <tr><td>Arm</td><td>Cannot use that arm; drop held item</td></tr>
+    <tr><td>Leg</td><td>Fall <strong>prone</strong>; lose Sprint; Move costs a major action</td></tr>
+    <tr><td>Torso</td><td><strong>2 D/C bleed</strong> at end of each of your turns</td></tr>
+    <tr><td>Head</td><td>Lose your <strong>next turn</strong>; vision-based tests +2 difficulty</td></tr>
+  </table>
+  <p>Penalties last until the injury is <strong>treated</strong> (First Aid) and then fully <strong>recovered</strong> (rest — see Chapter 5).</p>
+
+  <h3>Dying</h3>
+  <p>When a character is reduced to <strong>0 HP</strong>, they immediately suffer an <strong>injury</strong> to the location just struck, fall <strong>prone</strong>, become <strong>unconscious</strong>, and begin <strong>dying</strong>.</p>
+  <ul class="bullets">
+    <li>If the attack that reached 0 HP was also a <strong>critical hit</strong>, the character suffers <strong>two injuries</strong>: one for the critical hit and one for hitting 0 HP (both on the location struck unless the GM rules otherwise).</li>
+    <li>While dying: <strong>no actions</strong> (minor or major). First Aid cannot restore HP — only <strong>stabilize</strong> (below).</li>
+    <li>At the <strong>start of each of the dying character's turns</strong> in initiative, their player rolls <strong>END + Survival</strong>. Difficulty = <strong>number of injuries</strong> currently suffered. Complication range <strong>19–20</strong>. On a pass, they remain dying. On a fail, they <strong>die</strong>.</li>
+    <li>If a dying character suffers <strong>any further damage</strong>, they immediately gain <strong>one additional injury</strong> (in addition to any injury from a new critical hit).</li>
+  </ul>
+
+  <div class="rule-callout">
+    <h3>◆ Stabilizing the Dying ◆</h3>
+    <p>A dying character can be pulled back from death by stabilizing — restoring them to <strong>1 HP</strong> and ending the END + Survival death saves.</p>
+    <table>
+      <tr><th>Method</th><th>Action</th><th>Test / Effect</th></tr>
+      <tr><td><strong>First Aid</strong></td><td>Major action</td><td>INT + Medicine, difficulty = patient's injuries (+1 if treating yourself). On success, choose one: <strong>stabilize</strong> (1 HP, no longer dying), heal HP equal to your Medicine rank, or <strong>treat one injury</strong></td></tr>
+      <tr><td><strong>Medic</strong> perk</td><td>First Aid</td><td>Stabilize a dying patient at <strong>difficulty 0</strong></td></tr>
+      <tr><td><strong>Rokakaka Fruit</strong></td><td>Minor action</td><td>Stabilize at 1 HP, restore 4 HP, or treat one injury; then roll Equivalent Exchange (see equipment)</td></tr>
+    </table>
+    <p>After stabilization: the character remains <strong>unconscious</strong> until someone spends <strong>1 AP</strong> to rouse them, or until they receive further healing. They are no longer dying and resume normal turn options once awake.</p>
+  </div>
+
+  <h3>Treated Injuries</h3>
+  <p>A successful First Aid roll can <strong>treat</strong> an injury so its penalties no longer apply. The injury is not fully healed — only patched.</p>
+  <p>If the character later takes damage to a location with a <strong>treated</strong> injury, roll <strong>1 D/C</strong> after applying damage. On an <strong>Effect</strong> (5–6), the wound reopens and the injury penalties return.</p>
+
+  <h3>Major Actions</h3>
+  <ul class="bullets">
+    <li><strong>Attack</strong> — melee or ranged</li>
+    <li><strong>Defend</strong> — AGI + Athletics vs current Defense; success +1 Defense (+1 more for 2 AP)</li>
+    <li><strong>First Aid</strong> — INT + Medicine</li>
+    <li><strong>Stand Attack / Stand Ability</strong> — see below</li>
+    <li><strong>Ready, Rally, Sprint, Assist, Pass</strong> — as core rules</li>
+  </ul>
+
+  <h3>Minor Actions</h3>
+  <ul class="bullets">
+    <li>Aim, Draw Item, Move (1 zone), Interact, Take Item (Rokakaka, etc.)</li>
+    <li><strong>Summon Stand</strong> — first activation in fight</li>
+    <li><strong>Hide Stand</strong> — stand inactive but ready</li>
+  </ul>
+
+  <h2>Stands in Combat</h2>
+  <p>Stands use <strong>Power, Speed, Range, Durability, Precision, Development Potential</strong> — not S.P.E.C.I.A.L. User characters keep normal attributes for personal actions.</p>
+
+  <h3>Stand Stat Grades</h3>
+  <table>
+    <tr><th>Grade</th><th>Value</th><th>Grade</th><th>Value</th></tr>
+    <tr><td>∞</td><td>12</td><td>C</td><td>6</td></tr>
+    <tr><td>A</td><td>10</td><td>D</td><td>4</td></tr>
+    <tr><td>B</td><td>8</td><td>E</td><td>2</td></tr>
+    <tr><td>?</td><td>6 (until revealed)</td><td></td><td></td></tr>
+  </table>
+
+  <h3>Stand Stat Roles</h3>
+  <table>
+    <tr><th>Stat</th><th>Mechanical Role</th></tr>
+    <tr><td>Power</td><td>Melee/destructive attack TN; +1 D/C if ≥ A, +2 if ∞</td></tr>
+    <tr><td>Speed</td><td>+Speed÷4 (round down) to user Initiative while active; Stand Defense 2 if ≥ A else 1</td></tr>
+    <tr><td>Range</td><td>Max attack band: E–D Close, C Medium, B Long, A/∞ Extreme</td></tr>
+    <tr><td>Durability</td><td>Stand HP = value + user level; DR = value÷4 (round down)</td></tr>
+    <tr><td>Precision</td><td>Ranged/special attack TN</td></tr>
+    <tr><td>Development Potential</td><td>Gain stand ability on level-up; drops one grade (A→B→…→∅)</td></tr>
+  </table>
+
+  <h3>Stand Turn Structure</h3>
+  <ul class="bullets">
+    <li>Stand acts on <strong>user's turn</strong> — no separate initiative</li>
+    <li><strong>Stand Attack</strong> = major action</li>
+    <li>Extra stand attack: 2 AP (+1 difficulty); user + stand same turn: 3 AP (both +1 difficulty)</li>
+    <li>Stand moves with user within Range</li>
+  </ul>
+
+  <h3>Visibility</h3>
+  <ul class="bullets">
+    <li>Stand users, Hamon rank ≥1, Spin rank ≥1 see stands automatically</li>
+    <li>Others: PER + Survival diff 2 to sense; −2 to hit stand; diff 3 same round to target stand</li>
+  </ul>
+
+  <h3>Stand Types</h3>
+  <table>
+    <tr><th>Type</th><th>Reach</th><th>User Defense Bonus</th></tr>
+    <tr><td>Close-Range</td><td>Reach / Close</td><td>Normal; +1 diff to hit user at range</td></tr>
+    <tr><td>Remote</td><td>Per Range stat</td><td>+1 vs ranged if stand in other zone</td></tr>
+    <tr><td>Automatic</td><td>Per profile</td><td>+2 while user hidden (PER+Survival 3 to find)</td></tr>
+    <tr><td>Colony</td><td>Multi-zone</td><td>+2 while concealed</td></tr>
+    <tr><td>Tool</td><td>Variable</td><td>No stand HP — bonuses only</td></tr>
+  </table>
+
+  <h3>Stand Damage</h3>
+  <ul class="bullets">
+    <li>Attacker chooses user or stand as damage target after hit</li>
+    <li>Stand HP 0: dismissed until scene end; user cannot use stand</li>
+    <li>User death = stand vanishes; stand destroyed ≠ user death</li>
+  </ul>
+
+  <h3>Stand Abilities (AP Cost)</h3>
+  <table>
+    <tr><th>Cost</th><th>Example</th></tr>
+    <tr><td>1 AP</td><td>Star Finger, single special attack</td></tr>
+    <tr><td>2 AP</td><td>The World (1 round time stop), King Crimson (erase action)</td></tr>
+    <tr><td>3 AP</td><td>ACT evolution mid-scene</td></tr>
+    <tr><td>1×/fight</td><td>Bite the Dust (after setup)</td></tr>
+  </table>
+
+  <h3>Hamon / Spin vs Stands</h3>
+  <ul class="bullets">
+    <li>Hamon: normal attacks vs stand or user; ×2 energy vs vampires</li>
+    <li>Spin: physical; Piercing abilities per profile</li>
+  </ul>
+
+  <h2>Healing in Combat</h2>
+  <p>During a fight, only quick interventions are available. Full recovery happens outside combat (Chapter 5).</p>
+  <ul class="bullets">
+    <li><strong>First Aid</strong> (major action): INT + Medicine — stabilize dying, heal HP (= Medicine rank), or treat one injury. See <strong>Injuries &amp; Dying</strong> above for difficulties.</li>
+    <li><strong>Rokakaka Fruit</strong> (minor action): 4 HP, treat 1 injury, or stabilize at 1 HP; then roll 1 D/C — Effect = Equivalent Exchange complication</li>
+    <li><strong>Bandage</strong> (minor action): 1 HP; cannot stabilize or treat injuries</li>
+    <li><strong>Blood Pack</strong> (minor action): vampire only, restore 3 HP</li>
+  </ul>
+  <p>Dying characters cannot regain HP from First Aid until stabilized. Allies may use the <strong>Assist</strong> action to add dice to Medicine tests.</p>
+
+  <h2>Environment</h2>
+  <p>Combat locations are divided into <strong>zones</strong> (rooms, street sections, rooftops, etc.). Range bands measure distance between attacker and target across those zones.</p>
+
+  <h3>Zones &amp; Range Bands</h3>
+  <table>
+    <tr><th>Band</th><th>Distance</th><th>Notes</th></tr>
+    <tr><td><strong>Reach</strong></td><td>Arm's length</td><td>Melee range; +2 difficulty to non-melee tests vs targets in Reach</td></tr>
+    <tr><td><strong>Close</strong></td><td>Same zone</td><td>Default for most pistols and melee</td></tr>
+    <tr><td><strong>Medium</strong></td><td>Adjacent zone</td><td>One zone away</td></tr>
+    <tr><td><strong>Long</strong></td><td>2 zones</td><td>Snipers, rifles</td></tr>
+    <tr><td><strong>Extreme</strong></td><td>3+ zones</td><td>Longest practical shots</td></tr>
+  </table>
+  <p>On a <strong>Move</strong> minor action you enter a zone and may position anywhere in it (including Reach of objects or enemies). <strong>Sprint</strong> reaches up to two zones away.</p>
+
+  <h3>Cover</h3>
+  <p>Cover is the primary way the environment reduces damage. Objects between attacker and target provide <strong>bonus DR</strong> against <strong>physical and energy</strong> attacks by rolling extra D/C dice — not a flat number, and not added to attack difficulty.</p>
+
+  <ol class="rule-steps">
+    <li><strong>Qualify for cover:</strong> The character must be behind an object that <strong>obscures the hit location</strong> about to be struck. A waist-high wall protects the torso but not the head on a called head shot. If cover blocks the attacker's line of sight entirely, the target <strong>cannot be attacked</strong> until they move or the cover is removed.</li>
+    <li><strong>Roll cover D/C:</strong> When a qualifying physical or energy attack hits, roll the cover's listed D/C dice <em>before</em> subtracting DR. Add the total to the target's DR for <strong>that attack only</strong> (armor DR + cover DR + type matching).</li>
+    <li><strong>Resolve damage:</strong> Subtract combined DR from damage as normal. Cover does not apply to poison, sunlight, or other types unless the GM rules the material blocks them (e.g. lead glass for sunlight — rare).</li>
+    <li><strong>Prone:</strong> While prone, a character behind cover may <strong>re-roll their cover D/C</strong> once and keep the better result.</li>
+    <li><strong>Breaking cover:</strong> The <strong>Breaking</strong> damage effect permanently reduces cover by 1 D/C die per Effect rolled (see Chapter 4). Reduced cover persists until repaired (INT + Repair, difficulty 2) or the object is destroyed.</li>
+  </ol>
+
+  <table>
+    <tr><th>Cover Type</th><th>D/C Dice</th><th>Examples</th></tr>
+    <tr><td>Light</td><td>1 D/C</td><td>Bushes, curtains, folding screen, thin wooden door, café table</td></tr>
+    <tr><td>Standard</td><td>2 D/C</td><td>Thick wood, rubble pile, sedan door, brick low wall, market stall</td></tr>
+    <tr><td>Heavy</td><td>3 D/C</td><td>Concrete pillar, marble statue, steel shutter, bank counter</td></tr>
+    <tr><td>Fortified</td><td>4 D/C</td><td>Vault door (ajar), sandbag emplacement, reinforced blast wall</td></tr>
+  </table>
+
+  <div class="example">
+    <strong>Example:</strong> Jotaro ducks behind a marble pillar (3 D/C) as DIO shoots. The hit lands on the torso for 4 damage. Jotaro has 1 physical DR from his coat. Cover rolls 2 + 1 + 0 = 3. Total DR = 1 + 3 = 4. He takes 0 damage; the pillar's cover is still intact unless DIO's attack had Breaking.
+  </div>
+
+  <div class="sidebar">
+    <strong>Stands &amp; cover:</strong> A stand in a separate zone does not grant cover to its user unless the stand physically interposes (GM discretion). Remote stands attacking from behind environmental cover use the same cover rules for attacks <em>against</em> the stand if it can be targeted.
+  </div>
+
+  <h3>Difficult Terrain &amp; Obstacles</h3>
+  <p>Moving out of difficult terrain or across an obstacle between zones costs <strong>extra AP</strong> in addition to the movement action. If you lack AP, use <strong>Rally</strong> (STR + Athletics, difficulty 0) to generate AP first.</p>
+  <table>
+    <tr><th>Terrain / Obstacle</th><th>Extra AP</th></tr>
+    <tr><td>Thick mud, loose sand, stairs</td><td>+1</td></tr>
+    <tr><td>Swamp, unstable rubble, waist-high barrier</td><td>+2</td></tr>
+    <tr><td>Steep slope, fast water, chest-high wall or long jump</td><td>+3</td></tr>
+  </table>
+  <p><strong>Light Step</strong> perk ignores difficult terrain AP costs.</p>
+
+  <h3>Environmental Conditions</h3>
+  <p>Conditions may affect whole scenes or specific zones.</p>
+  <table>
+    <tr><th>Condition</th><th>Effect</th></tr>
+    <tr><td>Poor light / darkness</td><td>+1 to +3 difficulty on PER-based vision tests and ranged attacks</td></tr>
+    <tr><td>Fog / rain</td><td>+1 difficulty on ranged attacks at Medium+ range; heavy rain +1 to Energy Weapons</td></tr>
+    <tr><td>Direct sunlight (vampires)</td><td>See Chapter 5 — sunlight damage ignores DR</td></tr>
+  </table>
+
+  <h3>Hazards</h3>
+  <p>Hazards inflict damage when a creature enters or starts its turn in the zone. Typical saves: <strong>AGI + Athletics</strong> or <strong>END + Survival</strong>, difficulty set by the hazard.</p>
+  <table>
+    <tr><th>Hazard</th><th>Damage</th></tr>
+    <tr><td>Open flame</td><td>2 D/C energy</td></tr>
+    <tr><td>Raging fire</td><td>3 D/C Persistent energy</td></tr>
+    <tr><td>Falling (per zone)</td><td>3 D/C Stun physical</td></tr>
+    <tr><td>Live wire / discharge</td><td>3 D/C Stun energy</td></tr>
+    <tr><td>Chemical spill</td><td>2 D/C poison</td></tr>
+    <tr><td>Collapsing debris (trap)</td><td>3–6 D/C physical; AGI + Athletics diff 2 to halve</td></tr>
+  </table>
+  <p><strong>Dangerous objects</strong> (mines, tripwires, pressure plates) trigger on entry or on a complication; PER + Survival or AGI + Athletics to avoid before damage resolves.</p>
+
+  <div class="page-footer">— Chapter 2 —</div>
+</body>
+</html>

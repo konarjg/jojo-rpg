@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chapter 4 — Equipment</title>
+  <link rel="stylesheet" href="../css/rulebook.css">
+</head>
+<body>
+  <div class="nav-bar">
+    <span>INTRO</span> | <span>CORE RULES</span> | <span>COMBAT</span> | <span>CHARACTER</span> | <span class="active">EQUIPMENT</span> | <span>SURVIVAL</span> | <span>GM</span> | <span>NPCs</span>
+  </div>
+  <div class="chapter-marker">◆ Chapter Four ◆</div>
+  <h1 class="chapter-title">Equipment</h1>
+
+  <h2>Money</h2>
+  <p>Track wealth as a single abstract total. Rarity 0–5 sets base cost. Wealth rating for NPCs uses the same dice as money loot.</p>
+
+  <h2>Weapon Qualities</h2>
+  <p><strong>Fire Rate (FR):</strong> Ranged attacks may fire up to FR times per major action; each shot after the first adds +1 difficulty unless a perk says otherwise. Each shot expends ammunition.</p>
+  <p><strong>Range:</strong> Close (C), Medium (M), Long (L), Extreme (X). Use the <strong>Range Modifiers</strong> table in Chapter 2 for attack difficulty.</p>
+  <p><strong>Two-Handed:</strong> Requires two hands; cannot use a shield or second weapon.</p>
+  <p><strong>Inaccurate:</strong> Cannot benefit from Aim; called shots cost +2 difficulty instead of +1.</p>
+  <p><strong>Blast:</strong> Hits all targets in a zone; each defends separately. Cover applies.</p>
+  <p><strong>Throwing:</strong> Usable at thrown range with AGI + Throwing; uses listed damage and effects.</p>
+
+  <h2>Damage Effects</h2>
+  <p>Listed on weapons, explosives, stand attacks, and hazards. Trigger only when one or more <strong>Effects</strong> appear on the damage D/C roll (each die showing 5–6). Count the total number of Effects rolled — that number applies to every effect on the attack.</p>
+
+  <table>
+    <tr><th>Effect</th><th>Rule</th></tr>
+    <tr>
+      <td><strong>Burst</strong></td>
+      <td>For each Effect rolled, the attack hits <strong>one additional target</strong> within Close range of the primary target. Resolve each hit separately (same difficulty as the original attack). Each extra target costs <strong>1 additional ammunition</strong> from the weapon. Burst cannot hit the same target twice.</td>
+    </tr>
+    <tr>
+      <td><strong>Breaking</strong></td>
+      <td>For each Effect rolled, permanently reduce the target's <strong>cover</strong> by 1 D/C of damage reduction. If the target has no cover, instead permanently reduce the <strong>DR of the location struck</strong> by 1 — physical damage reduces physical DR only, energy reduces energy DR, sunlight reduces sunlight DR, poison reduces poison DR. Armor DR can be restored with INT + Repair (difficulty 2) and appropriate parts.</td>
+    </tr>
+    <tr>
+      <td><strong>Persistent</strong></td>
+      <td>If one or more Effects are rolled, the target suffers the weapon's <strong>full damage again</strong> (re-roll D/C, apply DR) at the <strong>end of their next turn</strong> and at the end of each subsequent turn for a number of rounds equal to the Effects rolled. A variant type may be noted in brackets — e.g. <em>Persistent Energy</em>, <em>Persistent Sunlight</em>, <em>Persistent Poison</em> — in which case the recurring damage uses that type instead of the weapon's base type. The target may spend a <strong>major action</strong> to attempt to end Persistent damage early: END + Survival (or INT + Medicine for poison), difficulty = number of Effects originally rolled.</td>
+    </tr>
+    <tr>
+      <td><strong>Piercing X</strong></td>
+      <td>For each Effect rolled, <strong>ignore X points of DR</strong> on the hit location, where X is the rating (Piercing 1, Piercing 2, etc.). Apply after determining location; only affects DR matching the attack's damage type unless the profile states otherwise. Hamon and sunlight damage always ignore DR against vampires regardless of Piercing.</td>
+    </tr>
+    <tr>
+      <td><strong>Spread</strong></td>
+      <td>For each Effect rolled, the attack inflicts <strong>one additional hit</strong> on the <strong>same target</strong>. Each extra hit deals <strong>half the rolled damage</strong> (round down) and strikes a <strong>random location</strong> (roll hit location), even if the initial attack was a called shot. DR applies separately to each hit.</td>
+    </tr>
+    <tr>
+      <td><strong>Stun</strong></td>
+      <td>If one or more Effects are rolled, the target <strong>cannot take their normal minor and major actions</strong> on their next turn. They may still spend <strong>AP</strong> to buy extra dice or take bonus actions granted by perks or stand abilities. Standing up from prone if knocked down still costs actions as normal once the stun ends.</td>
+    </tr>
+    <tr>
+      <td><strong>Vicious</strong></td>
+      <td>For each Effect rolled, the attack inflicts <strong>+1 damage</strong> after the D/C roll is totaled and before DR is subtracted. Vicious stacks with critical injuries and other bonuses.</td>
+    </tr>
+    <tr>
+      <td><strong>Sunlight</strong></td>
+      <td>Replaces <em>Radioactive</em> from the base 2d20 rules. For each Effect rolled, the target suffers <strong>1 additional sunlight damage</strong> after normal damage from the attack is applied. Sunlight is an <strong>energy subtype</strong>: it <strong>ignores vampire DR</strong>, uses the Sunlight DR track on the character sheet, and is not reduced by normal energy DR unless the profile says otherwise. Against non-vampires, sunlight damage counts as energy damage. Hamon exposure uses energy/sunlight rules against vampires (×2 damage where noted). Track sunlight damage separately when an attack mixes types (e.g. 4 physical + 1 sunlight from one roll).</td>
+    </tr>
+  </table>
+
+  <div class="example">
+    <strong>Example:</strong> A Tommy Gun (4 D/C, Burst) hits with 2 Effects on the damage roll. The primary target takes full damage. Two additional targets within Close range are also hit; each takes a fresh 4 D/C roll, and 2 extra rounds of ammunition are spent.
+  </div>
+
+  <div class="sidebar">
+    <strong>Stacking:</strong> An attack can have multiple effects (e.g. <em>4 D/C Energy Persistent Sunlight</em>). Roll damage once; each Effect triggers <em>all</em> listed qualities. A Plasma Rifle with Persistent and 2 Effects both recurs for 2 rounds <em>and</em> benefits from any other listed effects on the same roll.
+  </div>
+
+  <h2>Small Guns</h2>
+  <table>
+    <tr><th>Weapon</th><th>Damage</th><th>Effects</th><th>Range</th><th>FR</th><th>Rarity</th><th>Cost</th></tr>
+    <tr><td>Revolver .38</td><td>3 D/C</td><td>—</td><td>C</td><td>1</td><td>1</td><td>25</td></tr>
+    <tr><td>9mm Pistol</td><td>3 D/C</td><td>—</td><td>C</td><td>2</td><td>1</td><td>30</td></tr>
+    <tr><td>Tommy Gun</td><td>4 D/C</td><td>Burst</td><td>C</td><td>3</td><td>3</td><td>120</td></tr>
+    <tr><td>Hunting Rifle</td><td>4 D/C</td><td>—</td><td>L</td><td>1</td><td>2</td><td>80</td></tr>
+    <tr><td>Combat Shotgun</td><td>5 D/C</td><td>Spread</td><td>C</td><td>1</td><td>3</td><td>150</td></tr>
+    <tr><td>Machine Gun</td><td>5 D/C</td><td>Burst</td><td>M</td><td>3</td><td>4</td><td>300</td></tr>
+  </table>
+
+  <h2>Big Guns</h2>
+  <table>
+    <tr><th>Weapon</th><th>Damage</th><th>Range</th><th>FR</th><th>Rarity</th></tr>
+    <tr><td>Rocket Launcher</td><td>6 D/C Blast</td><td>L</td><td>1</td><td>5</td></tr>
+    <tr><td>Heavy Machine Gun</td><td>6 D/C Burst</td><td>M</td><td>4</td><td>4</td></tr>
+  </table>
+
+  <h2>Energy Weapons</h2>
+  <table>
+    <tr><th>Weapon</th><th>Damage</th><th>Range</th><th>Notes</th></tr>
+    <tr><td>Red Stone Laser</td><td>4 D/C Energy</td><td>M</td><td>Part 2; rare</td></tr>
+    <tr><td>Laser Pistol</td><td>4 D/C Energy</td><td>C</td><td>Part 3+</td></tr>
+    <tr><td>Plasma Rifle</td><td>5 D/C Energy Persistent</td><td>M</td><td>Part 3+</td></tr>
+  </table>
+
+  <h2>Melee Weapons</h2>
+  <table>
+    <tr><th>Weapon</th><th>Damage</th><th>Effects</th><th>Rarity</th></tr>
+    <tr><td>Combat Knife</td><td>3 D/C</td><td>—</td><td>0</td></tr>
+    <tr><td>Machete</td><td>4 D/C</td><td>—</td><td>1</td></tr>
+    <tr><td>Sword</td><td>4 D/C</td><td>Piercing 1</td><td>2</td></tr>
+    <tr><td>Razor Chain</td><td>4 D/C</td><td>Vicious</td><td>2</td></tr>
+    <tr><td>Sledgehammer</td><td>5 D/C</td><td>—</td><td>1</td></tr>
+    <tr><td>Steel Ball (Spin)</td><td>3 D/C</td><td>Vicious; Thrown M</td><td>2</td></tr>
+    <tr><td>Vampire Bone Blade</td><td>4 D/C</td><td>Piercing 1</td><td>3</td></tr>
+  </table>
+
+  <h2>Explosives</h2>
+  <table>
+    <tr><th>Item</th><th>Damage</th><th>Range</th></tr>
+    <tr><td>Grenade</td><td>5 D/C Blast Physical</td><td>Thrown M</td></tr>
+    <tr><td>Molotov</td><td>4 D/C Persistent Energy</td><td>Thrown M</td></tr>
+    <tr><td>Claymore Mine</td><td>6 D/C Blast</td><td>Placed</td></tr>
+  </table>
+
+  <h2>Armor</h2>
+  <table>
+    <tr><th>Armor</th><th>Physical DR</th><th>Energy DR</th><th>Locations</th><th>Rarity</th></tr>
+    <tr><td>Fine Suit</td><td>0</td><td>0</td><td>—</td><td>0</td></tr>
+    <tr><td>Leather Coat</td><td>1</td><td>0</td><td>Arms, Torso</td><td>1</td></tr>
+    <tr><td>Tactical Vest</td><td>2</td><td>1</td><td>Torso</td><td>2</td></tr>
+    <tr><td>Heavy Coat</td><td>2</td><td>2</td><td>All</td><td>3</td></tr>
+    <tr><td>Tactical Armor</td><td>3</td><td>2</td><td>All</td><td>4</td></tr>
+    <tr><td>Stone Mask (artifact)</td><td>1</td><td>1</td><td>Head</td><td>5</td></tr>
+  </table>
+
+  <h2>Consumables</h2>
+  <table>
+    <tr><th>Item</th><th>Effect</th><th>Rarity</th><th>Cost</th></tr>
+    <tr><td><strong>Rokakaka Fruit</strong></td><td>Minor action: 4 HP or treat 1 injury or stabilize at 1 HP. Roll 1 D/C — Effect = Equivalent Exchange (GM: −1 test, 1 D/C to random location, or stiff limb until rest)</td><td>4–5</td><td>200+</td></tr>
+    <tr><td>Bandage</td><td>1 HP</td><td>0</td><td>5</td></tr>
+    <tr><td>Antiseptic</td><td>2 HP; +1 to next Medicine test</td><td>1</td><td>15</td></tr>
+    <tr><td>Blood Pack</td><td>Vampire: restore 3 HP</td><td>2</td><td>20</td></tr>
+    <tr><td>Adrenaline Shot</td><td>+2 Initiative this scene; crash −1 END tests after</td><td>2</td><td>40</td></tr>
+    <tr><td>Steroid Dose</td><td>+1 STR tests this scene</td><td>2</td><td>35</td></tr>
+    <tr><td>Wine / Spirits</td><td>Re-roll 1d20 STR/CHA; INT +1 diff</td><td>1</td><td>8</td></tr>
+    <tr><td>Coffee / Tea</td><td>+1 AP immediately</td><td>0</td><td>3</td></tr>
+  </table>
+  <p><strong>Rokakaka</strong> cannot be crafted — scavenged or quest reward only.</p>
+
+  <h2>Books &amp; Magazines</h2>
+  <p>Grant one-time skill bonus or perk requirement satisfaction. Examples: <em>Hamon Manual</em> (+1 Hamon test), <em>Gunsmith Weekly</em> (+1 Repair for guns), <em>Spin Atlas</em> (counts toward Spin training).</p>
+
+  <div class="page-footer">— Chapter 4 —</div>
+</body>
+</html>

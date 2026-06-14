@@ -1,0 +1,796 @@
+/* JoJo RPG — unified theme (rulebook + character/stand sheets) */
+
+:root {
+  --jojo-bg: #1a0a2e;
+  --jojo-bg-panel: #2d1b4e;
+  --jojo-bg-row: #3d2a5c;
+  --jojo-bg-row-alt: #352550;
+  --jojo-gold: #e8c547;
+  --jojo-gold-dim: #c9a227;
+  --jojo-magenta: #e94560;
+  --jojo-purple: #9d4edd;
+  --jojo-cream: #f5e6d3;
+  --jojo-cream-dim: #d4c4b0;
+  --jojo-border: #e8c547;
+  --jojo-shadow: rgba(0, 0, 0, 0.35);
+  --jojo-glow: rgba(233, 69, 96, 0.35);
+}
+
+@page {
+  size: A4;
+  margin: 12mm 15mm;
+}
+
+@page sheet {
+  size: A4;
+  margin: 8mm 10mm;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--jojo-bg);
+}
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11pt;
+  line-height: 1.45;
+  color: var(--jojo-cream);
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 12mm 15mm;
+  background: linear-gradient(160deg, #1a0a2e 0%, #2d1b4e 45%, #4a1942 100%);
+  background-attachment: fixed;
+}
+
+a {
+  color: var(--jojo-gold);
+}
+
+a:hover {
+  color: var(--jojo-magenta);
+}
+
+h1, h2, h3, h4 {
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  color: var(--jojo-gold);
+}
+
+h1 {
+  font-size: 18pt;
+  border-bottom: 2px solid var(--jojo-gold);
+  padding-bottom: 0.3em;
+  text-shadow: 0 0 10px var(--jojo-glow);
+}
+
+h2 {
+  font-size: 13pt;
+  color: var(--jojo-gold);
+  border-left: 4px solid var(--jojo-magenta);
+  padding-left: 0.5em;
+}
+
+h3 {
+  font-size: 11pt;
+  color: var(--jojo-gold-dim);
+}
+
+p, li {
+  color: var(--jojo-cream);
+}
+
+.chapter-marker {
+  text-align: center;
+  font-size: 10pt;
+  letter-spacing: 0.2em;
+  margin: 2em 0 0.5em;
+  color: var(--jojo-magenta);
+  font-family: "Arial Narrow", Arial, sans-serif;
+}
+
+.chapter-title {
+  text-align: center;
+  font-size: 22pt;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 0 1.5em;
+  letter-spacing: 0.08em;
+  color: var(--jojo-gold);
+  text-shadow: 0 0 14px var(--jojo-glow);
+}
+
+.nav-bar {
+  font-family: Arial, sans-serif;
+  font-size: 7pt;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-top: 1px solid var(--jojo-gold-dim);
+  border-bottom: 1px solid var(--jojo-gold-dim);
+  padding: 6px 0;
+  margin-bottom: 1.5em;
+  text-align: center;
+  color: var(--jojo-cream-dim);
+  background: var(--jojo-bg-panel);
+}
+
+.nav-bar span {
+  margin: 0 0.4em;
+}
+
+.nav-bar .active {
+  font-weight: bold;
+  color: var(--jojo-gold);
+}
+
+.page-footer {
+  font-family: Arial, sans-serif;
+  font-size: 8pt;
+  text-align: center;
+  margin-top: 2em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--jojo-gold-dim);
+  color: var(--jojo-purple);
+}
+
+.rule-steps {
+  counter-reset: step;
+  list-style: none;
+  padding-left: 0;
+}
+
+.rule-steps li {
+  counter-increment: step;
+  margin-bottom: 0.6em;
+  padding-left: 2em;
+  position: relative;
+  color: var(--jojo-cream);
+}
+
+.rule-steps li::before {
+  content: counter(step) ". ";
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+  color: var(--jojo-magenta);
+}
+
+ul.bullets {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.bullets li::before {
+  content: "▸ ";
+  font-weight: bold;
+  color: var(--jojo-magenta);
+}
+
+ul.bullets li {
+  margin-bottom: 0.35em;
+  color: var(--jojo-cream);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 10pt;
+}
+
+th, td {
+  border: 1px solid var(--jojo-gold-dim);
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--jojo-magenta);
+  color: var(--jojo-cream);
+  font-family: Arial, sans-serif;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+td {
+  background: var(--jojo-bg-row);
+  color: var(--jojo-cream);
+}
+
+tr:nth-child(even) td {
+  background: var(--jojo-bg-row-alt);
+}
+
+.example {
+  font-style: italic;
+  margin: 0.8em 0;
+  padding: 0.6em 1em;
+  border-left: 4px solid var(--jojo-purple);
+  background: var(--jojo-bg-panel);
+  color: var(--jojo-cream-dim);
+}
+
+.sidebar {
+  background: var(--jojo-bg-panel);
+  border: 1px solid var(--jojo-gold-dim);
+  border-left: 4px solid var(--jojo-magenta);
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  font-size: 10pt;
+  color: var(--jojo-cream);
+  box-shadow: 0 2px 8px var(--jojo-shadow);
+}
+
+.rule-callout {
+  background: var(--jojo-bg-panel);
+  border: 2px solid var(--jojo-gold);
+  border-top: 4px solid var(--jojo-magenta);
+  padding: 1em 1.2em;
+  margin: 1.2em 0;
+  box-shadow: 0 0 20px rgba(232, 197, 71, 0.15), 0 4px 12px var(--jojo-shadow);
+  page-break-inside: avoid;
+}
+
+.rule-callout h3 {
+  margin-top: 0;
+  font-size: 12pt;
+  color: var(--jojo-gold);
+  text-align: center;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid var(--jojo-purple);
+  padding-bottom: 0.4em;
+  margin-bottom: 0.8em;
+  text-shadow: 0 0 8px var(--jojo-glow);
+}
+
+.rule-callout table {
+  margin: 0.6em 0;
+}
+
+.rule-callout .rule-highlight {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6em;
+  margin-top: 0.8em;
+}
+
+.rule-callout .rule-highlight .highlight-box {
+  background: var(--jojo-bg-row);
+  border: 1px solid var(--jojo-gold-dim);
+  padding: 0.6em 0.8em;
+  text-align: center;
+}
+
+.rule-callout .rule-highlight .highlight-box strong {
+  display: block;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--jojo-magenta);
+  margin-bottom: 0.3em;
+}
+
+.chapter-break {
+  page-break-before: always;
+}
+
+.npc-block {
+  background: var(--jojo-bg-panel);
+  border: 2px solid var(--jojo-gold-dim);
+  border-left: 5px solid var(--jojo-magenta);
+  padding: 1em;
+  margin: 1.5em 0;
+  page-break-inside: avoid;
+  box-shadow: 0 2px 10px var(--jojo-shadow);
+}
+
+.npc-block h3 {
+  margin-top: 0;
+  border-bottom: 1px solid var(--jojo-purple);
+  padding-bottom: 0.3em;
+  color: var(--jojo-gold);
+}
+
+.stat-line {
+  font-family: "Courier New", monospace;
+  font-size: 9.5pt;
+  margin: 0.2em 0;
+  color: var(--jojo-cream-dim);
+}
+
+strong {
+  color: var(--jojo-gold);
+}
+
+em {
+  color: var(--jojo-cream-dim);
+}
+
+/* ─── Character & Stand sheets ─── */
+
+body.sheet-body {
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 1.35;
+  padding: 10mm 12mm;
+  page: sheet;
+}
+
+.sheet-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 277mm;
+  position: relative;
+  padding-bottom: 0;
+}
+
+.sheet-page-content {
+  flex: 1 1 auto;
+}
+
+.sheet-page::after {
+  content: "";
+  display: block;
+  page-break-after: always;
+  break-after: page;
+}
+
+.sheet-page:last-child::after {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+.sheet-page + .sheet-page {
+  page-break-before: always;
+  break-before: page;
+}
+
+.sheet-page--dense .sheet-section {
+  margin-bottom: 0.5em;
+}
+
+.sheet-page--dense .sheet-table {
+  font-size: 8.5pt;
+}
+
+.sheet-page--dense .sheet-table th,
+.sheet-page--dense .sheet-table td {
+  padding: 3px 5px;
+}
+
+.screen-only {
+  display: block;
+}
+
+.sheet-header {
+  text-align: center;
+  border-bottom: 3px double var(--jojo-gold);
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+}
+
+.sheet-header h1 {
+  font-size: 20pt;
+  color: var(--jojo-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+  text-shadow: 0 0 12px var(--jojo-glow);
+  border: none;
+}
+
+.sheet-header .page-label {
+  font-size: 9pt;
+  color: var(--jojo-magenta);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-top: 0.3em;
+}
+
+.sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8em;
+}
+
+.sheet-section {
+  background: var(--jojo-bg-panel);
+  border: 1px solid var(--jojo-gold-dim);
+  border-left: 4px solid var(--jojo-magenta);
+  padding: 0.7em 0.9em;
+  margin-bottom: 0.8em;
+  box-shadow: 0 2px 8px var(--jojo-shadow);
+}
+
+.sheet-section h3 {
+  color: var(--jojo-gold);
+  font-size: 10pt;
+  margin: 0 0 0.5em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--jojo-purple);
+  padding-bottom: 0.25em;
+  border-left: none;
+  padding-left: 0;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25em 0;
+  border-bottom: 1px dotted var(--jojo-purple);
+  color: var(--jojo-cream);
+}
+
+.field-row span:last-child {
+  color: var(--jojo-cream-dim);
+  min-width: 45%;
+  text-align: right;
+}
+
+.sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+}
+
+.sheet-table th {
+  background: var(--jojo-magenta);
+  color: var(--jojo-cream);
+  border: 1px solid var(--jojo-gold-dim);
+  padding: 4px 6px;
+  text-transform: uppercase;
+  font-size: 8pt;
+  letter-spacing: 0.05em;
+}
+
+.sheet-table td {
+  background: var(--jojo-bg-row);
+  border: 1px solid var(--jojo-gold-dim);
+  padding: 5px 6px;
+  color: var(--jojo-cream);
+  min-height: 1.4em;
+}
+
+.sheet-table tr:nth-child(even) td {
+  background: var(--jojo-bg-row-alt);
+}
+
+.sheet-table .write-line {
+  border-bottom: 1px solid var(--jojo-cream-dim);
+  min-height: 1.3em;
+}
+
+.sheet-footer {
+  margin-top: auto;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 8pt;
+  color: var(--jojo-purple);
+  border-top: 1px solid var(--jojo-gold-dim);
+  padding-top: 0.4em;
+}
+
+.sheet-link {
+  color: var(--jojo-gold);
+  font-size: 8pt;
+  margin-top: 0.5em;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5em;
+  margin: 0.8em 0;
+}
+
+.stat-box {
+  background: var(--jojo-bg-row);
+  border: 2px solid var(--jojo-gold);
+  text-align: center;
+  padding: 0.5em;
+  box-shadow: inset 0 0 15px rgba(157, 78, 221, 0.2);
+}
+
+.stat-box .label {
+  font-size: 7pt;
+  text-transform: uppercase;
+  color: var(--jojo-magenta);
+  letter-spacing: 0.1em;
+}
+
+.stat-box .grade {
+  font-size: 20pt;
+  font-weight: bold;
+  color: var(--jojo-gold);
+}
+
+@media print {
+  /* Force browsers to print backgrounds and theme colors (enable "Background graphics" in print dialog if needed) */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+    background-color: #1a0a2e;
+  }
+
+  @page sheet {
+    size: A4;
+    margin: 8mm 10mm;
+    background-color: #1a0a2e;
+  }
+
+  html {
+    background: #1a0a2e !important;
+  }
+
+  body {
+    background: #1a0a2e !important;
+    background-image: none !important;
+    background-attachment: scroll !important;
+    color: #f5e6d3 !important;
+    padding: 0;
+  }
+
+  .chapter-break,
+  .sheet-page,
+  body.sheet-body {
+    background: #1a0a2e !important;
+  }
+
+  h1, h2, h3, h4, .chapter-title, strong {
+    color: #e8c547 !important;
+  }
+
+  h3 {
+    color: #c9a227 !important;
+  }
+
+  p, li, td, .stat-line {
+    color: #f5e6d3 !important;
+  }
+
+  em, .field-row span:last-child {
+    color: #d4c4b0 !important;
+  }
+
+  .chapter-marker {
+    color: #e94560 !important;
+  }
+
+  .nav-bar {
+    background: #2d1b4e !important;
+    color: #d4c4b0 !important;
+  }
+
+  .nav-bar .active {
+    color: #e8c547 !important;
+  }
+
+  .page-footer,
+  .sheet-footer {
+    color: #9d4edd !important;
+  }
+
+  a, .sheet-link {
+    color: #e8c547 !important;
+  }
+
+  th,
+  .sheet-table th {
+    background: #e94560 !important;
+    color: #f5e6d3 !important;
+    border-color: #c9a227 !important;
+  }
+
+  td,
+  .sheet-table td {
+    background: #3d2a5c !important;
+    color: #f5e6d3 !important;
+    border-color: #c9a227 !important;
+  }
+
+  tr:nth-child(even) td,
+  .sheet-table tr:nth-child(even) td {
+    background: #352550 !important;
+  }
+
+  .example,
+  .sidebar,
+  .rule-callout,
+  .npc-block,
+  .sheet-section,
+  .nav-bar {
+    background: #2d1b4e !important;
+    border-color: #c9a227 !important;
+    box-shadow: none !important;
+  }
+
+  .rule-callout .rule-highlight .highlight-box,
+  .stat-box {
+    background: #3d2a5c !important;
+    border-color: #c9a227 !important;
+    box-shadow: none !important;
+  }
+
+  .example {
+    color: #d4c4b0 !important;
+    border-left-color: #9d4edd !important;
+  }
+
+  .rule-callout {
+    border-top-color: #e94560 !important;
+  }
+
+  .rule-callout .rule-highlight .highlight-box strong,
+  .stat-box .label {
+    color: #e94560 !important;
+  }
+
+  .stat-box .grade {
+    color: #e8c547 !important;
+  }
+
+  .field-row {
+    color: #f5e6d3 !important;
+    border-bottom-color: #9d4edd !important;
+  }
+
+  h1, .chapter-title, .sheet-header h1, .rule-callout h3 {
+    text-shadow: none !important;
+  }
+
+  .chapter-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .chapter-break:first-of-type {
+    page-break-before: auto;
+    break-before: auto;
+  }
+
+  body:not(.sheet-body) {
+    max-width: none !important;
+  }
+
+  /* Each .sheet-page = one printed A4 page */
+  body.sheet-body {
+    page: sheet !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    font-size: 9pt !important;
+    line-height: 1.25 !important;
+  }
+
+  body.sheet-body .sheet-page {
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: calc(297mm - 16mm) !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.sheet-body .sheet-page + .sheet-page {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  body.sheet-body .sheet-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  body.sheet-body .sheet-page--dense {
+    font-size: 8.25pt !important;
+    line-height: 1.2 !important;
+  }
+
+  body.sheet-body .sheet-page--dense .sheet-header {
+    margin-bottom: 0.35em !important;
+    padding-bottom: 0.25em !important;
+  }
+
+  body.sheet-body .sheet-page--dense .sheet-header h1 {
+    font-size: 14pt !important;
+  }
+
+  body.sheet-body .sheet-page--dense .sheet-section {
+    padding: 0.25em 0.45em !important;
+    margin-bottom: 0.25em !important;
+  }
+
+  body.sheet-body .sheet-page--dense .sheet-table {
+    font-size: 6.75pt !important;
+  }
+
+  body.sheet-body .sheet-page--dense .sheet-table th,
+  body.sheet-body .sheet-page--dense .sheet-table td {
+    padding: 1px 3px !important;
+  }
+
+  body.sheet-body .screen-only,
+  body.sheet-body .sheet-link {
+    display: none !important;
+  }
+
+  body.sheet-body .sheet-header {
+    flex-shrink: 0;
+    margin-bottom: 0.5em !important;
+    padding-bottom: 0.35em !important;
+  }
+
+  body.sheet-body .sheet-header h1 {
+    font-size: 15pt !important;
+  }
+
+  body.sheet-body .sheet-section {
+    padding: 0.35em 0.55em !important;
+    margin-bottom: 0.35em !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  body.sheet-body .sheet-table {
+    font-size: 7.5pt !important;
+  }
+
+  body.sheet-body .sheet-table th,
+  body.sheet-body .sheet-table td {
+    padding: 2px 4px !important;
+  }
+
+  body.sheet-body .field-row {
+    margin: 0.15em 0 !important;
+  }
+
+  body.sheet-body .stat-box .grade {
+    font-size: 16pt !important;
+  }
+
+  body.sheet-body .sheet-grid,
+  body.sheet-body .stat-grid {
+    gap: 0.35em !important;
+    margin: 0.35em 0 !important;
+  }
+
+  body.sheet-body .sheet-footer {
+    position: static !important;
+    margin-top: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .npc-block,
+  .rule-callout {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .sheet-page::after {
+    display: none !important;
+  }
+}
