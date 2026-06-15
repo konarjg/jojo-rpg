@@ -66,7 +66,7 @@ def main() -> None:
     with open(OUTPUT_PATH, "w", encoding="utf-8", newline="\n") as f:
         f.write(output)
 
-    print(f"Merged {len(CHAPTER_FILES)} chapters → {OUTPUT_PATH}")
+    print(f"Merged {len(CHAPTER_FILES)} chapters -> {OUTPUT_PATH}")
     print(f"Output size: {len(output):,} bytes")
 
 
