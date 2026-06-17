@@ -784,6 +784,19 @@
     document.getElementById('modal-overlay').classList.add('hidden');
   }
 
+  function closeDice() {
+    var diceModal = document.getElementById('dice-modal');
+    if (diceModal) diceModal.classList.add('hidden');
+    document.getElementById('modal-overlay').classList.add('hidden');
+  }
+
+  function openDice() {
+    closePicker();
+    closeRules();
+    document.getElementById('modal-overlay').classList.remove('hidden');
+    document.getElementById('dice-modal').classList.remove('hidden');
+  }
+
   function openRules() {
     closePicker();
     document.getElementById('modal-overlay').classList.remove('hidden');
@@ -1012,8 +1025,16 @@
     });
     document.getElementById('modal-overlay').addEventListener('click', function () {
       closeRules();
+      closeDice();
       closePicker();
     });
+    document.getElementById('btn-dice').addEventListener('click', openDice);
+    var diceClose = document.getElementById('btn-dice-close');
+    if (diceClose) diceClose.addEventListener('click', closeDice);
+    if (typeof DiceRoller !== 'undefined') {
+      var diceRoot = document.getElementById('dice-modal-root');
+      if (diceRoot) DiceRoller.mount(diceRoot);
+    }
     document.getElementById('btn-rules').addEventListener('click', openRules);
     document.getElementById('btn-rules-close').addEventListener('click', closeRules);
     document.getElementById('btn-page-prev').addEventListener('click', function () {

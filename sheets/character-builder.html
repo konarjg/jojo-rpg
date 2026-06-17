@@ -1487,6 +1487,762 @@ body.sheet-interactive .stand-toggle {
   }
 }
 
+/* ---- Dice roller (shared) ---- */
+
+.dice-roller-root,
+.dice-roller {
+  font-family: Arial, sans-serif;
+}
+
+.dice-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  align-items: flex-end;
+  margin-bottom: 0.75em;
+}
+
+.dice-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  font-size: 0.85rem;
+  color: var(--jojo-cream-dim);
+}
+
+.dice-field .sheet-input {
+  min-width: 5em;
+}
+
+.dice-count {
+  width: 4.5em;
+}
+
+.dice-broadcast {
+  font-size: 0.85rem;
+}
+
+.dice-result-area {
+  min-height: 4.5em;
+  margin-bottom: 0.75em;
+}
+
+.dice-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  justify-content: center;
+}
+
+.dice-tiles--pyramid {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.dice-row {
+  display: flex;
+  gap: 0.5em;
+  justify-content: center;
+}
+
+.dice-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--jojo-cream);
+  font-weight: bold;
+  position: relative;
+}
+
+.dice-face--d6 {
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--jojo-gold-dim);
+  border-radius: 6px;
+  background: var(--jojo-bg-row);
+}
+
+.dice-face--rolling {
+  animation: dice-wobble 0.6s ease-in-out;
+  color: var(--jojo-gold-dim);
+}
+
+.dice-face--rolling.dice-face--d20 .dice-d20-num {
+  fill: var(--jojo-gold-dim);
+}
+
+.dice-face--settled .dice-face {
+  animation: dice-settle 0.25s ease-out;
+}
+
+@keyframes dice-wobble {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(18deg) scale(1.08); }
+  50% { transform: rotate(-14deg) scale(0.95); }
+  75% { transform: rotate(10deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes dice-settle {
+  from { transform: scale(1.15); opacity: 0.6; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.dice-tiles--settled .dice-face {
+  animation: dice-settle 0.25s ease-out;
+}
+
+.dice-face--success.dice-face--d6 {
+  border-color: #7bed9f;
+  box-shadow: 0 0 8px rgba(123, 237, 159, 0.45);
+}
+
+.dice-face--success.dice-face--d20 .dice-d20-body {
+  stroke: #7bed9f;
+}
+
+.dice-face--success.dice-face--d20 {
+  filter: drop-shadow(0 0 6px rgba(123, 237, 159, 0.45));
+}
+
+.dice-face--d6 .dice-pip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 2.2em;
+  height: 2.2em;
+  gap: 2px;
+}
+
+.dice-pip {
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: transparent;
+  justify-self: center;
+  align-self: center;
+}
+
+.dice-pip--on {
+  background: var(--jojo-cream);
+}
+
+.dice-face--d20 {
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.dice-d20-shape {
+  width: 3.25rem;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.dice-d20-body {
+  fill: var(--jojo-bg-row);
+  stroke: var(--jojo-gold);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.dice-d20-num {
+  fill: var(--jojo-cream);
+  font-size: 20px;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+.dice-summary {
+  text-align: center;
+  margin: 0.5em 0 0;
+  font-size: 0.9rem;
+  color: var(--jojo-gold);
+}
+
+body.sheet-interactive .dice-modal {
+  width: min(520px, 96vw);
+}
+
+/* ---- GM Panel ---- */
+
+body.gm-body {
+  height: 100vh;
+  overflow: hidden;
+  padding: 0;
+}
+
+.gm-app {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0.5em;
+  box-sizing: border-box;
+}
+
+.gm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65em;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75em 1em;
+  margin-bottom: 0.75em;
+  background: rgba(26, 10, 46, 0.97);
+  border: 2px solid var(--jojo-gold-dim);
+  border-radius: 8px;
+  flex-shrink: 0;
+  z-index: 40;
+}
+
+.gm-toolbar h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--jojo-gold);
+  border: none;
+  padding: 0;
+}
+
+.gm-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.pick-btn--accent {
+  background: var(--jojo-magenta);
+  border-color: var(--jojo-gold);
+  color: var(--jojo-cream);
+  font-weight: bold;
+}
+
+.gm-status {
+  font-size: 0.85rem;
+  padding: 0.35em 0.65em;
+  border-radius: 4px;
+  border: 1px solid var(--jojo-gold-dim);
+}
+
+.gm-status--ok {
+  color: #7bed9f;
+  border-color: #7bed9f;
+}
+
+.gm-status--warn {
+  color: #ffd166;
+  border-color: #ffd166;
+}
+
+.gm-auto-open {
+  font-size: 0.85rem;
+}
+
+.gm-layout {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) minmax(28rem, 2.8fr) minmax(20rem, 1.4fr);
+  gap: 0.75em;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.gm-column {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+  overflow: hidden;
+}
+
+.gm-column--left {
+  min-height: 0;
+}
+
+.gm-notepad-section {
+  flex: 1 1 45%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.gm-sticky-section {
+  flex: 1 1 55%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.gm-column--center {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gm-column--npc {
+  min-height: 0;
+}
+
+.gm-panel-section {
+  background: rgba(45, 27, 78, 0.65);
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 8px;
+  padding: 0.75em;
+  margin-bottom: 0;
+}
+
+.gm-panel-section h2 {
+  margin: 0 0 0.5em;
+  font-size: 0.95rem;
+  color: var(--jojo-gold);
+  border: none;
+  padding: 0;
+}
+
+.gm-hint {
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: var(--jojo-cream-dim);
+}
+
+.gm-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.gm-section-head h2 {
+  margin: 0;
+}
+
+.gm-notepad {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  resize: none;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.gm-sticky-board {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  background:
+    linear-gradient(rgba(201, 162, 39, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 39, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border: 1px dashed var(--jojo-gold-dim);
+  border-radius: 6px;
+}
+
+.gm-sticky {
+  position: absolute;
+  min-width: 7em;
+  max-width: 14em;
+  width: max-content;
+  padding: 0.5em;
+  border-radius: 4px;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.35);
+  color: #1a0a2e;
+}
+
+.gm-sticky-delete {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  border: none;
+  background: transparent;
+  color: #1a0a2e;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.gm-sticky-text {
+  display: block;
+  width: 100%;
+  min-width: 6em;
+  max-width: 13em;
+  min-height: 3em;
+  max-height: 12.5em;
+  margin-top: 1.25em;
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  color: #1a0a2e;
+  font-size: 0.85rem;
+  resize: none;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+  line-height: 1.35;
+}
+
+.gm-map-section {
+  flex: 1 1 auto;
+  min-height: 10rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.gm-map-section .gm-map-canvas {
+  flex: 1 1 auto;
+  min-height: 10rem;
+}
+
+.gm-tokens-section,
+.gm-dice-section {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
+.gm-column--npc .gm-npc-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.gm-npc-search {
+  width: 100%;
+  margin-bottom: 0.5em;
+  box-sizing: border-box;
+}
+
+.gm-npc-actions {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
+
+.gm-npc-modal {
+  width: min(560px, 96vw);
+}
+
+.gm-form-field {
+  display: block;
+  margin-bottom: 0.75em;
+  font-size: 0.9rem;
+  color: var(--jojo-cream-dim);
+}
+
+.gm-npc-body {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.45;
+  font-size: 0.9rem;
+}
+
+.gm-map-canvas {
+  position: relative;
+  width: 100%;
+  min-height: 10rem;
+  --gm-grid-size: 48px;
+  --gm-token-inset: 2px;
+  background:
+    linear-gradient(rgba(201, 162, 39, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 162, 39, 0.14) 1px, transparent 1px);
+  background-size: var(--gm-grid-size) var(--gm-grid-size);
+  background-color: rgba(26, 10, 46, 0.5);
+  border: 2px solid var(--jojo-gold-dim);
+  border-radius: 6px;
+  cursor: default;
+}
+
+.gm-map-canvas--place {
+  cursor: none;
+}
+
+.gm-map-canvas--select {
+  cursor: default;
+}
+
+.gm-cursor-token {
+  pointer-events: none !important;
+  z-index: 4;
+  opacity: 0.38;
+  box-shadow: none;
+  border-style: dashed;
+  border-color: rgba(245, 230, 211, 0.75);
+  width: calc(var(--gm-grid-size) - var(--gm-token-inset) * 2);
+  height: calc(var(--gm-grid-size) - var(--gm-token-inset) * 2);
+  transform: none;
+}
+
+.gm-cursor-token.gm-token--player {
+  background: rgba(126, 200, 164, 0.45);
+}
+
+.gm-cursor-token.gm-token--npc {
+  background: rgba(233, 69, 96, 0.45);
+}
+
+.gm-cursor-token.gm-token--boss {
+  background: rgba(92, 45, 145, 0.45);
+}
+
+.gm-cursor-token.gm-token--cover {
+  background: rgba(142, 180, 232, 0.45);
+}
+
+.gm-cursor-token.gm-token--obstacle {
+  background: rgba(107, 91, 122, 0.45);
+}
+
+.gm-token {
+  position: absolute;
+  box-sizing: border-box;
+  width: calc(var(--gm-grid-size) - var(--gm-token-inset) * 2);
+  height: calc(var(--gm-grid-size) - var(--gm-token-inset) * 2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: bold;
+  border: 2px solid rgba(0, 0, 0, 0.35);
+  cursor: grab;
+  user-select: none;
+  z-index: 4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 2px;
+}
+
+.gm-token--selected {
+  outline: 3px solid var(--jojo-gold);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(232, 197, 71, 0.65);
+  z-index: 4;
+}
+
+.gm-token--selected::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 2px dashed var(--jojo-magenta);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.gm-token--player {
+  background: #7ec8a4;
+  color: #1a0a2e;
+}
+
+.gm-token--npc {
+  background: #e94560;
+  color: var(--jojo-cream);
+}
+
+.gm-token--boss {
+  background: #5c2d91;
+  border-color: var(--jojo-gold);
+  box-shadow: inset 0 0 0 1px rgba(232, 197, 71, 0.35);
+}
+
+.gm-token--cover {
+  background: #8eb4e8;
+  color: #1a0a2e;
+  border-radius: 4px;
+  font-size: 0.58rem;
+}
+
+.gm-token--obstacle {
+  background: #6b5b7a;
+  color: var(--jojo-cream);
+  border-radius: 4px;
+}
+
+.gm-token-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  margin-bottom: 0.5em;
+}
+
+.gm-mode-select {
+  width: 100%;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.gm-palette-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.gm-palette-swatch {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gm-palette-swatch.gm-token--cover,
+.gm-palette-swatch.gm-token--obstacle {
+  border-radius: 3px;
+  width: 1.25em;
+  height: 0.9em;
+}
+
+.gm-palette-btn--active {
+  background: var(--jojo-magenta);
+  border-color: var(--jojo-gold);
+  box-shadow: 0 0 0 2px rgba(232, 197, 71, 0.45);
+  font-weight: bold;
+}
+
+.gm-npc-layout {
+  display: grid;
+  grid-template-columns: minmax(8rem, 10rem) 1fr;
+  gap: 0.5em;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.gm-npc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gm-npc-item {
+  width: 100%;
+  text-align: left;
+}
+
+.gm-npc-item--active {
+  background: var(--jojo-magenta);
+  border-color: var(--jojo-gold);
+}
+
+.gm-npc-preview {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.65em;
+  background: var(--jojo-bg-row);
+  border: 1px solid var(--jojo-gold-dim);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.gm-npc-preview h4 {
+  margin: 0 0 0.5em;
+  color: var(--jojo-gold);
+  font-size: 0.95rem;
+}
+
+.gm-npc-preview .stat-line {
+  font-size: 0.82rem;
+}
+
+/* Player view popup */
+
+.player-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75em;
+  box-sizing: border-box;
+}
+
+.player-header {
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.player-header h1 {
+  margin: 0 0 0.25em;
+  font-size: 1.2rem;
+  color: var(--jojo-gold);
+  border: none;
+}
+
+.player-share-hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--jojo-cream-dim);
+}
+
+.player-roll-banner {
+  text-align: center;
+  padding: 0.65em 1em;
+  margin-bottom: 0.5em;
+  background: rgba(233, 69, 96, 0.25);
+  border: 1px solid var(--jojo-magenta);
+  border-radius: 6px;
+  color: var(--jojo-cream);
+  font-weight: bold;
+}
+
+.player-map-canvas {
+  flex: 1;
+  min-height: calc(100vh - 8em);
+}
+
+@media (max-width: 1100px) {
+  body.gm-body {
+    height: auto;
+    overflow: auto;
+  }
+
+  .gm-app {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .gm-layout {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .gm-column {
+    overflow: visible;
+  }
+
+  .gm-column--center {
+    overflow-y: visible;
+  }
+
+  .gm-map-section .gm-map-canvas {
+    min-height: 16rem;
+  }
+
+  .gm-npc-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
   </style>
 </head>
 <body class="sheet-body sheet-interactive">
@@ -1513,6 +2269,7 @@ body.sheet-interactive .stand-toggle {
       <input type="file" id="btn-import" accept=".json" class="hidden">
     </label>
     <span id="save-status">Saved</span>
+    <button type="button" id="btn-dice" class="pick-btn">Dice</button>
     <button type="button" id="btn-rules" class="pick-btn pick-btn--rules">Rules</button>
   </div>
 </div>
@@ -1817,7 +2574,7 @@ body.sheet-interactive .stand-toggle {
     <li>2–5 players and one Gamemaster (GM)</li>
     <li>At least two d20 dice per player; at least four d6 (Combat Dice)</li>
     <li>Tokens or paper for Action Points</li>
-    <li><a href="../sheets/character-sheet.html">Printable character sheet</a> (3 pages) — <a href="../sheets/stand-sheet.html">Stand sheet</a> — <a href="../sheets/character-builder.html"><strong>Interactive Character Sheet</strong></a> (editable online, trait &amp; equipment pickers, inline rules)</li>
+    <li><a href="../sheets/character-sheet.html">Printable character sheet</a> (3 pages) — <a href="../sheets/stand-sheet.html">Stand sheet</a> — <a href="../sheets/character-builder.html"><strong>Interactive Character Sheet</strong></a> (editable online, trait &amp; equipment pickers, inline rules, dice roller) — <a href="../sheets/gm-panel.html"><strong>GM Panel</strong></a> (notepad, combat map, NPCs, Discord player view)</li>
     <li>Pencil and paper for notes</li>
   </ul>
 
@@ -2905,6 +3662,15 @@ body.sheet-interactive .stand-toggle {
     </div>
     </div>
   </div>
+</div>
+
+
+<div id="dice-modal" class="modal-panel dice-modal hidden">
+  <div class="rules-modal-header">
+    <h3>Dice Roller</h3>
+    <button type="button" id="btn-dice-close" class="pick-btn" title="Close">&times;</button>
+  </div>
+  <div id="dice-modal-root" class="dice-roller-root"></div>
 </div>
 
 
@@ -4806,6 +5572,184 @@ body.sheet-interactive .stand-toggle {
 <!-- CATALOG:END -->
 
 <script>
+(function (global) {
+  'use strict';
+
+  var ROLL_MS = 600;
+  var MAX_DICE = 20;
+
+  var D6_PIPS = {
+    1: [4],
+    2: [0, 8],
+    3: [0, 4, 8],
+    4: [0, 2, 6, 8],
+    5: [0, 2, 4, 6, 8],
+    6: [0, 2, 3, 5, 6, 8]
+  };
+
+  function rollDie(sides) {
+    return Math.floor(Math.random() * sides) + 1;
+  }
+
+  function clampCount(n) {
+    var v = parseInt(n, 10);
+    if (isNaN(v) || v < 1) return 1;
+    if (v > MAX_DICE) return MAX_DICE;
+    return v;
+  }
+
+  function d6FaceHtml(value) {
+    var pips = D6_PIPS[value] || D6_PIPS[1];
+    var cells = [];
+    for (var i = 0; i < 9; i++) {
+      var on = pips.indexOf(i) >= 0;
+      cells.push('<span class="dice-pip' + (on ? ' dice-pip--on' : '') + '"></span>');
+    }
+    return '<div class="dice-face dice-face--d6" data-value="' + value + '"><div class="dice-pip-grid">' + cells.join('') + '</div></div>';
+  }
+
+  function d20ShapeSvg(display) {
+    return '<svg class="dice-d20-shape" viewBox="0 0 100 100" aria-hidden="true">' +
+      '<polygon class="dice-d20-body" points="50,8 92,38 76,88 24,88 8,38"/>' +
+      '<text class="dice-d20-num" x="50" y="56" text-anchor="middle" dominant-baseline="middle">' + display + '</text>' +
+      '</svg>';
+  }
+
+  function d20FaceHtml(value) {
+    return '<div class="dice-face dice-face--d20" data-value="' + value + '">' +
+      d20ShapeSvg(String(value)) +
+      '</div>';
+  }
+
+  function rollingTileHtml(die) {
+    if (die === 'd20') {
+      return '<div class="dice-face dice-face--rolling dice-face--d20">' + d20ShapeSvg('?') + '</div>';
+    }
+    return '<div class="dice-face dice-face--rolling dice-face--d6">?</div>';
+  }
+
+  function dieFaceHtml(die, value) {
+    return die === 'd6' ? d6FaceHtml(value) : d20FaceHtml(value);
+  }
+
+  function pyramidRowSizes(count) {
+    if (count <= 0) return [];
+    if (count <= 3) return [count];
+    var rows = [];
+    var remaining = count;
+    while (remaining > 0) {
+      var take = Math.min(3, remaining);
+      rows.push(take);
+      remaining -= take;
+    }
+    return rows;
+  }
+
+  function buildPyramidHtml(die, values, rolling) {
+    var rows = pyramidRowSizes(values.length);
+    var html = '<div class="dice-tiles dice-tiles--pyramid' + (rolling ? '' : ' dice-tiles--settled') + '">';
+    var idx = 0;
+    rows.forEach(function (rowSize) {
+      html += '<div class="dice-row">';
+      for (var i = 0; i < rowSize; i++) {
+        html += rolling ? rollingTileHtml(die) : dieFaceHtml(die, values[idx++]);
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function mount(container, options) {
+    options = options || {};
+    var showBroadcast = !!options.showBroadcast;
+    var onBroadcast = typeof options.onBroadcast === 'function' ? options.onBroadcast : null;
+    var rolling = false;
+
+    container.innerHTML =
+      '<div class="dice-roller">' +
+      '  <div class="dice-controls">' +
+      '    <label class="dice-field">Type ' +
+      '      <select class="sheet-input dice-type"><option value="d20">d20</option><option value="d6">d6</option></select>' +
+      '    </label>' +
+      '    <label class="dice-field">Count <input type="number" class="sheet-input dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
+      '    <button type="button" class="pick-btn dice-roll-btn">Roll</button>' +
+      (showBroadcast ? '    <label class="dice-broadcast sheet-toggle"><input type="checkbox" class="dice-broadcast-check"> Show on player view</label>' : '') +
+      '  </div>' +
+      '  <div class="dice-result-area" aria-live="polite"></div>' +
+      '</div>';
+
+    var typeEl = container.querySelector('.dice-type');
+    var countEl = container.querySelector('.dice-count');
+    var rollBtn = container.querySelector('.dice-roll-btn');
+    var resultArea = container.querySelector('.dice-result-area');
+    var broadcastCheck = container.querySelector('.dice-broadcast-check');
+
+    function showSettled(entry) {
+      resultArea.innerHTML = buildPyramidHtml(entry.die, entry.results, false);
+    }
+
+    function renderResults(entry, animate) {
+      if (animate) {
+        var placeholders = [];
+        for (var i = 0; i < entry.count; i++) {
+          placeholders.push(0);
+        }
+        resultArea.innerHTML = buildPyramidHtml(entry.die, placeholders, true);
+        setTimeout(function () {
+          showSettled(entry);
+        }, ROLL_MS);
+      } else {
+        showSettled(entry);
+      }
+    }
+
+    function doRoll() {
+      if (rolling) return;
+      rolling = true;
+      rollBtn.disabled = true;
+
+      var die = typeEl.value === 'd6' ? 'd6' : 'd20';
+      var count = clampCount(countEl.value);
+      countEl.value = String(count);
+      var sides = die === 'd6' ? 6 : 20;
+      var results = [];
+      for (var i = 0; i < count; i++) {
+        results.push(rollDie(sides));
+      }
+      var entry = {
+        die: die,
+        count: count,
+        results: results,
+        time: Date.now()
+      };
+
+      renderResults(entry, true);
+
+      setTimeout(function () {
+        rolling = false;
+        rollBtn.disabled = false;
+        if (showBroadcast && broadcastCheck && broadcastCheck.checked && onBroadcast) {
+          onBroadcast(entry);
+        }
+      }, ROLL_MS);
+    }
+
+    rollBtn.addEventListener('click', doRoll);
+    countEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doRoll();
+    });
+
+    return {
+      roll: doRoll
+    };
+  }
+
+  global.DiceRoller = { mount: mount, MAX_DICE: MAX_DICE };
+})(typeof window !== 'undefined' ? window : this);
+
+</script>
+<script>
 (function () {
   'use strict';
 
@@ -5592,6 +6536,19 @@ body.sheet-interactive .stand-toggle {
     document.getElementById('modal-overlay').classList.add('hidden');
   }
 
+  function closeDice() {
+    var diceModal = document.getElementById('dice-modal');
+    if (diceModal) diceModal.classList.add('hidden');
+    document.getElementById('modal-overlay').classList.add('hidden');
+  }
+
+  function openDice() {
+    closePicker();
+    closeRules();
+    document.getElementById('modal-overlay').classList.remove('hidden');
+    document.getElementById('dice-modal').classList.remove('hidden');
+  }
+
   function openRules() {
     closePicker();
     document.getElementById('modal-overlay').classList.remove('hidden');
@@ -5820,8 +6777,16 @@ body.sheet-interactive .stand-toggle {
     });
     document.getElementById('modal-overlay').addEventListener('click', function () {
       closeRules();
+      closeDice();
       closePicker();
     });
+    document.getElementById('btn-dice').addEventListener('click', openDice);
+    var diceClose = document.getElementById('btn-dice-close');
+    if (diceClose) diceClose.addEventListener('click', closeDice);
+    if (typeof DiceRoller !== 'undefined') {
+      var diceRoot = document.getElementById('dice-modal-root');
+      if (diceRoot) DiceRoller.mount(diceRoot);
+    }
     document.getElementById('btn-rules').addEventListener('click', openRules);
     document.getElementById('btn-rules-close').addEventListener('click', closeRules);
     document.getElementById('btn-page-prev').addEventListener('click', function () {

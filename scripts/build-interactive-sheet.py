@@ -5,28 +5,21 @@ import importlib.util
 import json
 import os
 import re
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(BASE_DIR, "scripts"))
+from rulebook_embed import rules_modal_html
+
 HTML_DIR = os.path.join(BASE_DIR, "html")
 CSS_PATH = os.path.join(BASE_DIR, "css", "rulebook.css")
 OUT_PATH = os.path.join(BASE_DIR, "sheets", "character-builder.html")
 APP_JS_PATH = os.path.join(BASE_DIR, "scripts", "sheet-app.js")
+DICE_JS_PATH = os.path.join(BASE_DIR, "scripts", "dice-roller.js")
 EXTRACT_PATH = os.path.join(BASE_DIR, "scripts", "extract-rules.py")
 
 CATALOG_START = "<!-- CATALOG:START -->"
 CATALOG_END = "<!-- CATALOG:END -->"
-
-RULEBOOK_CHAPTERS = [
-    ("00-table-of-contents", "Introduction", ""),
-    ("01-core-rules", "Core Rules", "Skill tests, Action Points, Luck, opposed tests"),
-    ("02-combat", "Combat", "Attacks, Defense, DR, injuries, Stand combat"),
-    ("03-character-creation", "Character Creation", "S.P.E.C.I.A.L., skills, races, Stand, perks"),
-    ("04-equipment", "Equipment", "Weapons, armor, consumables"),
-    ("05-survival", "Survival", "Sunlight, crafting, scavenging"),
-    ("06-gamemastering", "Gamemastering", "NPC types, safety, campaigns"),
-    ("07-npc-examples", "NPC Examples", "11 villain profiles"),
-    ("08-appendices", "Appendices", "Reference tables, index"),
-]
 
 SPECIAL = ["STR", "PER", "END", "CHA", "INT", "AGI", "LCK"]
 STAND_STATS = [
@@ -130,106 +123,14 @@ def read_file(path: str) -> str:
         return f.read()
 
 
-def extract_body(html: str) -> str:
-    match = re.search(r"<body[^>]*>(.*)</body>", html, re.DOTALL | re.IGNORECASE)
-    if match:
-        return match.group(1).strip()
-    return html
-
-
-def rules_chapter_label(index: int, chapter_id: str, title: str) -> str:
-    if chapter_id.startswith("00"):
-        return title
-    chapter_num = int(chapter_id[:2])
-    return f"{chapter_num}. {title}"
-
-
-def build_rules_toc() -> str:
-    lines = [
-        '    <nav class="rules-toc">',
-        '      <p class="rules-toc-heading">Table of Contents</p>',
-        '      <ul class="rules-toc-list">',
-    ]
-    for index, (chapter_id, title, summary) in enumerate(RULEBOOK_CHAPTERS):
-        label = rules_chapter_label(index, chapter_id, title)
-        active = " rules-toc-link--active" if index == 0 else ""
-        summary_html = (
-            f'        <p class="rules-toc-desc">{summary}</p>' if summary else ""
-        )
-        lines.append(
-            f'      <li class="rules-toc-item">'
-            f'<button type="button" class="rules-toc-link{active}" data-rules-index="{index}">'
-            f"{label}</button>"
-        )
-        if summary_html:
-            lines.append(summary_html)
-        lines.append("      </li>")
-    lines.extend(["      </ul>", "    </nav>"])
-    return "\n".join(lines)
-
-
-def build_rules_pagination() -> str:
-    options = []
-    for index, (chapter_id, title, _summary) in enumerate(RULEBOOK_CHAPTERS):
-        label = rules_chapter_label(index, chapter_id, title)
-        selected = " selected" if index == 0 else ""
-        options.append(f'        <option value="{index}"{selected}>{label}</option>')
-    opts = "\n".join(options)
-    return f"""    <div class="rules-pagination">
-      <button type="button" id="btn-rules-prev" class="pick-btn" title="Previous chapter">← Prev</button>
-      <select id="rules-chapter-select" class="sheet-input" title="Jump to chapter">
-{opts}
-      </select>
-      <button type="button" id="btn-rules-next" class="pick-btn" title="Next chapter">Next →</button>
-    </div>"""
-
-
-def build_rules_content() -> str:
-    lines = ['    <div id="rules-content" class="rules-content">']
-    for index, (chapter_id, title, _summary) in enumerate(RULEBOOK_CHAPTERS):
-        path = os.path.join(HTML_DIR, f"{chapter_id}.html")
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"Missing rulebook chapter: {path}")
-        body = extract_body(read_file(path))
-        active = " rules-chapter--active" if index == 0 else ""
-        lines.append(
-            f'      <section class="rules-chapter{active}" id="rules-chapter-{chapter_id}" '
-            f'data-rules-index="{index}" data-chapter="{chapter_id}">'
-        )
-        lines.append(body)
-        lines.append("      </section>")
-    lines.append("    </div>")
-    return "\n".join(lines)
-
-
-def rules_modal_html() -> str:
-    return f"""
-<div id="modal-overlay" class="modal-overlay hidden"></div>
-<div id="card-picker-modal" class="modal-panel hidden">
-  <h3 id="picker-title">Choose</h3>
-  <input type="text" id="picker-search" placeholder="Search..." class="sheet-input" style="width:100%;margin-bottom:0.5em">
-  <div class="modal-grid">
-    <div id="picker-list" class="picker-list"></div>
-    <div id="picker-preview" class="picker-preview"><em>Select an item to preview</em></div>
-  </div>
-  <div class="modal-actions">
-    <button type="button" id="picker-cancel" class="pick-btn">Cancel</button>
-    <button type="button" id="picker-confirm" class="pick-btn" disabled>Select</button>
-  </div>
-</div>
-
-<div id="rules-modal" class="modal-panel rules-modal hidden">
+def dice_modal_html() -> str:
+    return """
+<div id="dice-modal" class="modal-panel dice-modal hidden">
   <div class="rules-modal-header">
-    <h3>JoJo RPG — Rules</h3>
-    <button type="button" id="btn-rules-close" class="pick-btn" title="Close">&times;</button>
+    <h3>Dice Roller</h3>
+    <button type="button" id="btn-dice-close" class="pick-btn" title="Close">&times;</button>
   </div>
-  <div class="rules-modal-layout">
-{build_rules_toc()}
-    <div class="rules-view">
-{build_rules_content()}
-{build_rules_pagination()}
-    </div>
-  </div>
+  <div id="dice-modal-root" class="dice-roller-root"></div>
 </div>
 """
 
@@ -269,6 +170,7 @@ def html_shell(css: str) -> str:
       <input type="file" id="btn-import" accept=".json" class="hidden">
     </label>
     <span id="save-status">Saved</span>
+    <button type="button" id="btn-dice" class="pick-btn">Dice</button>
     <button type="button" id="btn-rules" class="pick-btn pick-btn--rules">Rules</button>
   </div>
 </div>
@@ -486,6 +388,7 @@ def html_shell(css: str) -> str:
 </div><!-- .sheet-shell -->
 
 {rules_modal_html()}
+{dice_modal_html()}
 
 """
 
@@ -497,12 +400,15 @@ def main() -> None:
 
     with open(APP_JS_PATH, encoding="utf-8") as f:
         app_js = f.read()
+    with open(DICE_JS_PATH, encoding="utf-8") as f:
+        dice_js = f.read()
 
     output = (
         html_shell(css)
         + f"{CATALOG_START}\n"
         + f'<script id="jojo-catalog" type="application/json">\n{catalog_json}\n</script>\n'
         + f"{CATALOG_END}\n\n"
+        + f"<script>\n{dice_js}\n</script>\n"
         + f"<script>\n{app_js}\n</script>\n</body>\n</html>\n"
     )
 
