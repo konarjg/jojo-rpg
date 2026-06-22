@@ -25,7 +25,7 @@ try
 
     Directory.CreateDirectory(outputDir);
     Console.WriteLine("Scaffolding linq2db entities to {0}", outputDir);
-    await RunLinq2DbScaffoldAsync(connectionString, outputDir);
+    await RunLinq2DbScaffoldAsync(repoRoot, connectionString, outputDir);
 
     if (!File.Exists(Path.Combine(outputDir, "JojoDataConnection.cs")))
     {
@@ -59,16 +59,30 @@ static void ApplyMigrations(string connectionString, string scriptsPath)
     }
 }
 
-static async Task RunLinq2DbScaffoldAsync(string connectionString, string outputDir)
+static async Task RunLinq2DbScaffoldAsync(string repoRoot, string connectionString, string outputDir)
 {
+    string configPath = Path.Combine(repoRoot, "tools", "JojoRpg.SchemaCodegen", "scaffold.json");
+
     ProcessStartInfo psi = new()
     {
         FileName = "dotnet",
-        Arguments = $"linq2db scaffold -p SqlServer -c \"{connectionString}\" -o \"{outputDir}\" --namespace JojoRpg.Data.Generated",
+        WorkingDirectory = repoRoot,
         RedirectStandardOutput = true,
         RedirectStandardError = true,
         UseShellExecute = false,
     };
+
+    psi.ArgumentList.Add("tool");
+    psi.ArgumentList.Add("run");
+    psi.ArgumentList.Add("dotnet-linq2db");
+    psi.ArgumentList.Add("--");
+    psi.ArgumentList.Add("scaffold");
+    psi.ArgumentList.Add("-i");
+    psi.ArgumentList.Add(configPath);
+    psi.ArgumentList.Add("-c");
+    psi.ArgumentList.Add(connectionString);
+    psi.ArgumentList.Add("-o");
+    psi.ArgumentList.Add(outputDir);
 
     using Process process = Process.Start(psi)!;
     string stdout = await process.StandardOutput.ReadToEndAsync();
@@ -82,8 +96,13 @@ static async Task RunLinq2DbScaffoldAsync(string connectionString, string output
 
     if (process.ExitCode != 0)
     {
-        Console.Error.WriteLine(stderr);
-        throw new InvalidOperationException($"linq2db scaffold failed (exit {process.ExitCode}).");
+        if (!string.IsNullOrWhiteSpace(stderr))
+        {
+            Console.Error.WriteLine(stderr);
+        }
+
+        throw new InvalidOperationException(
+            $"linq2db scaffold failed (exit {process.ExitCode}).{Environment.NewLine}{stderr}{Environment.NewLine}{stdout}");
     }
 }
 

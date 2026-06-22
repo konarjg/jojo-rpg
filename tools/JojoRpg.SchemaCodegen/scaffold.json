@@ -1,0 +1,21 @@
+{
+  "general": {
+    "provider": "SQLServer",
+    "overwrite": true
+  },
+  "code": {
+    "namespace": "JojoRpg.Data.Generated"
+  },
+  "dataModel": {
+    "context-name": "JojoDataConnection",
+    "add-typed-options-ctor": true,
+    "entity-class-name": {
+      "suffix": "Entity"
+    }
+  },
+  "schema": {
+    "exclude-tables": [
+      "SchemaVersions"
+    ]
+  }
+}

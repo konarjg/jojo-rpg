@@ -42,7 +42,7 @@ jobs:
       - run: npm run build
         working-directory: client
 
-      - run: dotnet tool install -g linq2db.cli
+      - run: dotnet tool restore
 
       - name: Generate linq2db entities
         env:
