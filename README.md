@@ -42,13 +42,13 @@ Auth uses an opaque `RoomSessionId` cookie backed by the `RoomSessions` table.
 
 ### Continuous deployment
 
-Pushes to `main` run [`.github/workflows/cd.yml`](.github/workflows/cd.yml): build, test, then Web Deploy to `http://jojorpg.runasp.net/`.
+Pushes to `main` run [`.github/workflows/cd.yml`](.github/workflows/cd.yml): build, test, then FTPS upload to `http://jojorpg.runasp.net/` (`/wwwroot` on site `site75760`).
 
 Add these **repository secrets** in GitHub (Settings → Secrets and variables → Actions):
 
 | Secret | Value |
 |--------|--------|
-| `WEBDEPLOY_PASSWORD` | Web Deploy password for site `site75760` |
+| `FTP_PASSWORD` | FTP password from hosting panel (Deploy → FTP) for site `site75760` |
 | `DATABASE_PASSWORD` | SQL password for production database user `db57094` |
 
 Production server and database settings are in `src/JojoRpg.Web/appsettings.Production.json` with a `__DB_PASSWORD__` placeholder; CD replaces that placeholder at publish time.
