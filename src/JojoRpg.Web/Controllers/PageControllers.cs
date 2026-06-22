@@ -7,6 +7,13 @@ namespace JojoRpg.Web.Controllers;
 
 public sealed class GmController : Controller
 {
+    private readonly ListPlayersUseCase _listPlayersUseCase;
+
+    public GmController(ListPlayersUseCase listPlayersUseCase)
+    {
+        _listPlayersUseCase = listPlayersUseCase;
+    }
+
     [HttpGet("/room/{roomCode}/gm")]
     public IActionResult Index(string roomCode)
     {
@@ -22,14 +29,14 @@ public sealed class GmController : Controller
     }
 
     [HttpGet("/room/{roomCode}/gm/sheets")]
-    public async Task<IActionResult> Sheets(string roomCode, ListPlayersUseCase listPlayers, CancellationToken cancellationToken)
+    public async Task<IActionResult> Sheets(string roomCode, CancellationToken cancellationToken)
     {
         if (!HttpContext.RequireGm(roomCode, out RoomSessionContext? session) || session is null)
         {
             return Redirect($"/room/{roomCode.ToUpperInvariant()}/gm");
         }
 
-        IReadOnlyList<Domain.Aggregates.Player> players = await listPlayers.ExecuteAsync(session.RoomId, cancellationToken);
+        IReadOnlyList<Domain.Aggregates.Player> players = await _listPlayersUseCase.ExecuteAsync(session.RoomId, cancellationToken);
         return View("GmSheets", players);
     }
 
