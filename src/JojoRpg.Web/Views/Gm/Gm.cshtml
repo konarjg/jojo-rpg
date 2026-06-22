@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/rulebook.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/sheets.css" asp-append-version="true" />
 </head>
+<body class="sheet-body sheet-interactive gm-body">
 @if (TempData["GmCode"] is string gmCode)
 {
     <div style="background:#2a2a1a;color:#e8c547;padding:1rem;">
@@ -28,5 +29,6 @@
 <script src="~/js/legacy/gm-state.js"></script>
 <script src="~/js/legacy/npc-sheet.js"></script>
 <script src="~/js/legacy/dice-roller.js"></script>
-<script src="~/js/gm.js"></script>
+<script src="~/js/gm.js" asp-append-version="true"></script>
+</body>
 </html>

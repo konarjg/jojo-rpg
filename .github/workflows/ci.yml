@@ -57,4 +57,9 @@ jobs:
 
       - run: dotnet build --configuration Release
 
+      - name: Verify legacy client scripts in output
+        run: |
+          test -f src/JojoRpg.Web/wwwroot/js/legacy/gm-state.js
+          test -f src/JojoRpg.Web/wwwroot/js/legacy/gm-app.js
+
       - run: dotnet test --configuration Release --no-build

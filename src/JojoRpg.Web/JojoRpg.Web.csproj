@@ -11,4 +11,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <LegacyScript Include="..\..\scripts\gm-app.js" />
+    <LegacyScript Include="..\..\scripts\gm-state.js" />
+    <LegacyScript Include="..\..\scripts\dice-roller.js" />
+    <LegacyScript Include="..\..\scripts\markdown-render.js" />
+    <LegacyScript Include="..\..\scripts\npc-sheet.js" />
+    <LegacyScript Include="..\..\scripts\sheet-app.js" />
+  </ItemGroup>
+
+  <Target Name="CopyLegacyClientScripts" BeforeTargets="BeforeBuild;BeforePublish">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\wwwroot\js\legacy" />
+    <Copy SourceFiles="@(LegacyScript)" DestinationFolder="$(MSBuildProjectDirectory)\wwwroot\js\legacy\" SkipUnchangedFiles="true" />
+  </Target>
+
 </Project>

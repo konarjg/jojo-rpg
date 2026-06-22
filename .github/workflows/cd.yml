@@ -86,6 +86,12 @@ jobs:
 
       - run: dotnet publish src/JojoRpg.Web/JojoRpg.Web.csproj --configuration Release --output publish
 
+      - name: Verify publish output
+        run: |
+          test -f publish/wwwroot/js/legacy/gm-state.js
+          test -f publish/wwwroot/js/legacy/gm-app.js
+          test -f publish/web.config
+
       - uses: actions/upload-artifact@v4
         with:
           name: web-publish
