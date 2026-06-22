@@ -109,8 +109,12 @@ jobs:
         shell: pwsh
         run: |
           $msi = "$env:RUNNER_TEMP\WebDeploy.msi"
-          Invoke-WebRequest -Uri "https://download.microsoft.com/download/0/1/D/01DC28EA-638C-4FAC-8B00-3CD77ECC62A6/WebDeploy_amd64_en-US.msi" -OutFile $msi
-          Start-Process msiexec.exe -ArgumentList "/i", $msi, "/quiet", "/norestart" -Wait
+          $url = "https://download.visualstudio.microsoft.com/download/pr/e1828da1-907a-46fe-a3cf-f3b9ea1c485c/035860f3c0d2bab0458e634685648385/webdeploy_amd64_en-us.msi"
+          Invoke-WebRequest -Uri $url -OutFile $msi
+          $install = Start-Process msiexec.exe -ArgumentList "/i", $msi, "/quiet", "/norestart", "ADDLOCAL=ALL" -Wait -PassThru
+          if ($install.ExitCode -ne 0) {
+            throw "Web Deploy installer failed with exit code $($install.ExitCode)."
+          }
 
       - name: Deploy via MSDeploy
         shell: pwsh
@@ -121,9 +125,13 @@ jobs:
             throw "Repository secret WEBDEPLOY_PASSWORD is not configured."
           }
 
-          $msdeploy = "${env:ProgramFiles}\IIS\Microsoft Web Deploy V3\msdeploy.exe"
-          if (-not (Test-Path $msdeploy)) {
-            throw "Web Deploy was not installed at $msdeploy"
+          $msdeployCandidates = @(
+            "${env:ProgramFiles}\IIS\Microsoft Web Deploy V3\msdeploy.exe",
+            "${env:ProgramFiles}\IIS\Microsoft Web Deploy\msdeploy.exe"
+          )
+          $msdeploy = $msdeployCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $msdeploy) {
+            throw "Web Deploy was not installed. Checked: $($msdeployCandidates -join ', ')"
           }
 
           $packagePath = Join-Path $env:GITHUB_WORKSPACE "publish"
