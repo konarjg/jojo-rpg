@@ -13,8 +13,8 @@ npm install
 npm run build
 cd ..
 
-# 2. (Optional, requires Docker) Regenerate linq2db entities from DbUp schema
-dotnet tool install -g linq2db.cli
+# 2. Regenerate linq2db entities from DbUp schema (Docker optional if SCHEMAGEN_CONNECTION_STRING is set)
+dotnet tool restore
 dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj
 
 # 3. Run the site (LocalDB connection string in appsettings.json)

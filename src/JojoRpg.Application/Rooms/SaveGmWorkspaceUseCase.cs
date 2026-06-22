@@ -22,7 +22,7 @@ public sealed class SaveGmWorkspaceUseCase
             return UseCaseResult.Fail("Room not found.");
         }
 
-        room.Workspace = workspace;
+        room.Workspace = workspace.WithDefaults();
         room.WorkspaceSchemaVersion = workspace.SchemaVersion;
         room.UpdatedAt = DateTimeOffset.UtcNow;
         await _roomRepository.SaveAsync(room, cancellationToken);

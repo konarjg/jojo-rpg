@@ -1,51 +1,110 @@
 ﻿using System.Diagnostics;
-using JojoRpg.Data.Database;
+using DbUp;
+using DbUp.Engine;
 using Testcontainers.MsSql;
 
 string repoRoot = FindRepoRoot();
 string outputDir = Path.Combine(repoRoot, "src", "JojoRpg.Data", "Generated");
 string migrationsDir = Path.Combine(repoRoot, "src", "JojoRpg.Data", "Database", "Migrations");
-Console.WriteLine("Starting SQL Server Testcontainer...");
-await using MsSqlContainer container = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-latest").Build();
-await container.StartAsync();
 
-string connectionString = container.GetConnectionString();
-Console.WriteLine("Applying DbUp migrations from {0}", migrationsDir);
+string? connectionString = Environment.GetEnvironmentVariable("SCHEMAGEN_CONNECTION_STRING");
+MsSqlContainer? container = null;
 
-string tempMigrations = Path.Combine(Path.GetTempPath(), "jojo-migrations-" + Guid.NewGuid().ToString("N"));
-Directory.CreateDirectory(tempMigrations);
-foreach (string file in Directory.GetFiles(migrationsDir, "*.sql"))
+if (string.IsNullOrWhiteSpace(connectionString))
 {
-    File.Copy(file, Path.Combine(tempMigrations, Path.GetFileName(file)), true);
+    Console.WriteLine("SCHEMAGEN_CONNECTION_STRING not set; starting SQL Server Testcontainer...");
+    container = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-latest").Build();
+    await container.StartAsync();
+    connectionString = container.GetConnectionString();
 }
 
-Environment.SetEnvironmentVariable("JOJO_MIGRATIONS", tempMigrations);
-DbUpRunner.Migrate(connectionString);
-Directory.CreateDirectory(outputDir);
-
-ProcessStartInfo psi = new()
+try
 {
-    FileName = "dotnet",
-    Arguments = $"linq2db scaffold -p SqlServer -c \"{connectionString}\" -o \"{outputDir}\" --namespace JojoRpg.Data.Generated",
-    RedirectStandardOutput = true,
-    RedirectStandardError = true,
-    UseShellExecute = false
-};
+    Console.WriteLine("Applying DbUp migrations from {0}", migrationsDir);
+    ApplyMigrations(connectionString, migrationsDir);
 
-using Process process = Process.Start(psi)!;
-string stdout = await process.StandardOutput.ReadToEndAsync();
-string stderr = await process.StandardError.ReadToEndAsync();
-await process.WaitForExitAsync();
+    Directory.CreateDirectory(outputDir);
+    Console.WriteLine("Scaffolding linq2db entities to {0}", outputDir);
+    await RunLinq2DbScaffoldAsync(repoRoot, connectionString, outputDir);
 
-Console.WriteLine(stdout);
-if (process.ExitCode != 0)
+    if (!File.Exists(Path.Combine(outputDir, "JojoDataConnection.cs")))
+    {
+        throw new InvalidOperationException("Schema codegen did not produce JojoDataConnection.cs.");
+    }
+
+    Console.WriteLine("Schema codegen complete.");
+}
+finally
 {
-    Console.Error.WriteLine(stderr);
-    Console.WriteLine("linq2db scaffold failed (exit {0}). Using existing Generated/ if present.", process.ExitCode);
-    Environment.Exit(process.ExitCode);
+    if (container is not null)
+    {
+        await container.DisposeAsync();
+    }
 }
 
-Console.WriteLine("Schema codegen complete.");
+static void ApplyMigrations(string connectionString, string scriptsPath)
+{
+    EnsureDatabase.For.SqlDatabase(connectionString);
+
+    UpgradeEngine upgrader = DeployChanges.To
+        .SqlDatabase(connectionString)
+        .WithScriptsFromFileSystem(scriptsPath)
+        .LogToConsole()
+        .Build();
+
+    DatabaseUpgradeResult result = upgrader.PerformUpgrade();
+    if (!result.Successful)
+    {
+        throw result.Error ?? new InvalidOperationException("Database migration failed.");
+    }
+}
+
+static async Task RunLinq2DbScaffoldAsync(string repoRoot, string connectionString, string outputDir)
+{
+    string configPath = Path.Combine(repoRoot, "tools", "JojoRpg.SchemaCodegen", "scaffold.json");
+
+    ProcessStartInfo psi = new()
+    {
+        FileName = "dotnet",
+        WorkingDirectory = repoRoot,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        UseShellExecute = false,
+    };
+
+    psi.ArgumentList.Add("tool");
+    psi.ArgumentList.Add("run");
+    psi.ArgumentList.Add("dotnet-linq2db");
+    psi.ArgumentList.Add("--");
+    psi.ArgumentList.Add("scaffold");
+    psi.ArgumentList.Add("-i");
+    psi.ArgumentList.Add(configPath);
+    psi.ArgumentList.Add("-c");
+    psi.ArgumentList.Add(connectionString);
+    psi.ArgumentList.Add("-o");
+    psi.ArgumentList.Add(outputDir);
+
+    using Process process = Process.Start(psi)!;
+    string stdout = await process.StandardOutput.ReadToEndAsync();
+    string stderr = await process.StandardError.ReadToEndAsync();
+    await process.WaitForExitAsync();
+
+    if (!string.IsNullOrWhiteSpace(stdout))
+    {
+        Console.WriteLine(stdout);
+    }
+
+    if (process.ExitCode != 0)
+    {
+        if (!string.IsNullOrWhiteSpace(stderr))
+        {
+            Console.Error.WriteLine(stderr);
+        }
+
+        throw new InvalidOperationException(
+            $"linq2db scaffold failed (exit {process.ExitCode}).{Environment.NewLine}{stderr}{Environment.NewLine}{stdout}");
+    }
+}
 
 static string FindRepoRoot()
 {

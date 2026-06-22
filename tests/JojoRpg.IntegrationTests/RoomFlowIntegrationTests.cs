@@ -137,11 +137,13 @@ public sealed class CampaignHubIntegrationTests : IAsyncLifetime
         SharedMapPayload? received = null;
         ManualResetEventSlim signal = new(false);
 
+        string sessionCookie = $"{RoomSessionCookie.Name}={created.Value.SessionId}";
+
         HubConnection hubConnection = new HubConnectionBuilder()
             .WithUrl(new Uri(client.BaseAddress!, "hubs/campaign"), options =>
             {
                 options.HttpMessageHandlerFactory = _ => _factory!.Server.CreateHandler();
-                options.Cookies.Add(new Cookie(RoomSessionCookie.Name, created.Value.SessionId.ToString()));
+                options.Headers["Cookie"] = sessionCookie;
             })
             .Build();
 
@@ -166,7 +168,7 @@ public sealed class CampaignHubIntegrationTests : IAsyncLifetime
         {
             Content = JsonContent.Create(mapPayload)
         };
-        request.Headers.Add("Cookie", $"{RoomSessionCookie.Name}={created.Value.SessionId}");
+        request.Headers.Add("Cookie", sessionCookie);
 
         HttpResponseMessage response = await client.SendAsync(request);
         Assert.True(response.IsSuccessStatusCode);
