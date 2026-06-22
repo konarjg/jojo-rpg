@@ -106,7 +106,19 @@ jobs:
           path: publish
 
       - name: Take site offline
-        run: echo "<html><body><p>Updating...</p></body></html>" > publish/app_offline.htm
+        run: |
+          mkdir offline-only
+          echo "<html><body><p>Updating...</p></body></html>" > offline-only/app_offline.htm
+
+      - name: Upload app_offline
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: site75760.siteasp.net
+          username: site75760
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: offline-only/
+          server-dir: /wwwroot/
+          protocol: ftps
 
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
@@ -118,13 +130,3 @@ jobs:
           server-dir: /wwwroot/
           protocol: ftps
           log-level: verbose
-
-      - name: Bring site back online
-        env:
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          if [ -z "$FTP_PASSWORD" ]; then
-            echo "FTP_PASSWORD secret is required."
-            exit 1
-          fi
-          lftp -c "set ftp:ssl-force true; set ssl:verify-certificate no; open -u site75760,$FTP_PASSWORD ftps://site75760.siteasp.net; cd wwwroot; rm -f app_offline.htm; bye"
