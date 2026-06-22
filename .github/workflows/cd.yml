@@ -105,17 +105,6 @@ jobs:
           name: web-publish
           path: publish
 
-      - name: Install Web Deploy
-        shell: pwsh
-        run: |
-          $msi = "$env:RUNNER_TEMP\WebDeploy.msi"
-          $url = "https://download.visualstudio.microsoft.com/download/pr/e1828da1-907a-46fe-a3cf-f3b9ea1c485c/035860f3c0d2bab0458e634685648385/webdeploy_amd64_en-us.msi"
-          Invoke-WebRequest -Uri $url -OutFile $msi
-          $install = Start-Process msiexec.exe -ArgumentList "/i", $msi, "/quiet", "/norestart", "ADDLOCAL=ALL" -Wait -PassThru
-          if ($install.ExitCode -ne 0) {
-            throw "Web Deploy installer failed with exit code $($install.ExitCode)."
-          }
-
       - name: Deploy via MSDeploy
         shell: pwsh
         env:
@@ -125,14 +114,47 @@ jobs:
             throw "Repository secret WEBDEPLOY_PASSWORD is not configured."
           }
 
-          $msdeployCandidates = @(
-            "${env:ProgramFiles}\IIS\Microsoft Web Deploy V3\msdeploy.exe",
-            "${env:ProgramFiles}\IIS\Microsoft Web Deploy\msdeploy.exe"
-          )
-          $msdeploy = $msdeployCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
-          if (-not $msdeploy) {
-            throw "Web Deploy was not installed. Checked: $($msdeployCandidates -join ', ')"
+          function Find-MsDeploy {
+            @(
+              "${env:ProgramFiles}\IIS\Microsoft Web Deploy V3\msdeploy.exe",
+              "${env:ProgramFiles}\IIS\Microsoft Web Deploy\msdeploy.exe",
+              "${env:ProgramFiles(x86)}\IIS\Microsoft Web Deploy V3\msdeploy.exe",
+              "${env:ProgramFiles(x86)}\IIS\Microsoft Web Deploy\msdeploy.exe"
+            ) | Where-Object { Test-Path $_ } | Select-Object -First 1
           }
+
+          $msdeploy = Find-MsDeploy
+          if (-not $msdeploy) {
+            Write-Host "Web Deploy not found on runner; installing via winget..."
+            winget install --id Microsoft.WebDeploy -e --accept-source-agreements --accept-package-agreements --disable-interactivity --silent
+            $msdeploy = Find-MsDeploy
+          }
+
+          if (-not $msdeploy) {
+            Write-Host "winget install did not produce msdeploy.exe; falling back to MSI..."
+            $msi = "$env:RUNNER_TEMP\WebDeploy.msi"
+            $url = "https://download.visualstudio.microsoft.com/download/pr/e1828da1-907a-46fe-a3cf-f3b9ea1c485c/035860f3c0d2bab0458e634685648385/webdeploy_amd64_en-us.msi"
+            Invoke-WebRequest -Uri $url -OutFile $msi
+            $log = "$env:RUNNER_TEMP\WebDeploy-install.log"
+            $install = Start-Process msiexec.exe -ArgumentList @(
+              "/i", $msi,
+              "/quiet", "/norestart",
+              "ADDLOCAL=ALL",
+              "LISTENURL=http://+:8080/MSDEPLOY2/",
+              "/L*v", $log
+            ) -Wait -PassThru
+            if ($install.ExitCode -ne 0) {
+              Get-Content $log -Tail 40
+              throw "Web Deploy installer failed with exit code $($install.ExitCode)."
+            }
+            $msdeploy = Find-MsDeploy
+          }
+
+          if (-not $msdeploy) {
+            throw "Web Deploy was not installed."
+          }
+
+          Write-Host "Using msdeploy at $msdeploy"
 
           $packagePath = Join-Path $env:GITHUB_WORKSPACE "publish"
           $dest = "contentPath=site75760,ComputerName=https://site75760.siteasp.net:8172/msdeploy.axd?site=site75760,UserName=site75760,Password=$env:WEBDEPLOY_PASSWORD,AuthType=Basic"
