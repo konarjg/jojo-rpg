@@ -1,0 +1,118 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: cd-main
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - run: npm install
+        working-directory: client
+
+      - run: npm run build
+        working-directory: client
+
+      - run: dotnet tool install -g linq2db.cli
+
+      - run: dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj
+
+      - name: Write production database config
+        env:
+          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+        run: |
+          if [ -z "$DATABASE_CONNECTION_STRING" ]; then
+            echo "Repository secret DATABASE_CONNECTION_STRING is required for CD."
+            exit 1
+          fi
+          python3 << 'PYEOF'
+          import json
+          import os
+
+          config = {
+              "ConnectionStrings": {
+                  "Default": os.environ["DATABASE_CONNECTION_STRING"]
+              }
+          }
+          path = "src/JojoRpg.Web/appsettings.Production.json"
+          with open(path, "w", encoding="utf-8") as file:
+              json.dump(config, file, indent=2)
+              file.write("\n")
+          PYEOF
+
+      - run: dotnet build --configuration Release
+
+      - run: dotnet test --configuration Release --no-build
+
+      - run: dotnet publish src/JojoRpg.Web/JojoRpg.Web.csproj --configuration Release --output publish
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-publish
+          path: publish/
+          retention-days: 7
+
+  deploy:
+    name: Deploy to production
+    needs: build
+    runs-on: windows-latest
+    environment:
+      name: production
+      url: http://jojorpg.runasp.net/
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-publish
+          path: publish
+
+      - name: Install Web Deploy
+        shell: pwsh
+        run: |
+          $msi = "$env:RUNNER_TEMP\WebDeploy.msi"
+          Invoke-WebRequest -Uri "https://download.microsoft.com/download/0/1/D/01DC28EA-638C-4FAC-8B00-3CD77ECC62A6/WebDeploy_amd64_en-US.msi" -OutFile $msi
+          Start-Process msiexec.exe -ArgumentList "/i", $msi, "/quiet", "/norestart" -Wait
+
+      - name: Deploy via MSDeploy
+        shell: pwsh
+        env:
+          WEBDEPLOY_PASSWORD: ${{ secrets.WEBDEPLOY_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:WEBDEPLOY_PASSWORD)) {
+            throw "Repository secret WEBDEPLOY_PASSWORD is not configured."
+          }
+
+          $msdeploy = "${env:ProgramFiles}\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+          if (-not (Test-Path $msdeploy)) {
+            throw "Web Deploy was not installed at $msdeploy"
+          }
+
+          $packagePath = Join-Path $env:GITHUB_WORKSPACE "publish"
+          $dest = "contentPath=site75760,ComputerName=https://site75760.siteasp.net:8172/msdeploy.axd?site=site75760,UserName=site75760,Password=$env:WEBDEPLOY_PASSWORD,AuthType=Basic"
+
+          & $msdeploy `
+            -verb:sync `
+            -source:contentPath="$packagePath" `
+            -dest:$dest `
+            -allowUntrusted `
+            -enableRule:AppOffline `
+            -disableLink:AppPoolExtension `
+            -disableLink:ContentExtension `
+            -disableLink:CertificateExtension

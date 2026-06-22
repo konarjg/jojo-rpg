@@ -1,0 +1,76 @@
+CREATE TABLE Rooms (
+    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    RoomCode NVARCHAR(16) NOT NULL,
+    GmCodeHash NVARCHAR(128) NOT NULL,
+    Name NVARCHAR(256) NOT NULL,
+    CreatedAt DATETIMEOFFSET NOT NULL,
+    UpdatedAt DATETIMEOFFSET NOT NULL,
+    CONSTRAINT UQ_Rooms_RoomCode UNIQUE (RoomCode)
+);
+
+CREATE TABLE Players (
+    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    RoomId UNIQUEIDENTIFIER NOT NULL,
+    DisplayName NVARCHAR(128) NOT NULL,
+    JoinedAt DATETIMEOFFSET NOT NULL,
+    LastSeenAt DATETIMEOFFSET NOT NULL,
+    CONSTRAINT FK_Players_Rooms FOREIGN KEY (RoomId) REFERENCES Rooms(Id)
+);
+
+CREATE INDEX IX_Players_RoomId ON Players(RoomId);
+
+CREATE TABLE RoomSessions (
+    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    RoomId UNIQUEIDENTIFIER NOT NULL,
+    Role NVARCHAR(16) NOT NULL,
+    PlayerId UNIQUEIDENTIFIER NULL,
+    CreatedAt DATETIMEOFFSET NOT NULL,
+    LastSeenAt DATETIMEOFFSET NULL,
+    RevokedAt DATETIMEOFFSET NULL,
+    CONSTRAINT FK_RoomSessions_Rooms FOREIGN KEY (RoomId) REFERENCES Rooms(Id),
+    CONSTRAINT FK_RoomSessions_Players FOREIGN KEY (PlayerId) REFERENCES Players(Id)
+);
+
+CREATE INDEX IX_RoomSessions_RoomId ON RoomSessions(RoomId);
+
+CREATE TABLE GmWorkspaces (
+    RoomId UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    SchemaVersion INT NOT NULL,
+    PayloadJson NVARCHAR(MAX) NOT NULL,
+    UpdatedAt DATETIMEOFFSET NOT NULL,
+    CONSTRAINT FK_GmWorkspaces_Rooms FOREIGN KEY (RoomId) REFERENCES Rooms(Id),
+    CONSTRAINT CK_GmWorkspaces_PayloadJson CHECK (ISJSON(PayloadJson) = 1)
+);
+
+CREATE TABLE CharacterSheets (
+    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    RoomId UNIQUEIDENTIFIER NOT NULL,
+    PlayerId UNIQUEIDENTIFIER NOT NULL,
+    DisplayName NVARCHAR(128) NOT NULL,
+    SchemaVersion INT NOT NULL,
+    PayloadJson NVARCHAR(MAX) NOT NULL,
+    UpdatedAt DATETIMEOFFSET NOT NULL,
+    CONSTRAINT FK_CharacterSheets_Rooms FOREIGN KEY (RoomId) REFERENCES Rooms(Id),
+    CONSTRAINT FK_CharacterSheets_Players FOREIGN KEY (PlayerId) REFERENCES Players(Id),
+    CONSTRAINT UQ_CharacterSheets_PlayerId UNIQUE (PlayerId),
+    CONSTRAINT CK_CharacterSheets_PayloadJson CHECK (ISJSON(PayloadJson) = 1)
+);
+
+CREATE TABLE PlayerStickyBoards (
+    PlayerId UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    StickiesJson NVARCHAR(MAX) NOT NULL,
+    UpdatedAt DATETIMEOFFSET NOT NULL,
+    CONSTRAINT FK_PlayerStickyBoards_Players FOREIGN KEY (PlayerId) REFERENCES Players(Id),
+    CONSTRAINT CK_PlayerStickyBoards_StickiesJson CHECK (ISJSON(StickiesJson) = 1)
+);
+
+CREATE TABLE SharedCampaignView (
+    RoomId UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    SharedMapJson NVARCHAR(MAX) NULL,
+    LastRollJson NVARCHAR(MAX) NULL,
+    MapSharedAt DATETIMEOFFSET NULL,
+    UpdatedAt DATETIMEOFFSET NOT NULL,
+    CONSTRAINT FK_SharedCampaignView_Rooms FOREIGN KEY (RoomId) REFERENCES Rooms(Id),
+    CONSTRAINT CK_SharedCampaignView_SharedMapJson CHECK (SharedMapJson IS NULL OR ISJSON(SharedMapJson) = 1),
+    CONSTRAINT CK_SharedCampaignView_LastRollJson CHECK (LastRollJson IS NULL OR ISJSON(LastRollJson) = 1)
+);

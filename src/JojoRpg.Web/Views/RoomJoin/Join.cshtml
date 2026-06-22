@@ -1,0 +1,17 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Join";
+    string roomCode = ViewBag.RoomCode as string ?? "";
+}
+
+<main style="max-width:480px;margin:2rem auto;padding:1rem;">
+    <h1>Join room @roomCode</h1>
+    @if (ViewBag.Error is string error)
+    {
+        <p style="color:#c44;">@error</p>
+    }
+    <form method="post" action="/room/@roomCode/join">
+        <label>Display name <input type="text" name="displayName" required /></label>
+        <button type="submit">Join</button>
+    </form>
+</main>

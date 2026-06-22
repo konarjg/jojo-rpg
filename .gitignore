@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# .NET (web app — see asp.net plan)
+bin/
+obj/
+**/Generated/
+**/wwwroot/js/
+*.user
+*.suo
+
+# Node (client TypeScript build)
+node_modules/
+client/dist/
+
+# Environment / secrets
+.env
+.env.*
+**/appsettings.Production.json
+
+# Test / tooling
+TestResults/
+*.log

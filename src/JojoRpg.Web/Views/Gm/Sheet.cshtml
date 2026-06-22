@@ -1,0 +1,23 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Character sheet";
+    string roomCode = ViewBag.RoomCode as string ?? "";
+    Guid playerId = ViewBag.PlayerId;
+    bool readOnly = ViewBag.ReadOnly ?? false;
+}
+
+<div id="sheet-app" data-player-id="@playerId" data-readonly="@readOnly.ToString().ToLowerInvariant()">
+    <header class="gm-toolbar">
+        <span class="gm-toolbar__title">Sheet @(readOnly ? "(read-only)" : "")</span>
+        <a href="/room/@roomCode/gm/sheets" class="gm-btn">Back</a>
+    </header>
+    <div id="sheet-root"></div>
+</div>
+
+@section Scripts {
+    <script>
+        window.JOJO_CONFIG = { roomId: '', roomCode: '@roomCode', playerId: '@playerId', mode: 'sheet', readOnly: @readOnly.ToString().ToLowerInvariant() };
+        window.JOJO_STORAGE_MODE = 'server';
+    </script>
+    <script src="~/js/sheet.js"></script>
+}

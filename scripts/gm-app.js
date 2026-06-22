@@ -79,6 +79,19 @@
   }
 
   function loadState() {
+    if (window.JOJO_INITIAL_WORKSPACE) {
+      try {
+        var ws = window.JOJO_INITIAL_WORKSPACE;
+        var merged = emptyState();
+        merged.activeSessionId = ws.activeSessionId || merged.activeSessionId;
+        merged.autoOpenPlayer = !!ws.autoOpenPlayer;
+        merged.npcs = ws.npcs || [];
+        merged.globalMaps = ws.globalMaps || {};
+        merged.sessions = ws.sessions || {};
+        merged.snapshots = ws.snapshots || [];
+        return GmState.migrateState(merged);
+      } catch (e) { /* fall through */ }
+    }
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
@@ -94,6 +107,12 @@
 
   function saveState() {
     syncStateNpcsFromCatalog();
+    if (window.JojoGmStorage && typeof window.JojoGmStorage.save === 'function') {
+      try {
+        window.JojoGmStorage.save(GmState.workspacePayload(state));
+      } catch (e) { /* ignore */ }
+      return;
+    }
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (e) { /* ignore */ }
@@ -1203,6 +1222,9 @@
       results: entry.results.slice()
     };
     broadcast(msg);
+    if (window.JOJO_STORAGE_MODE === 'server') {
+      document.dispatchEvent(new CustomEvent('jojo-roll-broadcast', { detail: msg }));
+    }
     try {
       var snap = JSON.parse(localStorage.getItem(SHARE_KEY) || '{}');
       snap.roll = msg;
@@ -1606,6 +1628,11 @@
       initGmView();
     }
   }
+
+  window.__jojoGmBridge = {
+    getState: function () { return state; },
+    getActiveSession: activeSession
+  };
 
   init();
 })();

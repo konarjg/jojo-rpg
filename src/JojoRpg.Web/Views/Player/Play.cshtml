@@ -1,0 +1,27 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Play";
+    string roomCode = ViewBag.RoomCode as string ?? "";
+    Guid roomId = ViewBag.RoomId;
+    Guid? playerId = ViewBag.PlayerId as Guid?;
+}
+
+<div id="play-app" data-room-id="@roomId" data-room-code="@roomCode" data-player-id="@playerId">
+    <header class="gm-toolbar">
+        <span class="gm-toolbar__title">JoJo RPG — @roomCode</span>
+        <form method="post" action="/session/leave" style="display:inline"><button type="submit" class="gm-btn">Leave</button></form>
+    </header>
+    <div id="player-roll-banner" class="player-roll-banner" hidden></div>
+    <div id="player-map-panel" class="player-map-panel"></div>
+    <div id="player-sticky-panel" class="gm-stickies-board"></div>
+    <div id="sheet-root"></div>
+</div>
+
+@section Scripts {
+    <script>
+        window.JOJO_CONFIG = { roomId: '@roomId', roomCode: '@roomCode', playerId: '@playerId', mode: 'play' };
+        window.JOJO_STORAGE_MODE = 'server';
+    </script>
+    <script src="~/js/play.js"></script>
+    <script src="~/js/sheet.js"></script>
+}

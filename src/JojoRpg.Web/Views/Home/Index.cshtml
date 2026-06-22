@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "JoJo RPG";
+}
+
+<main class="home-page" style="max-width:480px;margin:2rem auto;padding:1rem;">
+    <h1>JoJo RPG</h1>
+    @if (TempData["Error"] is string error)
+    {
+        <p class="error" style="color:#c44;">@error</p>
+    }
+
+    <section>
+        <h2>Create campaign (GM)</h2>
+        <form method="post" action="/rooms">
+            <label>Campaign name <input type="text" name="name" placeholder="Campaign" /></label>
+            <button type="submit">Create room</button>
+        </form>
+    </section>
+
+    <section style="margin-top:2rem;">
+        <h2>Join as player</h2>
+        <p>Ask your GM for the room code, then open <code>/room/{code}/join</code>.</p>
+    </section>
+
+    <form method="post" action="/session/leave" style="margin-top:2rem;">
+        <button type="submit">Leave session</button>
+    </form>
+</main>

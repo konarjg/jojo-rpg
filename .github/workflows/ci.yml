@@ -1,0 +1,26 @@
+name: CI
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - run: npm install
+        working-directory: client
+      - run: npm run build
+        working-directory: client
+      - run: dotnet tool install -g linq2db.cli
+      - run: dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj
+      - run: dotnet build --configuration Release
+      - run: dotnet test --configuration Release --no-build

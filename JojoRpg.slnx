@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/JojoRpg.Application/JojoRpg.Application.csproj" />
+    <Project Path="src/JojoRpg.Data/JojoRpg.Data.csproj" />
+    <Project Path="src/JojoRpg.Domain/JojoRpg.Domain.csproj" />
+    <Project Path="src/JojoRpg.Web/JojoRpg.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/JojoRpg.Application.Tests/JojoRpg.Application.Tests.csproj" />
+    <Project Path="tests/JojoRpg.IntegrationTests/JojoRpg.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj" />
+  </Folder>
+</Solution>

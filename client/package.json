@@ -1,0 +1,14 @@
+{
+  "name": "jojo-rpg-client",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/gm.ts src/play.ts src/sheet.ts --bundle --outdir=../src/JojoRpg.Web/wwwroot/js --format=iife --platform=browser",
+    "watch": "npm run build -- --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@microsoft/signalr": "^8.0.7",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.2"
+  }
+}

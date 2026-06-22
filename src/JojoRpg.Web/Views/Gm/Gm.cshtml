@@ -1,0 +1,33 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "GM Panel";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GM — @ViewBag.RoomCode</title>
+    <link rel="stylesheet" href="~/css/rulebook.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sheets.css" asp-append-version="true" />
+</head>
+@if (TempData["GmCode"] is string gmCode)
+{
+    <div style="background:#2a2a1a;color:#e8c547;padding:1rem;">
+        <strong>Save your GM code</strong> (shown once): <code>@gmCode</code>
+    </div>
+}
+<partial name="_GmPanelBody" />
+<script>
+    window.JOJO_CONFIG = { roomId: '@ViewBag.RoomId', roomCode: '@ViewBag.RoomCode', mode: 'gm' };
+    window.JOJO_STORAGE_MODE = 'server';
+</script>
+<script src="~/vendor/marked.min.js"></script>
+<script src="~/vendor/purify.min.js"></script>
+<script src="~/js/legacy/markdown-render.js"></script>
+<script src="~/js/legacy/gm-state.js"></script>
+<script src="~/js/legacy/npc-sheet.js"></script>
+<script src="~/js/legacy/dice-roller.js"></script>
+<script src="~/js/gm.js"></script>
+<script src="~/js/legacy/gm-app.js"></script>
+</html>

@@ -1,0 +1,137 @@
+@* NPC editor modal — mirrors scripts/build-gm-panel.py npc_modal_html *@
+<div id="npc-modal" class="modal-panel gm-npc-modal hidden">
+  <div class="rules-modal-header">
+    <h3 id="npc-modal-title">Add NPC</h3>
+    <button type="button" id="npc-modal-close" class="pick-btn" title="Close">&times;</button>
+  </div>
+  <div class="gm-npc-form-scroll">
+    <fieldset class="gm-npc-form-section">
+      <legend>Identity</legend>
+      <div class="gm-form-row">
+        <label class="gm-form-field gm-form-field--grow">Name
+          <input type="text" id="npc-f-name" class="sheet-input" placeholder="e.g. Dio Brando">
+        </label>
+        <label class="gm-form-field">Level
+          <input type="text" id="npc-f-level" class="sheet-input" placeholder="12">
+        </label>
+        <label class="gm-form-field">Type
+          <select id="npc-f-type" class="sheet-input"><option value="normal">Normal</option><option value="notable">Notable</option><option value="major">Major</option><option value="creature">Creature</option></select>
+        </label>
+        <label class="gm-form-field">XP
+          <input type="text" id="npc-f-xp" class="sheet-input" placeholder="180">
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="gm-npc-form-section" id="npc-f-special-section">
+      <legend>S.P.E.C.I.A.L.</legend>
+      <div class="gm-stat-grid">
+          <label class="gm-stat-field"><span class="gm-stat-label">STR</span><input type="text" id="npc-f-str" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">PER</span><input type="text" id="npc-f-per" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">END</span><input type="text" id="npc-f-end" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">CHA</span><input type="text" id="npc-f-cha" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">INT</span><input type="text" id="npc-f-int" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">AGI</span><input type="text" id="npc-f-agi" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">LCK</span><input type="text" id="npc-f-lck" class="sheet-input"></label>
+      </div>
+      <label class="gm-form-field">Extra (e.g. Spin rank 2)
+        <input type="text" id="npc-f-special-extra" class="sheet-input" placeholder="Optional notes on stat line">
+      </label>
+    </fieldset>
+
+    <fieldset class="gm-npc-form-section hidden" id="npc-f-creature-section">
+      <legend>Creature stats</legend>
+      <div class="gm-stat-grid gm-stat-grid--creature">
+        <label class="gm-stat-field"><span class="gm-stat-label">BODY</span><input type="text" id="npc-f-body" class="sheet-input"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">MIND</span><input type="text" id="npc-f-mind" class="sheet-input"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">Melee</span><input type="text" id="npc-f-melee" class="sheet-input"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">Guns</span><input type="text" id="npc-f-guns" class="sheet-input" placeholder="— if none"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">Other</span><input type="text" id="npc-f-other" class="sheet-input"></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="gm-npc-form-section">
+      <legend>Combat</legend>
+      <div class="gm-stat-grid">
+        <label class="gm-stat-field"><span class="gm-stat-label">HP</span><input type="text" id="npc-f-hp" class="sheet-input"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">Initiative</span><input type="text" id="npc-f-initiative" class="sheet-input"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">Defense</span><input type="text" id="npc-f-defense" class="sheet-input"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">Luck</span><input type="text" id="npc-f-luck" class="sheet-input"></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="gm-npc-form-section">
+      <legend>Damage resistance</legend>
+      <div class="gm-stat-grid">
+        <label class="gm-stat-field"><span class="gm-stat-label">PHYS DR</span><input type="text" id="npc-f-dr-phys" class="sheet-input" placeholder="2 (all)"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">ENERGY DR</span><input type="text" id="npc-f-dr-energy" class="sheet-input"></label>
+      </div>
+      <div class="gm-stat-grid hidden" id="npc-f-dr-creature">
+        <label class="gm-stat-field"><span class="gm-stat-label">POISON DR</span><input type="text" id="npc-f-dr-poison" class="sheet-input"></label>
+        <label class="gm-stat-field"><span class="gm-stat-label">SUN DR</span><input type="text" id="npc-f-dr-sun" class="sheet-input"></label>
+      </div>
+      <label class="gm-form-field hidden" id="npc-f-dr-special">Other DR / notes
+        <input type="text" id="npc-f-dr-extra" class="sheet-input" placeholder="Immortal Blood, Regeneration…">
+      </label>
+    </fieldset>
+
+    <fieldset class="gm-npc-form-section">
+      <legend>Attacks</legend>
+      <div class="gm-attack-list-field">
+        <div id="npc-f-attacks-list" class="gm-attack-list">
+          <ul class="gm-attack-list-items"></ul>
+          <button type="button" class="pick-btn gm-attack-add">+ Add attack</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="gm-npc-form-section">
+      <legend>Stand</legend>
+      <label class="sheet-toggle gm-stand-toggle"><input type="checkbox" id="npc-f-has-stand"> Has Stand</label>
+      <div id="npc-f-stand-fields" class="hidden">
+        <div class="gm-form-row">
+          <label class="gm-form-field gm-form-field--grow">Stand name
+            <input type="text" id="npc-f-stand-name" class="sheet-input" placeholder="The World">
+          </label>
+          <label class="gm-form-field">Type
+            <select id="npc-f-stand-type" class="sheet-input"><option value="Close-Range">Close-Range</option><option value="Remote">Remote</option><option value="Automatic">Automatic</option><option value="Colony">Colony</option><option value="Tool">Tool</option></select>
+          </label>
+        </div>
+        <div class="gm-stat-grid gm-stat-grid--stand">
+          <label class="gm-stat-field"><span class="gm-stat-label">Power</span> <select id="npc-f-stand-power" class="sheet-input"><option value="∞">∞</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option><option value="E">E</option><option value="?">?</option><option value="∅">∅</option></select></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">Speed</span> <select id="npc-f-stand-speed" class="sheet-input"><option value="∞">∞</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option><option value="E">E</option><option value="?">?</option><option value="∅">∅</option></select></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">Range</span> <select id="npc-f-stand-range" class="sheet-input"><option value="∞">∞</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option><option value="E">E</option><option value="?">?</option><option value="∅">∅</option></select></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">Durability</span> <select id="npc-f-stand-durability" class="sheet-input"><option value="∞">∞</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option><option value="E">E</option><option value="?">?</option><option value="∅">∅</option></select></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">Precision</span> <select id="npc-f-stand-precision" class="sheet-input"><option value="∞">∞</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option><option value="E">E</option><option value="?">?</option><option value="∅">∅</option></select></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">DP</span> <select id="npc-f-stand-dp" class="sheet-input"><option value="∞">∞</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D" selected>D</option><option value="E">E</option><option value="?">?</option><option value="∅">∅</option></select></label>
+        </div>
+        <div class="gm-stat-grid">
+          <label class="gm-stat-field"><span class="gm-stat-label">Stand HP</span><input type="text" id="npc-f-stand-hp" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">Stand Defense</span><input type="text" id="npc-f-stand-defense" class="sheet-input"></label>
+          <label class="gm-stat-field"><span class="gm-stat-label">Stand DR</span><input type="text" id="npc-f-stand-dr" class="sheet-input"></label>
+        </div>
+        <p class="gm-subsection-label">Stand attacks</p>
+        <div class="gm-attack-list-field">
+          <div id="npc-f-stand-attacks-list" class="gm-attack-list">
+            <ul class="gm-attack-list-items"></ul>
+            <button type="button" class="pick-btn gm-attack-add">+ Add attack</button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="gm-npc-form-section">
+      <legend>Abilities</legend>
+      <div class="gm-attack-list-field">
+        <div id="npc-f-abilities-list" class="gm-attack-list">
+          <ul class="gm-attack-list-items"></ul>
+          <button type="button" class="pick-btn gm-attack-add">+ Add ability</button>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  <div class="modal-actions">
+    <button type="button" id="npc-modal-cancel" class="pick-btn">Cancel</button>
+    <button type="button" id="npc-modal-save" class="pick-btn pick-btn--accent">Save</button>
+  </div>
+</div>
