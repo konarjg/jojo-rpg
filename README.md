@@ -1,4 +1,61 @@
-# JoJo RPG — Build Scripts
+# JoJo RPG
+
+## Web application (ASP.NET)
+
+Hexagonal .NET solution under `src/` with TypeScript client in `client/`.
+
+### Build order
+
+```powershell
+# 1. Frontend bundles → src/JojoRpg.Web/wwwroot/js/
+cd client
+npm install
+npm run build
+cd ..
+
+# 2. (Optional, requires Docker) Regenerate linq2db entities from DbUp schema
+dotnet tool install -g linq2db.cli
+dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj
+
+# 3. Run the site (LocalDB connection string in appsettings.json)
+dotnet run --project src/JojoRpg.Web/JojoRpg.Web.csproj
+```
+
+### Tests
+
+```powershell
+dotnet test tests/JojoRpg.Application.Tests          # no Docker
+dotnet test tests/JojoRpg.IntegrationTests           # requires Docker (Testcontainers SQL Server)
+```
+
+### Routes
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Create room or join link |
+| `/room/{code}/join` | Player join |
+| `/room/{code}/gm` | GM panel |
+| `/room/{code}/play` | Player view |
+| `/room/{code}/gm/sheets` | GM sheet list |
+
+Auth uses an opaque `RoomSessionId` cookie backed by the `RoomSessions` table.
+
+### Continuous deployment
+
+Pushes to `main` run [`.github/workflows/cd.yml`](.github/workflows/cd.yml): build, test, then Web Deploy to `http://jojorpg.runasp.net/`.
+
+Add these **repository secrets** in GitHub (Settings → Secrets and variables → Actions):
+
+| Secret | Value |
+|--------|--------|
+| `WEBDEPLOY_PASSWORD` | Web Deploy password for site `site75760` |
+| `DATABASE_PASSWORD` | SQL password for production database user `db57094` |
+
+Production server and database settings are in `src/JojoRpg.Web/appsettings.Production.json` with a `__DB_PASSWORD__` placeholder; CD replaces that placeholder at publish time.
+
+---
+
+## Legacy static HTML (Python build scripts)
 
 Uses [uv](https://docs.astral.sh/uv/) for Python.
 

@@ -1,0 +1,91 @@
+@* GM panel DOM shell — mirrors scripts/build-gm-panel.py gm_shell *@
+<body class="sheet-body sheet-interactive gm-body">
+<div id="gm-app" class="gm-app">
+  <div class="gm-toolbar screen-only">
+    <h1>JoJo RPG — GM (@ViewBag.RoomCode)</h1>
+    <div class="gm-toolbar-actions">
+      <button type="button" id="btn-share-map" class="pick-btn pick-btn--accent">Share map</button>
+      <a href="/room/@ViewBag.RoomCode/play" target="_blank" class="pick-btn">Player view</a>
+      <a href="/room/@ViewBag.RoomCode/gm/sheets" class="pick-btn">Sheets</a>
+      <form method="post" action="/session/leave" style="display:inline"><button type="submit" class="pick-btn">Leave</button></form>
+      <span class="gm-toolbar-divider" aria-hidden="true"></span>
+      <select id="gm-session-select" class="sheet-input"></select>
+      <button type="button" id="gm-add-session" class="pick-btn" title="Add session">+</button>
+      <button type="button" id="gm-rename-session" class="pick-btn" title="Rename session">Rename</button>
+      <button type="button" id="gm-delete-session" class="pick-btn" title="Delete session">Delete</button>
+      <span class="gm-toolbar-divider" aria-hidden="true"></span>
+      <span class="gm-panel-toggles" aria-label="Show panels">
+        <button type="button" class="pick-btn gm-panel-toggle gm-panel-toggle--active" data-panel="notes" aria-pressed="true">Notes</button>
+        <button type="button" class="pick-btn gm-panel-toggle gm-panel-toggle--active" data-panel="map" aria-pressed="true">Map</button>
+        <button type="button" class="pick-btn gm-panel-toggle gm-panel-toggle--active" data-panel="npc" aria-pressed="true">NPCs</button>
+      </span>
+      <span class="gm-toolbar-divider" aria-hidden="true"></span>
+      <button type="button" id="gm-import-json-btn" class="pick-btn" title="Import legacy JSON">Import</button>
+      <input type="file" id="gm-import-json" class="gm-import-json-input hidden" accept="application/json,.json">
+    </div>
+  </div>
+  <div class="gm-layout" id="gm-layout">
+    <aside class="gm-column gm-column--left" data-panel="notes">
+      <section class="gm-panel-section gm-sticky-section">
+        <div class="gm-section-head"><h2>Notes</h2>
+          <div class="gm-section-actions">
+            <button type="button" id="gm-add-sticky" class="pick-btn">+ Note</button>
+            <button type="button" class="gm-panel-close" data-panel="notes">&times;</button>
+          </div>
+        </div>
+        <div id="gm-sticky-board" class="gm-sticky-board"></div>
+      </section>
+    </aside>
+    <main class="gm-column gm-column--center" data-panel="map">
+      <section class="gm-panel-section gm-map-section">
+        <div class="gm-section-head gm-section-head--map">
+          <h2>Combat map</h2>
+          <div class="gm-section-actions">
+            <div class="gm-map-toolbar">
+              <select id="gm-map-select" class="sheet-input gm-map-select"></select>
+              <button type="button" id="gm-map-add" class="pick-btn">+ Map</button>
+              <button type="button" id="gm-map-rename" class="pick-btn">Rename</button>
+              <button type="button" id="gm-map-delete" class="pick-btn">Delete</button>
+              <button type="button" id="gm-map-global" class="pick-btn">Save as global</button>
+            </div>
+            <button type="button" class="gm-panel-close" data-panel="map">&times;</button>
+          </div>
+        </div>
+        <div id="gm-map-canvas" class="gm-map-canvas gm-map-canvas--select"></div>
+      </section>
+      <section class="gm-panel-section gm-tokens-section">
+        <h2>Tokens</h2>
+        <p id="gm-token-hint" class="gm-hint">Select / move tokens, or pick a type below to place.</p>
+        <button type="button" id="gm-mode-select" class="pick-btn gm-palette-btn gm-mode-select">Select / move</button>
+        <div id="gm-token-palette" class="gm-token-palette"></div>
+        <button type="button" id="gm-remove-token" class="pick-btn">Remove selected</button>
+      </section>
+      <section class="gm-panel-section gm-dice-section">
+        <h2>Dice</h2>
+        <div id="gm-dice-root" class="dice-roller-root"></div>
+      </section>
+    </main>
+    <aside class="gm-column gm-column--right gm-column--npc" data-panel="npc">
+      <section class="gm-panel-section gm-npc-section">
+        <div class="gm-section-head"><h2>NPC quick view</h2>
+          <div class="gm-section-actions">
+            <button type="button" id="gm-npc-add" class="pick-btn">+ Add NPC</button>
+            <button type="button" class="gm-panel-close" data-panel="npc">&times;</button>
+          </div>
+        </div>
+        <input type="text" id="gm-npc-search" class="sheet-input gm-npc-search" placeholder="Search NPCs…">
+        <div class="gm-npc-layout">
+          <div id="gm-npc-list" class="gm-npc-list"></div>
+          <div id="gm-npc-preview" class="gm-npc-preview"><em>Add or select an NPC</em></div>
+        </div>
+        <div class="gm-npc-actions">
+          <button type="button" id="gm-npc-edit" class="pick-btn" disabled>Edit</button>
+          <button type="button" id="gm-npc-delete" class="pick-btn" disabled>Delete</button>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>
+<div id="modal-overlay" class="modal-overlay hidden" aria-hidden="true"></div>
+<partial name="_GmNpcModal" />
+</body>
