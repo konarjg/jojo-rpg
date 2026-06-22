@@ -22,4 +22,26 @@ public record GmWorkspacePayload
 
     [JsonPropertyName("sessions")]
     public JsonElement Sessions { get; init; }
+
+    public GmWorkspacePayload WithDefaults()
+    {
+        return this with
+        {
+            Npcs = DefaultIfUnset(Npcs, "[]"),
+            GlobalMaps = DefaultIfUnset(GlobalMaps, "{}"),
+            Snapshots = DefaultIfUnset(Snapshots, "[]"),
+            Sessions = DefaultIfUnset(Sessions, "{}")
+        };
+    }
+
+    private static JsonElement DefaultIfUnset(JsonElement value, string json)
+    {
+        if (value.ValueKind != JsonValueKind.Undefined)
+        {
+            return value;
+        }
+
+        using JsonDocument document = JsonDocument.Parse(json);
+        return document.RootElement.Clone();
+    }
 }
