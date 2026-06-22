@@ -35,27 +35,25 @@ jobs:
 
       - run: dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj
 
-      - name: Write production database config
+      - name: Inject production database password
         env:
-          DATABASE_CONNECTION_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: |
-          if [ -z "$DATABASE_CONNECTION_STRING" ]; then
-            echo "Repository secret DATABASE_CONNECTION_STRING is required for CD."
+          if [ -z "$DATABASE_PASSWORD" ]; then
+            echo "Repository secret DATABASE_PASSWORD is required for CD."
             exit 1
           fi
           python3 << 'PYEOF'
-          import json
           import os
 
-          config = {
-              "ConnectionStrings": {
-                  "Default": os.environ["DATABASE_CONNECTION_STRING"]
-              }
-          }
           path = "src/JojoRpg.Web/appsettings.Production.json"
+          with open(path, encoding="utf-8") as file:
+              content = file.read()
+          if "__DB_PASSWORD__" not in content:
+              raise SystemExit("appsettings.Production.json is missing __DB_PASSWORD__ placeholder.")
+          content = content.replace("__DB_PASSWORD__", os.environ["DATABASE_PASSWORD"])
           with open(path, "w", encoding="utf-8") as file:
-              json.dump(config, file, indent=2)
-              file.write("\n")
+              file.write(content)
           PYEOF
 
       - run: dotnet build --configuration Release

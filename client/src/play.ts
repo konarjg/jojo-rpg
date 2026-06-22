@@ -11,7 +11,6 @@ async function bootstrap(): Promise<void> {
     onRoll: renderRoll,
   });
 }
-
 async function loadSharedView(roomId: string): Promise<void> {
   const response = await fetch(`/api/rooms/${roomId}/shared-view`, { credentials: 'same-origin' });
   if (!response.ok) return;

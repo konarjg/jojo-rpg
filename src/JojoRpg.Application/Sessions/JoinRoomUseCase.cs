@@ -3,6 +3,7 @@ using JojoRpg.Application.Ports.Persistence;
 using JojoRpg.Domain.Aggregates;
 using JojoRpg.Domain.Enums;
 using JojoRpg.Domain.Payloads;
+using System.Text.Json;
 
 namespace JojoRpg.Application.Sessions;
 
@@ -67,7 +68,12 @@ public sealed class JoinRoomUseCase
             JoinedAt = now,
             LastSeenAt = now,
             SheetSchemaVersion = 2,
-            Sheet = new CharacterSheetPayload { Id = playerId.ToString(), Name = displayName },
+            Sheet = new CharacterSheetPayload
+            {
+                Id = playerId.ToString(),
+                Name = displayName,
+                Data = JsonSerializer.SerializeToElement(new { id = playerId.ToString(), name = displayName })
+            },
             StickyBoard = new StickyBoardPayload()
         };
 

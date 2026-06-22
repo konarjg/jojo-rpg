@@ -31,7 +31,6 @@ client/dist/
 # Environment / secrets
 .env
 .env.*
-**/appsettings.Production.json
 
 # Test / tooling
 TestResults/

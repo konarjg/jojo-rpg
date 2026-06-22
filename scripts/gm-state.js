@@ -120,6 +120,7 @@
       autoOpenPlayer: !!state.autoOpenPlayer,
       npcs: deepClone(state.npcs || []),
       globalMaps: deepClone(state.globalMaps || {}),
+      snapshots: deepClone(state.snapshots || []),
       sessions: deepClone(state.sessions || {})
     };
   }

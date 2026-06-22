@@ -231,17 +231,26 @@
   }
 
   function closeRules() {
-    document.getElementById('rules-modal').classList.add('hidden');
-    document.getElementById('modal-overlay').classList.add('hidden');
+    var rulesModal = document.getElementById('rules-modal');
+    var overlay = document.getElementById('modal-overlay');
+    if (rulesModal) rulesModal.classList.add('hidden');
+    if (overlay) overlay.classList.add('hidden');
   }
 
   function openRules() {
-    document.getElementById('modal-overlay').classList.remove('hidden');
-    document.getElementById('rules-modal').classList.remove('hidden');
+    var overlay = document.getElementById('modal-overlay');
+    var rulesModal = document.getElementById('rules-modal');
+    if (!overlay || !rulesModal) return;
+    overlay.classList.remove('hidden');
+    rulesModal.classList.remove('hidden');
     showRulesChapter(currentRulesChapterIndex);
   }
 
   function initRulesModal() {
+    var btnRules = document.getElementById('btn-rules');
+    var overlay = document.getElementById('modal-overlay');
+    if (!btnRules || !overlay) return;
+
     var start = 0;
     try {
       var saved = parseInt(localStorage.getItem(RULES_CHAPTER_STORAGE_KEY), 10);
@@ -264,9 +273,10 @@
     if (sel) sel.addEventListener('change', function (e) {
       showRulesChapter(parseInt(e.target.value, 10) || 0);
     });
-    document.getElementById('btn-rules').addEventListener('click', openRules);
-    document.getElementById('btn-rules-close').addEventListener('click', closeRules);
-    document.getElementById('modal-overlay').addEventListener('click', function () {
+    btnRules.addEventListener('click', openRules);
+    var btnClose = document.getElementById('btn-rules-close');
+    if (btnClose) btnClose.addEventListener('click', closeRules);
+    overlay.addEventListener('click', function () {
       closeRules();
       closeNpcModal();
     });
@@ -1135,14 +1145,19 @@
   }
 
   function closeNpcModal() {
-    document.getElementById('npc-modal').classList.add('hidden');
-    document.getElementById('modal-overlay').classList.add('hidden');
+    var modal = document.getElementById('npc-modal');
+    var overlay = document.getElementById('modal-overlay');
+    if (modal) modal.classList.add('hidden');
+    if (overlay) overlay.classList.add('hidden');
     npcEditId = null;
   }
 
   function openNpcModal(editId) {
     npcEditId = editId || null;
     var title = document.getElementById('npc-modal-title');
+    var overlay = document.getElementById('modal-overlay');
+    var modal = document.getElementById('npc-modal');
+    if (!title || !overlay || !modal) return;
     if (editId) {
       var npc = findNpc(editId);
       if (!npc) return;
@@ -1152,8 +1167,8 @@
       title.textContent = 'Add NPC';
       NpcSheet.fillForm(NpcSheet.emptyNpc());
     }
-    document.getElementById('modal-overlay').classList.remove('hidden');
-    document.getElementById('npc-modal').classList.remove('hidden');
+    overlay.classList.remove('hidden');
+    modal.classList.remove('hidden');
     var nameEl = document.getElementById('npc-f-name');
     if (nameEl) nameEl.focus();
   }
@@ -1329,43 +1344,33 @@
     reader.onload = function () {
       try {
         var payload = JSON.parse(reader.result);
-        var err = GmState.validateImport(payload);
+        var data = payload.data && payload.sessions ? payload.data : payload;
+        var err = GmState.validateImport(data);
         if (err) {
           alert(err);
           return;
         }
-        var name = prompt('Import as snapshot named:', payload.name || 'Imported backup');
-        if (!name) return;
-        if (!state.snapshots) state.snapshots = [];
-        if (state.snapshots.length >= GmState.MAX_SNAPSHOTS) {
-          if (!confirm('Snapshot limit reached. Oldest will be removed. Continue?')) return;
-        }
-        var data = {
-          schemaVersion: payload.schemaVersion || GmState.SCHEMA_VERSION,
-          activeSessionId: payload.activeSessionId,
-          autoOpenPlayer: !!payload.autoOpenPlayer,
-          npcs: GmState.deepClone(payload.npcs),
-          globalMaps: GmState.deepClone(payload.globalMaps || {}),
-          sessions: GmState.deepClone(payload.sessions)
+        var normalized = {
+          schemaVersion: data.schemaVersion || GmState.SCHEMA_VERSION,
+          activeSessionId: data.activeSessionId,
+          autoOpenPlayer: !!data.autoOpenPlayer,
+          npcs: GmState.deepClone(data.npcs),
+          globalMaps: GmState.deepClone(data.globalMaps || {}),
+          sessions: GmState.deepClone(data.sessions)
         };
-        Object.keys(data.sessions).forEach(function (sid) {
-          data.sessions[sid] = GmState.migrateSession(data.sessions[sid]);
+        Object.keys(normalized.sessions).forEach(function (sid) {
+          normalized.sessions[sid] = GmState.migrateSession(normalized.sessions[sid]);
         });
-        var snap = {
-          id: uid('snap'),
-          name: name,
-          createdAt: Date.now(),
-          data: data
-        };
-        state.snapshots.unshift(snap);
-        while (state.snapshots.length > GmState.MAX_SNAPSHOTS) {
-          state.snapshots.pop();
+
+        if (!confirm('Apply imported workspace? This replaces your current campaign data.')) {
+          return;
         }
+
+        GmState.applySnapshotData(state, normalized);
+        syncNpcCatalogFromState();
         saveState();
-        renderSnapshotSelect();
-        var snapSel = document.getElementById('gm-snapshot-select');
-        if (snapSel) snapSel.value = snap.id;
-        alert('Imported as snapshot “' + name + '”. Use Restore to apply.');
+        renderAll();
+        alert('Imported workspace applied.');
       } catch (e) {
         alert('Could not parse JSON file.');
       }
@@ -1373,15 +1378,7 @@
     reader.readAsText(file);
   }
 
-  function initBackupToolbar() {
-    var saveBtn = document.getElementById('gm-snapshot-save');
-    if (saveBtn) saveBtn.addEventListener('click', saveSnapshot);
-    var restoreBtn = document.getElementById('gm-snapshot-restore');
-    if (restoreBtn) restoreBtn.addEventListener('click', restoreSnapshot);
-    var deleteBtn = document.getElementById('gm-snapshot-delete');
-    if (deleteBtn) deleteBtn.addEventListener('click', deleteSnapshot);
-    var exportBtn = document.getElementById('gm-export-json');
-    if (exportBtn) exportBtn.addEventListener('click', exportWorkspaceJson);
+  function initImportToolbar() {
     var importInput = document.getElementById('gm-import-json');
     if (importInput) {
       importInput.addEventListener('change', function (e) {
@@ -1423,7 +1420,7 @@
     initNpcPanel();
     initMapEditor();
     initMapToolbar();
-    initBackupToolbar();
+    initImportToolbar();
     initPanelLayout();
     initRulesModal();
     initChannelListeners();
@@ -1519,15 +1516,18 @@
       renderStickies();
     });
 
-    document.getElementById('gm-open-player').addEventListener('click', openPlayerView);
+    var openPlayerBtn = document.getElementById('gm-open-player');
+    if (openPlayerBtn) openPlayerBtn.addEventListener('click', openPlayerView);
 
     var autoOpen = document.getElementById('gm-auto-open-player');
-    autoOpen.checked = !!state.autoOpenPlayer;
-    autoOpen.addEventListener('change', function (e) {
-      state.autoOpenPlayer = e.target.checked;
-      saveState();
-    });
-    if (state.autoOpenPlayer) openPlayerView();
+    if (autoOpen) {
+      autoOpen.checked = !!state.autoOpenPlayer;
+      autoOpen.addEventListener('change', function (e) {
+        state.autoOpenPlayer = e.target.checked;
+        saveState();
+      });
+      if (state.autoOpenPlayer) openPlayerView();
+    }
 
     if (typeof DiceRoller !== 'undefined') {
       var diceRoot = document.getElementById('gm-dice-root');

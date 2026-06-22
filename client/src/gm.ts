@@ -13,6 +13,7 @@ declare global {
 async function bootstrap(): Promise<void> {
   installGmApi();
   await loadGmWorkspace();
+  await loadLegacyGmApp();
 
   const shareBtn = document.getElementById('btn-share-map');
   if (shareBtn) {
@@ -58,6 +59,16 @@ async function handleShareMap(): Promise<void> {
   };
 
   await shareMap(payload);
+}
+
+function loadLegacyGmApp(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = '/js/legacy/gm-app.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load gm-app.js'));
+    document.body.appendChild(script);
+  });
 }
 
 void bootstrap();

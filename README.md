@@ -49,9 +49,9 @@ Add these **repository secrets** in GitHub (Settings â†’ Secrets and variables â
 | Secret | Value |
 |--------|--------|
 | `WEBDEPLOY_PASSWORD` | Web Deploy password for site `site75760` |
-| `DATABASE_CONNECTION_STRING` | Production SQL connection string (see `appsettings.Production.json.example`) |
+| `DATABASE_PASSWORD` | SQL password for production database user `db57094` |
 
-`appsettings.Production.json` is generated during CD from `DATABASE_CONNECTION_STRING` and is not committed.
+Production server and database settings are in `src/JojoRpg.Web/appsettings.Production.json` with a `__DB_PASSWORD__` placeholder; CD replaces that placeholder at publish time.
 
 ---
 

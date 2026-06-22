@@ -53,6 +53,8 @@ public sealed class Linq2DbRoomRepository : IRoomRepository
         await using DataConnectionTransaction transaction = await _db.BeginTransactionAsync(cancellationToken);
         await _db.Rooms
             .Where(r => r.Id == room.Id)
+            .Set(r => r.RoomCode, room.RoomCode)
+            .Set(r => r.GmCodeHash, room.GmCodeHash)
             .Set(r => r.Name, room.Name)
             .Set(r => r.UpdatedAt, room.UpdatedAt)
             .UpdateAsync(cancellationToken);

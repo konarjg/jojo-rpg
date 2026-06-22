@@ -10,6 +10,7 @@
     <Project Path="tests/JojoRpg.IntegrationTests/JojoRpg.IntegrationTests.csproj" />
   </Folder>
   <Folder Name="/tools/">
+    <Project Path="tools/JojoRpg.MigrateDb/JojoRpg.MigrateDb.csproj" />
     <Project Path="tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj" />
   </Folder>
 </Solution>

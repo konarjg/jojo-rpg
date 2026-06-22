@@ -1,4 +1,6 @@
 import { getConfig } from './storage-mode';
+import { installPlayerImportUi, type CharacterSheetPayload } from './legacy-import';
+import { renderSheetPreview } from './sheet-render';
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -19,39 +21,40 @@ async function bootstrap(): Promise<void> {
   }
 
   const response = await fetch(`/api/players/${playerId}/sheet`, { credentials: 'same-origin' });
-  if (!response.ok) {
-    return;
-  }
-
-  const sheet = await response.json();
-  const root = document.getElementById('sheet-root');
-  if (root) {
-    root.innerHTML = `<pre class="sheet-json-preview">${escapeHtml(JSON.stringify(sheet, null, 2))}</pre>`;
+  if (response.ok) {
+    const sheet = (await response.json()) as CharacterSheetPayload;
+    renderSheetPreview(sheet);
+    if (config.mode === 'play' && !config.readOnly) {
+      installSheetSave(sheet);
+    }
   }
 
   if (config.mode === 'play' && !config.readOnly) {
-    installSheetSave(sheet);
+    installPlayerImportUi((sheet) => {
+      renderSheetPreview(sheet);
+      installSheetSave(sheet);
+    });
   }
 }
 
-function installSheetSave(initialSheet: unknown): void {
-  let currentSheet = initialSheet;
+function installSheetSave(initialSheet: CharacterSheetPayload): void {
+  let currentSheet: CharacterSheetPayload = initialSheet;
 
   window.addEventListener('jojo-sheet-changed', (event: Event) => {
-    currentSheet = (event as CustomEvent).detail;
+    currentSheet = (event as CustomEvent).detail as CharacterSheetPayload;
     scheduleSheetSave(currentSheet);
   });
 
-  (window as unknown as { jojoSheet?: { get: () => unknown; set: (value: unknown) => void } }).jojoSheet = {
+  (window as unknown as { jojoSheet?: { get: () => CharacterSheetPayload; set: (value: CharacterSheetPayload) => void } }).jojoSheet = {
     get: () => currentSheet,
-    set: (value: unknown) => {
+    set: (value: CharacterSheetPayload) => {
       currentSheet = value;
       scheduleSheetSave(value);
     },
   };
 }
 
-function scheduleSheetSave(sheet: unknown): void {
+function scheduleSheetSave(sheet: CharacterSheetPayload): void {
   if (saveTimer) {
     clearTimeout(saveTimer);
   }
@@ -64,10 +67,6 @@ function scheduleSheetSave(sheet: unknown): void {
       credentials: 'same-origin',
     });
   }, 400);
-}
-
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 void bootstrap();

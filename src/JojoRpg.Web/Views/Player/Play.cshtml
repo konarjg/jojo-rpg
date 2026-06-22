@@ -9,6 +9,8 @@
 <div id="play-app" data-room-id="@roomId" data-room-code="@roomCode" data-player-id="@playerId">
     <header class="gm-toolbar">
         <span class="gm-toolbar__title">JoJo RPG — @roomCode</span>
+        <button type="button" id="player-import-json-btn" class="gm-btn">Import JSON</button>
+        <input type="file" id="player-import-json" class="hidden" accept="application/json,.json" />
         <form method="post" action="/session/leave" style="display:inline"><button type="submit" class="gm-btn">Leave</button></form>
     </header>
     <div id="player-roll-banner" class="player-roll-banner" hidden></div>
