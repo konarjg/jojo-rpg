@@ -1344,7 +1344,9 @@
     reader.onload = function () {
       try {
         var payload = JSON.parse(reader.result);
-        var data = payload.data && payload.sessions ? payload.data : payload;
+        var data = payload.data && typeof payload.data === 'object' && payload.data.sessions
+          ? payload.data
+          : payload;
         var err = GmState.validateImport(data);
         if (err) {
           alert(err);
@@ -1369,10 +1371,11 @@
         GmState.applySnapshotData(state, normalized);
         syncNpcCatalogFromState();
         saveState();
-        renderAll();
+        refreshAllUi();
         alert('Imported workspace applied.');
       } catch (e) {
-        alert('Could not parse JSON file.');
+        var message = e && e.message ? e.message : 'Import failed.';
+        alert(message);
       }
     };
     reader.readAsText(file);
