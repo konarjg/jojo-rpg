@@ -4,9 +4,20 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  SCHEMAGEN_CONNECTION_STRING: Server=localhost,1433;Database=JojoRpgSchema;User Id=sa;Password=JojoCi_Test123!;TrustServerCertificate=True;Encrypt=False
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: JojoCi_Test123!
+        ports:
+          - 1433:1433
     steps:
       - uses: actions/checkout@v4
 
@@ -28,7 +39,20 @@ jobs:
 
       - run: dotnet tool install -g linq2db.cli
 
-      - run: dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj
+      - name: Generate linq2db entities
+        env:
+          SCHEMAGEN_CONNECTION_STRING: ${{ env.SCHEMAGEN_CONNECTION_STRING }}
+        run: |
+          for attempt in $(seq 1 30); do
+            if dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj -c Release; then
+              echo "Schema codegen succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Schema codegen failed (attempt $attempt), waiting for SQL Server..."
+            sleep 3
+          done
+          echo "Schema codegen did not succeed in time."
+          exit 1
 
       - run: dotnet build --configuration Release
 

@@ -17,6 +17,9 @@ cd ..
 dotnet tool install -g linq2db.cli
 dotnet run --project tools/JojoRpg.SchemaCodegen/JojoRpg.SchemaCodegen.csproj
 
+# CI/CD sets SCHEMAGEN_CONNECTION_STRING to a SQL Server service container.
+# Locally, omit it to use a Testcontainer (Docker required).
+
 # 3. Run the site (LocalDB connection string in appsettings.json)
 dotnet run --project src/JojoRpg.Web/JojoRpg.Web.csproj
 ```
