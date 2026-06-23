@@ -36,6 +36,18 @@ let sheetPanelOpen = true;
 let interactionInstalled = false;
 let dragState: { tokenId: string; offsetX: number; offsetY: number } | null = null;
 let interactionOptions: PlayerMapInteractionOptions | null = null;
+let panelLayoutMapRefresh: (() => void) | null = null;
+
+function notifyPanelLayoutChange(): void {
+  requestAnimationFrame(() => {
+    window.dispatchEvent(new Event('resize'));
+    panelLayoutMapRefresh?.();
+  });
+}
+
+export function setPanelLayoutMapRefresh(refresh: () => void): void {
+  panelLayoutMapRefresh = refresh;
+}
 
 function syncMapGrid(canvas: HTMLElement): number {
   const width = canvas.clientWidth;
@@ -136,6 +148,7 @@ export function setSheetPanelVisible(visible: boolean): void {
   }
 
   updatePlayPanelToggleButtons();
+  notifyPanelLayoutChange();
 }
 
 export function setNotesPanelVisible(visible: boolean): void {
@@ -147,6 +160,7 @@ export function setNotesPanelVisible(visible: boolean): void {
   }
 
   updatePlayPanelToggleButtons();
+  notifyPanelLayoutChange();
 }
 
 export function setMapPanelVisible(visible: boolean): void {
@@ -159,6 +173,7 @@ export function setMapPanelVisible(visible: boolean): void {
   panel.classList.toggle('play-map-sidebar--closed', !visible);
   panel.setAttribute('aria-hidden', visible ? 'false' : 'true');
   updatePlayPanelToggleButtons();
+  notifyPanelLayoutChange();
 }
 
 function installSheetCloseButton(): void {

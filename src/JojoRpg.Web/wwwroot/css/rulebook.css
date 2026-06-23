@@ -2698,35 +2698,33 @@ body.play-mode .play-layout {
   overflow: hidden;
 }
 
-body.play-mode .play-main {
-  flex: 0 1 38%;
-  max-width: 42%;
-  min-width: min(300px, 36vw);
+body.play-mode .play-main:not(.play-sheet-panel--closed) {
+  flex: 3 1 0%;
+  min-width: min(280px, 30vw);
   min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
+  transition: flex 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
 }
 
 body.play-mode .play-main.play-sheet-panel--closed {
-  flex: 0 0 0 !important;
-  max-width: 0 !important;
-  min-width: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
+  display: none;
 }
 
-body.play-mode .play-notes-sidebar,
-body.play-mode .play-map-sidebar {
-  flex: 1 1 26%;
-  max-width: 38%;
-  min-width: min(280px, 30vw);
+body.play-mode .play-notes-sidebar:not(.play-notes-sidebar--closed),
+body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
+  flex: 2 1 0%;
+  min-width: min(260px, 28vw);
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+body.play-mode .play-notes-sidebar.play-notes-sidebar--closed,
+body.play-mode .play-map-sidebar.play-map-sidebar--closed {
+  display: none;
 }
 
 body.play-mode .play-notes-sidebar .player-sticky-section {
@@ -2754,30 +2752,12 @@ body.play-mode .play-notes-sidebar .gm-sticky-board {
   min-height: 0;
 }
 
-body.play-mode .play-notes-sidebar {
-  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
+body.play-mode .play-notes-sidebar:not(.play-notes-sidebar--closed) {
+  transition: flex 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
 }
 
-body.play-mode .play-notes-sidebar.play-notes-sidebar--closed {
-  flex: 0 0 0 !important;
-  max-width: 0 !important;
-  min-width: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-body.play-mode .play-map-sidebar {
-  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
-}
-
-body.play-mode .play-map-sidebar.play-map-sidebar--closed {
-  flex: 0 0 0 !important;
-  max-width: 0 !important;
-  min-width: 0 !important;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
+body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
+  transition: flex 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
 }
 
 body.play-mode .play-map-sidebar .gm-map-section {
@@ -2885,15 +2865,14 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
     overflow: auto;
   }
 
-  body.play-mode .play-notes-sidebar,
+  body.play-mode .play-notes-sidebar:not(.play-notes-sidebar--closed),
   body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed),
   body.play-mode .play-main:not(.play-sheet-panel--closed) {
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     width: auto;
-    max-width: none;
     min-width: 0;
     min-height: min(40vh, 320px);
-    max-height: min(70vh, 640px);
+    max-height: none;
     overflow: hidden;
   }
 
@@ -2903,17 +2882,11 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
     overflow-y: auto;
   }
 
-  body.play-mode .play-notes-sidebar.play-notes-sidebar--closed,
-  body.play-mode .play-map-sidebar.play-map-sidebar--closed,
-  body.play-mode .play-main.play-sheet-panel--closed {
-    min-height: 0;
-  }
-
   body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
     min-height: min(50vh, 420px);
   }
 
-  body.play-mode .play-map-sidebar .player-map-canvas {
+  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) .player-map-canvas {
     min-height: min(50vh, 420px);
   }
 }

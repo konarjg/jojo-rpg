@@ -5,7 +5,9 @@ import {
   initPlayPanels,
   installMapResizeHandler,
   installPlayerMapInteraction,
+  renderEmptyMap,
   renderSharedMap,
+  setPanelLayoutMapRefresh,
 } from './player-map';
 import type { RollPayload, SharedMapPayload, SharedViewDto, StickyBoardPayload, StickyNotePayload } from './types/payloads';
 
@@ -34,6 +36,14 @@ let playerStickyState: StickyNotePayload[] = [];
 async function bootstrap(): Promise<void> {
   const config = getConfig();
   initPlayPanels();
+
+  setPanelLayoutMapRefresh(() => {
+    if (latestMap) {
+      renderSharedMap(latestMap);
+    } else {
+      renderEmptyMap();
+    }
+  });
 
   await loadSharedView(config.roomId);
   await initPlayerStickies();
