@@ -54,18 +54,21 @@
     if (!container) return;
     container.innerHTML = '';
     container.classList.add('gm-sticky-note-palette');
+    var activeColor = note.color || STICKY_COLORS[0];
     STICKY_COLORS.forEach(function (color) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'gm-sticky-palette-swatch gm-sticky-palette-swatch--small';
       btn.style.background = color;
+      btn.setAttribute('data-color', color);
       btn.title = 'Set color';
-      if (color === note.color) {
+      if (color === activeColor) {
         btn.classList.add('gm-sticky-palette-swatch--active');
       }
       btn.addEventListener('click', function (event) {
         event.stopPropagation();
         note.color = color;
+        setPaletteActive(container, color);
         onSelect();
       });
       container.appendChild(btn);
@@ -96,8 +99,8 @@
 
     function autosizeStickyText(ta) {
       if (!ta) return;
-      var minWidth = 80;
-      var maxWidth = 168;
+      var minWidth = 120;
+      var maxWidth = 220;
       var text = ta.value.length ? ta.value : '\u00a0';
       var style = window.getComputedStyle(ta);
       var mirror = getMirror();
