@@ -2707,6 +2707,41 @@ body.play-mode .play-main {
   flex-direction: column;
 }
 
+body.play-mode .play-notes-sidebar {
+  flex: 0 0 22%;
+  max-width: 28%;
+  min-width: min(280px, 32vw);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body.play-mode .play-notes-sidebar .player-sticky-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body.play-mode .play-notes-sidebar .gm-section-head {
+  flex-wrap: wrap;
+}
+
+body.play-mode .play-notes-sidebar .gm-section-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--jojo-gold);
+  border: none;
+}
+
+body.play-mode .play-notes-sidebar .gm-sticky-board {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 body.play-mode .play-map-sidebar {
   flex: 0 0 38%;
   max-width: 42%;
@@ -2746,16 +2781,6 @@ body.play-mode .play-map-sidebar .player-map-canvas {
   height: 100%;
 }
 
-body.play-mode .player-sticky-section {
-  flex: 0 0 220px;
-  min-height: 180px;
-  margin-top: 0.75rem;
-}
-
-body.play-mode .player-sticky-section .gm-sticky-board {
-  min-height: 140px;
-}
-
 body.play-mode .sheet-shell {
   flex: 1 1 auto;
   min-height: 0;
@@ -2769,6 +2794,13 @@ body.play-mode .sheet-viewport {
   body.play-mode .play-layout {
     flex-direction: column;
     overflow: auto;
+  }
+
+  body.play-mode .play-notes-sidebar {
+    flex: 0 0 auto;
+    max-width: none;
+    min-width: 0;
+    min-height: min(40vh, 320px);
   }
 
   body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {

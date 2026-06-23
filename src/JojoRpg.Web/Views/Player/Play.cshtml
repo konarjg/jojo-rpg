@@ -20,8 +20,7 @@
     </header>
     <div id="player-roll-banner" class="player-roll-banner" hidden></div>
     <div class="play-layout" id="play-layout">
-        <div class="play-main">
-            <partial name="_InteractiveSheetShell" />
+        <aside class="play-notes-sidebar" aria-label="My notes">
             <section class="gm-panel-section gm-sticky-section player-sticky-section">
                 <div class="gm-section-head">
                     <h2>My notes</h2>
@@ -35,6 +34,9 @@
                 </div>
                 <div id="player-sticky-board" class="gm-sticky-board"></div>
             </section>
+        </aside>
+        <div class="play-main">
+            <partial name="_InteractiveSheetShell" />
         </div>
         <aside id="player-map-panel" class="play-map-sidebar play-map-sidebar--closed" aria-hidden="true">
             <section class="gm-panel-section gm-map-section">
