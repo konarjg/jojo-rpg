@@ -7,6 +7,13 @@
 }
 
 <div id="play-app" data-room-id="@roomId" data-room-code="@roomCode" data-player-id="@playerId">
+    @if (TempData["PlayerCode"] is string playerCode)
+    {
+        <div style="background:#2a2a1a;color:#e8c547;padding:1rem;margin-bottom:0.75rem;border-radius:8px;border:1px solid #e8c547;">
+            <strong>Save your player code</strong> (shown once): <code>@playerCode</code>
+            <div style="font-size:0.9rem;margin-top:0.35rem;color:#ccc;">We also saved it in this browser. Enter it manually to rejoin from another device.</div>
+        </div>
+    }
     <header class="gm-toolbar screen-only">
         <span class="gm-toolbar__title">JoJo RPG — @roomCode</span>
         <form method="post" action="/session/leave" style="display:inline"><button type="submit" class="gm-btn">Leave</button></form>

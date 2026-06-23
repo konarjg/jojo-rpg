@@ -2,6 +2,7 @@
     Layout = "_Layout";
     ViewData["Title"] = "Join";
     string roomCode = ViewBag.RoomCode as string ?? "";
+    string? savedPlayerCode = ViewBag.SavedPlayerCode as string;
 }
 
 <main style="max-width:480px;margin:2rem auto;padding:1rem;">
@@ -11,7 +12,15 @@
         <p style="color:#c44;">@error</p>
     }
     <form method="post" action="/room/@roomCode/join">
-        <label>Display name <input type="text" name="displayName" required /></label>
+        <label>
+            Display name
+            <input type="text" name="displayName" required maxlength="128" placeholder="Your name" />
+        </label>
+        <label>
+            Player code <span style="font-weight:normal;color:#888">(optional)</span>
+            <input type="text" name="playerCode" maxlength="16" autocomplete="off" value="@savedPlayerCode" placeholder="Saved automatically in this browser" style="text-transform:uppercase" />
+        </label>
         <button type="submit">Join</button>
     </form>
+    <p style="font-size:0.9rem;color:#888;margin-top:0.75rem;">Leave player code blank to create a new character. Use your saved code to recover an existing sheet.</p>
 </main>

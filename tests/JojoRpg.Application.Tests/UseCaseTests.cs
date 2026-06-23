@@ -45,7 +45,7 @@ public class JoinRoomUseCaseTests
             CreatedAt = DateTimeOffset.UtcNow
         }, CancellationToken.None);
 
-        JoinRoomUseCase useCase = new(rooms, players, sessions);
+        JoinRoomUseCase useCase = new(rooms, players, sessions, new FakeRoomCodeGenerator(), new FakeGmCodeHasher());
         Application.Common.UseCaseResult<JoinRoomResponse> result = await useCase.ExecuteAsync(new JoinRoomRequest
         {
             RoomCode = "ABC12345",
@@ -55,6 +55,70 @@ public class JoinRoomUseCaseTests
 
         Assert.True(result.Success);
         Assert.NotNull(sessions.Sessions[oldSession].RevokedAt);
+        Assert.True(result.Value!.IssuedNewPlayerCode);
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.PlayerCode));
+    }
+
+    [Fact]
+    public async Task JoinRoom_ReusesPlayerWhenCodeMatches()
+    {
+        FakeRoomRepository rooms = new();
+        FakeSessionRepository sessions = new();
+        FakePlayerRepository players = new();
+        FakeGmCodeHasher hasher = new();
+        Guid roomId = Guid.NewGuid();
+        Room room = new() { Id = roomId, RoomCode = "ABC12345", GmCodeHash = "x", Name = "T", CreatedAt = DateTimeOffset.UtcNow, UpdatedAt = DateTimeOffset.UtcNow };
+        await rooms.AddAsync(room, CancellationToken.None);
+
+        Guid existingPlayerId = Guid.NewGuid();
+        string playerCode = "PLAYERCODE1";
+        await players.AddAsync(new Player
+        {
+            Id = existingPlayerId,
+            RoomId = roomId,
+            DisplayName = "Alice",
+            PlayerCodeHash = hasher.Hash(playerCode),
+            JoinedAt = DateTimeOffset.UtcNow,
+            LastSeenAt = DateTimeOffset.UtcNow,
+            Sheet = new CharacterSheetPayload { Id = existingPlayerId.ToString(), Name = "Alice" }
+        }, CancellationToken.None);
+
+        JoinRoomUseCase useCase = new(rooms, players, sessions, new FakeRoomCodeGenerator(), hasher);
+        Application.Common.UseCaseResult<JoinRoomResponse> firstJoin = await useCase.ExecuteAsync(new JoinRoomRequest
+        {
+            RoomCode = "ABC12345",
+            DisplayName = "Alice",
+            PlayerCode = playerCode
+        }, CancellationToken.None);
+
+        Assert.True(firstJoin.Success);
+        Assert.True(firstJoin.Value!.RejoinedExistingPlayer);
+        Assert.Equal(existingPlayerId, firstJoin.Value.PlayerId);
+        Assert.Equal(playerCode, firstJoin.Value.PlayerCode);
+        Assert.False(firstJoin.Value.IssuedNewPlayerCode);
+        Assert.Single(players.Players);
+    }
+
+    [Fact]
+    public async Task JoinRoom_RejectsInvalidPlayerCode()
+    {
+        FakeRoomRepository rooms = new();
+        FakeSessionRepository sessions = new();
+        FakePlayerRepository players = new();
+        Guid roomId = Guid.NewGuid();
+        Room room = new() { Id = roomId, RoomCode = "ABC12345", GmCodeHash = "x", Name = "T", CreatedAt = DateTimeOffset.UtcNow, UpdatedAt = DateTimeOffset.UtcNow };
+        await rooms.AddAsync(room, CancellationToken.None);
+
+        JoinRoomUseCase useCase = new(rooms, players, sessions, new FakeRoomCodeGenerator(), new FakeGmCodeHasher());
+        Application.Common.UseCaseResult<JoinRoomResponse> result = await useCase.ExecuteAsync(new JoinRoomRequest
+        {
+            RoomCode = "ABC12345",
+            DisplayName = "Alice",
+            PlayerCode = "NOTAVALID1"
+        }, CancellationToken.None);
+
+        Assert.False(result.Success);
+        Assert.Empty(players.Players);
     }
 }
 

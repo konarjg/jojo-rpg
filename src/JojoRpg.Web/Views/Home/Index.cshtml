@@ -28,8 +28,13 @@
                 Display name
                 <input type="text" name="displayName" required maxlength="128" placeholder="Your name" />
             </label>
+            <label>
+                Player code <span style="font-weight:normal;color:#888">(optional — rejoin an existing character)</span>
+                <input type="text" name="playerCode" maxlength="16" autocomplete="off" placeholder="Leave blank for a new character" style="text-transform:uppercase" />
+            </label>
             <button type="submit">Join</button>
         </form>
+        <p style="font-size:0.9rem;color:#888;margin-top:0.75rem;">Your player code is saved in this browser after your first join. Enter it manually to rejoin from another device.</p>
     </section>
 
     <form method="post" action="/session/leave" style="margin-top:2rem;">

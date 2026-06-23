@@ -17,6 +17,11 @@ public sealed class RoomCodeGenerator : IRoomCodeGenerator
         return Generate(length);
     }
 
+    public string GeneratePlayerCode(int length)
+    {
+        return Generate(length);
+    }
+
     private static string Generate(int length)
     {
         char[] chars = new char[length];

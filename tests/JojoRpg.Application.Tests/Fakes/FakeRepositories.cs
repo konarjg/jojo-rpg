@@ -90,6 +90,16 @@ public sealed class FakePlayerRepository : IPlayerRepository
         return Task.FromResult(list);
     }
 
+    public Task<Player?> GetByRoomAndPlayerCodeHashAsync(Guid roomId, string playerCodeHash, CancellationToken cancellationToken)
+    {
+        Player? player = Players.Values.FirstOrDefault(p =>
+            p.RoomId == roomId
+            && p.PlayerCodeHash is not null
+            && string.Equals(p.PlayerCodeHash, playerCodeHash, StringComparison.OrdinalIgnoreCase));
+
+        return Task.FromResult(player);
+    }
+
     public Task AddAsync(Player player, CancellationToken cancellationToken)
     {
         Players[player.Id] = player;
@@ -140,4 +150,6 @@ public sealed class FakeRoomCodeGenerator : IRoomCodeGenerator
     public string GenerateRoomCode(int length) => "ROOM" + (++Counter).ToString("D4");
 
     public string GenerateGmCode(int length) => "GM" + new string('X', length - 2);
+
+    public string GeneratePlayerCode(int length) => "PL" + (++Counter).ToString("D6");
 }

@@ -95,11 +95,16 @@ public sealed class RoomJoinController : Controller
 {
     private readonly JoinRoomUseCase _joinRoomUseCase;
     private readonly ISessionCookieService _cookieService;
+    private readonly IPlayerCodeCookieService _playerCodeCookieService;
 
-    public RoomJoinController(JoinRoomUseCase joinRoomUseCase, ISessionCookieService cookieService)
+    public RoomJoinController(
+        JoinRoomUseCase joinRoomUseCase,
+        ISessionCookieService cookieService,
+        IPlayerCodeCookieService playerCodeCookieService)
     {
         _joinRoomUseCase = joinRoomUseCase;
         _cookieService = cookieService;
+        _playerCodeCookieService = playerCodeCookieService;
     }
 
     [HttpGet("/room/{roomCode}/join")]
@@ -112,11 +117,16 @@ public sealed class RoomJoinController : Controller
         }
 
         ViewBag.RoomCode = code;
+        ViewBag.SavedPlayerCode = _playerCodeCookieService.GetPlayerCode(HttpContext, code);
         return View("Join");
     }
 
     [HttpPost("/join")]
-    public async Task<IActionResult> JoinFromHome([FromForm] string? roomCode, [FromForm] string? displayName, CancellationToken cancellationToken)
+    public async Task<IActionResult> JoinFromHome(
+        [FromForm] string? roomCode,
+        [FromForm] string? displayName,
+        [FromForm] string? playerCode,
+        CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(roomCode))
         {
@@ -124,25 +134,36 @@ public sealed class RoomJoinController : Controller
             return Redirect("/");
         }
 
-        return await JoinInternal(roomCode.Trim(), displayName, returnToHomeOnError: true, cancellationToken);
+        return await JoinInternal(roomCode.Trim(), displayName, playerCode, returnToHomeOnError: true, cancellationToken);
     }
 
     [HttpPost("/room/{roomCode}/join")]
-    public Task<IActionResult> Join(string roomCode, [FromForm] string? displayName, CancellationToken cancellationToken)
+    public Task<IActionResult> Join(
+        string roomCode,
+        [FromForm] string? displayName,
+        [FromForm] string? playerCode,
+        CancellationToken cancellationToken)
     {
-        return JoinInternal(roomCode, displayName, returnToHomeOnError: false, cancellationToken);
+        return JoinInternal(roomCode, displayName, playerCode, returnToHomeOnError: false, cancellationToken);
     }
 
     private async Task<IActionResult> JoinInternal(
         string roomCode,
         string? displayName,
+        string? playerCode,
         bool returnToHomeOnError,
         CancellationToken cancellationToken)
     {
+        string normalizedRoomCode = roomCode.Trim().ToUpperInvariant();
+        string? resolvedPlayerCode = string.IsNullOrWhiteSpace(playerCode)
+            ? _playerCodeCookieService.GetPlayerCode(HttpContext, normalizedRoomCode)
+            : playerCode.Trim();
+
         JoinRoomRequest request = new()
         {
-            RoomCode = roomCode,
+            RoomCode = normalizedRoomCode,
             DisplayName = displayName,
+            PlayerCode = resolvedPlayerCode,
             ExistingSessionId = _cookieService.GetSessionId(HttpContext)
         };
 
@@ -155,12 +176,20 @@ public sealed class RoomJoinController : Controller
                 return Redirect("/");
             }
 
-            ViewBag.RoomCode = roomCode.ToUpperInvariant();
+            ViewBag.RoomCode = normalizedRoomCode;
             ViewBag.Error = result.Error;
+            ViewBag.SavedPlayerCode = resolvedPlayerCode;
             return View("Join");
         }
 
         _cookieService.SetSession(HttpContext, result.Value.SessionId);
+        _playerCodeCookieService.SetPlayerCode(HttpContext, result.Value.RoomCode, result.Value.PlayerCode);
+
+        if (result.Value.IssuedNewPlayerCode)
+        {
+            TempData["PlayerCode"] = result.Value.PlayerCode;
+        }
+
         return Redirect($"/room/{result.Value.RoomCode}/play");
     }
 }

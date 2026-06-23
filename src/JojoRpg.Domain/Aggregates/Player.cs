@@ -14,6 +14,8 @@ public class Player
 
     public DateTimeOffset LastSeenAt { get; set; }
 
+    public string? PlayerCodeHash { get; set; }
+
     public int SheetSchemaVersion { get; set; } = 2;
 
     public CharacterSheetPayload Sheet { get; set; } = new();
