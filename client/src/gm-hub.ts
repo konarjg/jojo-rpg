@@ -7,6 +7,7 @@ let connection: signalR.HubConnection | null = null;
 
 export function startCampaignHub(handlers: {
   onMapShared?: (map: SharedMapPayload) => void;
+  onMapSharingStopped?: () => void;
   onRoll?: (roll: RollPayload) => void;
 }): signalR.HubConnection {
   if (connection) return connection;
@@ -19,6 +20,11 @@ export function startCampaignHub(handlers: {
   if (handlers.onMapShared) {
     connection.on('MapShared', handlers.onMapShared);
   }
+
+  if (handlers.onMapSharingStopped) {
+    connection.on('MapSharingStopped', handlers.onMapSharingStopped);
+  }
+
   if (handlers.onRoll) {
     connection.on('RollBroadcast', handlers.onRoll);
   }

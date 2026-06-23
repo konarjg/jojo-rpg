@@ -160,7 +160,14 @@
     if (mapSyncTimer) clearTimeout(mapSyncTimer);
     mapSyncTimer = setTimeout(function () {
       saveState();
+      pushServerMapShareIfActive();
     }, 100);
+  }
+
+  function pushServerMapShareIfActive() {
+    if (window.JOJO_STORAGE_MODE !== 'server') return;
+    if (!window.__jojoMapShareActive) return;
+    document.dispatchEvent(new CustomEvent('jojo-map-share-sync'));
   }
 
   function setPlayerStatus(connected) {

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/css/rulebook.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/sheets.css" asp-append-version="true" />
 </head>
-<body>
+<body class="@ViewData["BodyClass"]">
     @RenderBody()
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -14,6 +14,10 @@ from rulebook_embed import rules_modal_html
 HTML_DIR = os.path.join(BASE_DIR, "html")
 CSS_PATH = os.path.join(BASE_DIR, "css", "rulebook.css")
 OUT_PATH = os.path.join(BASE_DIR, "sheets", "character-builder.html")
+ASPNET_SHELL_PATH = os.path.join(
+    BASE_DIR, "src", "JojoRpg.Web", "wwwroot", "partials", "sheet-shell.html"
+)
+CATALOG_JSON_PATH = os.path.join(BASE_DIR, "src", "JojoRpg.Web", "wwwroot", "data", "jojo-catalog.json")
 APP_JS_PATH = os.path.join(BASE_DIR, "scripts", "sheet-app.js")
 DICE_JS_PATH = os.path.join(BASE_DIR, "scripts", "dice-roller.js")
 EXTRACT_PATH = os.path.join(BASE_DIR, "scripts", "extract-rules.py")
@@ -135,20 +139,8 @@ def dice_modal_html() -> str:
 """
 
 
-def html_shell(css: str) -> str:
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JoJo RPG — Character Sheet</title>
-  <style>
-{css}
-  </style>
-</head>
-<body class="sheet-body sheet-interactive">
-
-<div class="sheet-shell">
+def sheet_markup() -> str:
+    return f"""<div class="sheet-shell">
 <div class="sheet-toolbar screen-only">
   <h1>JoJo RPG — Character Sheet</h1>
   <div class="sheet-toolbar-actions">
@@ -389,8 +381,39 @@ def html_shell(css: str) -> str:
 
 {rules_modal_html()}
 {dice_modal_html()}
-
 """
+
+
+def html_shell(css: str) -> str:
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JoJo RPG — Character Sheet</title>
+  <style>
+{css}
+  </style>
+</head>
+<body class="sheet-body sheet-interactive">
+
+{sheet_markup()}
+"""
+
+
+def write_aspnet_assets(catalog_json: str) -> None:
+    os.makedirs(os.path.dirname(CATALOG_JSON_PATH), exist_ok=True)
+    with open(CATALOG_JSON_PATH, "w", encoding="utf-8", newline="\n") as f:
+        f.write(catalog_json)
+        f.write("\n")
+
+    shell = sheet_markup()
+    os.makedirs(os.path.dirname(ASPNET_SHELL_PATH), exist_ok=True)
+    with open(ASPNET_SHELL_PATH, "w", encoding="utf-8", newline="\n") as f:
+        f.write(shell)
+
+    print(f"Wrote {ASPNET_SHELL_PATH}")
+    print(f"Wrote {CATALOG_JSON_PATH}")
 
 
 def main() -> None:
@@ -402,6 +425,8 @@ def main() -> None:
         app_js = f.read()
     with open(DICE_JS_PATH, encoding="utf-8") as f:
         dice_js = f.read()
+
+    write_aspnet_assets(catalog_json)
 
     output = (
         html_shell(css)

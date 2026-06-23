@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<SaveGmWorkspaceUseCase>();
         services.AddScoped<GetGmWorkspaceUseCase>();
         services.AddScoped<ShareMapUseCase>();
+        services.AddScoped<StopShareMapUseCase>();
         services.AddScoped<BroadcastRollUseCase>();
         services.AddScoped<GetSharedViewUseCase>();
         services.AddScoped<SavePlayerSheetUseCase>();

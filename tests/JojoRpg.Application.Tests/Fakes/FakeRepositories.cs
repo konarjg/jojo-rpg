@@ -113,6 +113,14 @@ public sealed class FakeCampaignNotifier : ICampaignNotifier
         return Task.CompletedTask;
     }
 
+    public List<Guid> StoppedRooms { get; } = new();
+
+    public Task MapSharingStoppedAsync(Guid roomId, CancellationToken cancellationToken)
+    {
+        StoppedRooms.Add(roomId);
+        return Task.CompletedTask;
+    }
+
     public Task RollBroadcastAsync(Guid roomId, RollPayload roll, CancellationToken cancellationToken) => Task.CompletedTask;
 
     public Task PlayerSheetChangedAsync(Guid roomId, Guid playerId, string displayName, CancellationToken cancellationToken) => Task.CompletedTask;

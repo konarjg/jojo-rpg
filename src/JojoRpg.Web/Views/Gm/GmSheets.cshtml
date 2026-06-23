@@ -1,18 +1,30 @@
 @model IReadOnlyList<JojoRpg.Domain.Aggregates.Player>
 @{
-    Layout = "_Layout";
     ViewData["Title"] = "Player sheets";
     string roomCode = Context.Request.RouteValues["roomCode"]?.ToString() ?? "";
 }
 
 <main style="max-width:640px;margin:2rem auto;padding:1rem;">
     <h1>Player sheets</h1>
-    <ul>
-        @foreach (JojoRpg.Domain.Aggregates.Player player in Model)
-        {
-            <li><a href="/room/@roomCode/gm/sheet/@player.Id">@player.DisplayName</a></li>
-        }
-    </ul>
-    <p><a href="/room/@roomCode/gm/builder">Reference character builder</a></p>
+    @if (Model.Count == 0)
+    {
+        <p>No players have joined this room yet.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (JojoRpg.Domain.Aggregates.Player player in Model)
+            {
+                <li>
+                    <a href="/room/@roomCode/gm/sheet/@player.Id">@player.DisplayName</a>
+                    @if (!string.IsNullOrWhiteSpace(player.Sheet.Name) && player.Sheet.Name != player.DisplayName)
+                    {
+                        <span style="color:var(--jojo-cream-dim)"> — @player.Sheet.Name</span>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    <p><a href="/room/@roomCode/gm/builder">Reference character builder</a> (local scratch sheet for the GM)</p>
     <p><a href="/room/@roomCode/gm">Back to GM panel</a></p>
 </main>

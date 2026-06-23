@@ -57,6 +57,18 @@ public sealed class RoomsApiController : ControllerBase
         return result.Success ? NoContent() : BadRequest(result.Error);
     }
 
+    [HttpPost("/api/rooms/{roomId:guid}/stop-share-map")]
+    public async Task<IActionResult> StopShareMap(Guid roomId, StopShareMapUseCase useCase, CancellationToken cancellationToken)
+    {
+        if (!AuthorizeGm(roomId))
+        {
+            return Forbid();
+        }
+
+        Application.Common.UseCaseResult result = await useCase.ExecuteAsync(roomId, cancellationToken);
+        return result.Success ? NoContent() : BadRequest(result.Error);
+    }
+
     [HttpPost("/api/rooms/{roomId:guid}/broadcast-roll")]
     public async Task<IActionResult> BroadcastRoll(Guid roomId, [FromBody] RollPayload roll, BroadcastRollUseCase useCase, CancellationToken cancellationToken)
     {

@@ -49,8 +49,10 @@ public sealed class GmController : Controller
         }
 
         ViewBag.RoomCode = session.RoomCode;
+        ViewBag.RoomId = session.RoomId;
         ViewBag.PlayerId = sheetId;
         ViewBag.ReadOnly = true;
+        ViewBag.ReferenceMode = false;
         return View("Sheet");
     }
 
@@ -63,6 +65,7 @@ public sealed class GmController : Controller
         }
 
         ViewBag.RoomCode = session.RoomCode;
+        ViewBag.RoomId = session.RoomId;
         ViewBag.ReadOnly = false;
         ViewBag.ReferenceMode = true;
         return View("Sheet");
@@ -83,5 +86,20 @@ public sealed class PlayerController : Controller
         ViewBag.RoomId = session.RoomId;
         ViewBag.PlayerId = session.PlayerId;
         return View("Play");
+    }
+
+    [HttpGet("/room/{roomCode}/player-view")]
+    public IActionResult PlayerView(string roomCode)
+    {
+        RoomSessionContext? session = HttpContext.GetRoomSession();
+        if (session is null || !string.Equals(session.RoomCode, roomCode, StringComparison.OrdinalIgnoreCase))
+        {
+            return Redirect($"/room/{roomCode.ToUpperInvariant()}/join");
+        }
+
+        ViewBag.RoomCode = session.RoomCode;
+        ViewBag.RoomId = session.RoomId;
+        ViewBag.IsGm = session.Role == Domain.Enums.SessionRole.Gm;
+        return View("PlayerView");
     }
 }

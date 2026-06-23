@@ -1,0 +1,1892 @@
+﻿{
+  "version": 1,
+  "skills": [
+    {
+      "id": "athletics",
+      "name": "Athletics",
+      "attribute": "STR",
+      "locked": false
+    },
+    {
+      "id": "pilot",
+      "name": "Pilot",
+      "attribute": "PER",
+      "locked": false
+    },
+    {
+      "id": "barter",
+      "name": "Barter",
+      "attribute": "CHA",
+      "locked": false
+    },
+    {
+      "id": "repair",
+      "name": "Repair",
+      "attribute": "INT",
+      "locked": false
+    },
+    {
+      "id": "big-guns",
+      "name": "Big Guns",
+      "attribute": "END",
+      "locked": false
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "attribute": "INT",
+      "locked": false
+    },
+    {
+      "id": "energy-weapons",
+      "name": "Energy Weapons",
+      "attribute": "PER",
+      "locked": false
+    },
+    {
+      "id": "small-guns",
+      "name": "Small Guns",
+      "attribute": "AGI",
+      "locked": false
+    },
+    {
+      "id": "explosives",
+      "name": "Explosives",
+      "attribute": "PER",
+      "locked": false
+    },
+    {
+      "id": "sneak",
+      "name": "Sneak",
+      "attribute": "AGI",
+      "locked": false
+    },
+    {
+      "id": "lockpick",
+      "name": "Lockpick",
+      "attribute": "PER",
+      "locked": false
+    },
+    {
+      "id": "speech",
+      "name": "Speech",
+      "attribute": "CHA",
+      "locked": false
+    },
+    {
+      "id": "medicine",
+      "name": "Medicine",
+      "attribute": "INT",
+      "locked": false
+    },
+    {
+      "id": "survival",
+      "name": "Survival",
+      "attribute": "END",
+      "locked": false
+    },
+    {
+      "id": "melee-weapons",
+      "name": "Melee Weapons",
+      "attribute": "STR",
+      "locked": false
+    },
+    {
+      "id": "throwing",
+      "name": "Throwing",
+      "attribute": "AGI",
+      "locked": false
+    },
+    {
+      "id": "unarmed",
+      "name": "Unarmed",
+      "attribute": "STR",
+      "locked": false
+    },
+    {
+      "id": "hamon",
+      "name": "Hamon",
+      "attribute": "END",
+      "locked": true
+    },
+    {
+      "id": "spin",
+      "name": "Spin",
+      "attribute": "AGI",
+      "locked": true
+    }
+  ],
+  "traits": {
+    "human": [
+      {
+        "id": "educated",
+        "name": "Educated",
+        "benefit": "+1 tag skill",
+        "penalty": "GM +1 AP when you fail non-tag test"
+      },
+      {
+        "id": "fast-shot",
+        "name": "Fast Shot",
+        "benefit": "Second ranged major action costs 1 AP not 2",
+        "penalty": "Cannot Aim"
+      },
+      {
+        "id": "gifted",
+        "name": "Gifted",
+        "benefit": "+1 to two SPECIAL",
+        "penalty": "Max Luck points â’1"
+      },
+      {
+        "id": "heavy-handed",
+        "name": "Heavy Handed",
+        "benefit": "+1 D/C melee bonus",
+        "penalty": "Complication on 19â€“20 melee"
+      },
+      {
+        "id": "small-frame",
+        "name": "Small Frame",
+        "benefit": "Re-roll 1d20 on balance AGI tests",
+        "penalty": "Carry 150+5Ă—STR"
+      }
+    ],
+    "vampire": {
+      "id": "immortal-blood",
+      "name": "Immortal Blood",
+      "benefits": [
+        "Regenerate 1 HP end of combat round (not in sunlight); 2 if last damaged by Hamon",
+        "Sunlight and Hamon ignore DR; sunlight = energy Persistent",
+        "Cannot learn Hamon; Spin only with GM approval",
+        "Max CHA/PER 10; +1 physical DR all locations"
+      ]
+    }
+  },
+  "perks": [
+    {
+      "id": "action-surge",
+      "name": "Action Surge",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {},
+        "levelMin": null,
+        "race": null,
+        "notes": null
+      },
+      "effect": "Second major action no +difficulty penalty"
+    },
+    {
+      "id": "adamant-frame",
+      "name": "Adamant Frame",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "END": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 7"
+      },
+      "effect": "Critical hit threshold +1 per rank (6+ damage)"
+    },
+    {
+      "id": "adrenaline-rush",
+      "name": "Adrenaline Rush",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "STR": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 7"
+      },
+      "effect": "Below max HP: STR counts as 10 for STR tests/melee"
+    },
+    {
+      "id": "beast-tamer",
+      "name": "Beast Tamer",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "CHA": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 6"
+      },
+      "effect": "Animals may not attack; rank 2 befriend with CHA+Survival 2"
+    },
+    {
+      "id": "aqua-adapt",
+      "name": "Aqua Adapt",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "END": 5
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 5"
+      },
+      "effect": "Hold breath 2Ă—; rank 2 harder to detect underwater"
+    },
+    {
+      "id": "armorer",
+      "name": "Armorer",
+      "ranks": 4,
+      "requirements": {
+        "attributes": {
+          "STR": 5,
+          "INT": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 5, INT 6"
+      },
+      "effect": "Unlock armor mod ranks equal to perk rank"
+    },
+    {
+      "id": "awareness",
+      "name": "Awareness",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 7"
+      },
+      "effect": "Aim at Close: next attack gains Piercing 1"
+    },
+    {
+      "id": "barbarian",
+      "name": "Barbarian",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "STR": 7
+        },
+        "levelMin": 4,
+        "race": null,
+        "notes": "STR 7, Lvl 4+"
+      },
+      "effect": "Physical DR from STR (7â€“8:+1, 9â€“10:+2, 11+:+3)"
+    },
+    {
+      "id": "basher",
+      "name": "Basher",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "STR": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 6"
+      },
+      "effect": "Rifle butt: Melee 2 D/C; gun melee +1 D/C"
+    },
+    {
+      "id": "sharpshooter",
+      "name": "Sharpshooter",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "PER": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 6"
+      },
+      "effect": "+1 D/C crit damage per rank"
+    },
+    {
+      "id": "silver-tongue",
+      "name": "Silver Tongue",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "CHA": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 6"
+      },
+      "effect": "+1 difficulty to resist your Speech per rank"
+    },
+    {
+      "id": "blitz",
+      "name": "Blitz",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "AGI": 9
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 9"
+      },
+      "effect": "Move+melee same turn: re-roll 1d20; rank 2 +1 D/C"
+    },
+    {
+      "id": "bloody-mess",
+      "name": "Bloody Mess",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 6"
+      },
+      "effect": "On crit: roll D/C; Effect = extra injury random location"
+    },
+    {
+      "id": "scrounger-plus",
+      "name": "Scrounger Plus",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 5
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 5"
+      },
+      "effect": "Scavenge consumables: +1 random item"
+    },
+    {
+      "id": "haggler",
+      "name": "Haggler",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 5
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 5"
+      },
+      "effect": "Barter Â±10% price"
+    },
+    {
+      "id": "cautious-nature",
+      "name": "Cautious Nature",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 7"
+      },
+      "effect": "When buying d20s with AP, re-roll 1d20"
+    },
+    {
+      "id": "center-mass",
+      "name": "Center Mass",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 7"
+      },
+      "effect": "Ranged torso without +diff; re-roll 1d20"
+    },
+    {
+      "id": "chem-resistant",
+      "name": "Chem Resistant",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "END": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 7"
+      },
+      "effect": "â’1 D/C addiction roll; rank 2 immune"
+    },
+    {
+      "id": "chemist",
+      "name": "Chemist",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "INT": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 7"
+      },
+      "effect": "Crafted chems last 2Ă—; unlock recipes"
+    },
+    {
+      "id": "commando",
+      "name": "Commando",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "AGI": 8
+        },
+        "levelMin": 2,
+        "race": null,
+        "notes": "AGI 8, Lvl 2+"
+      },
+      "effect": "Fire Rate â‰Ą3 ranged: +1 D/C per rank"
+    },
+    {
+      "id": "comprehension",
+      "name": "Comprehension",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 6"
+      },
+      "effect": "After magazine bonus, D/C Effect = reuse once"
+    },
+    {
+      "id": "concentrated-fire",
+      "name": "Concentrated Fire",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 8,
+          "AGI": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 8, AGI 6"
+      },
+      "effect": "Spend ammo for damage: re-roll up to 3 D/C"
+    },
+    {
+      "id": "daring-nature",
+      "name": "Daring Nature",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 7"
+      },
+      "effect": "When giving GM AP for dice, re-roll 1d20"
+    },
+    {
+      "id": "demolition-expert",
+      "name": "Demolition Expert",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 6,
+          "LCK": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 6, LCK 6"
+      },
+      "effect": "Blast weapons gain Vicious"
+    },
+    {
+      "id": "dodger",
+      "name": "Dodger",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "AGI": 6
+        },
+        "levelMin": 4,
+        "race": null,
+        "notes": "AGI 6, Lvl 4+"
+      },
+      "effect": "Defend â’1 diff; rank 2 +1 Defense costs 1 AP"
+    },
+    {
+      "id": "loyal-companion",
+      "name": "Loyal Companion",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 5
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 5"
+      },
+      "effect": "Pet dog ally (profile as creature)"
+    },
+    {
+      "id": "bug-slayer",
+      "name": "Bug Slayer",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 7"
+      },
+      "effect": "vs Insects: Piercing 1 or +1 Piercing"
+    },
+    {
+      "id": "fast-metabolism",
+      "name": "Fast Metabolism",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6"
+      },
+      "effect": "+1 HP per rank from non-rest healing"
+    },
+    {
+      "id": "faster-healing",
+      "name": "Faster Healing",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6"
+      },
+      "effect": "First bought d20 on injury recovery free"
+    },
+    {
+      "id": "finesse",
+      "name": "Finesse",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 9
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 9"
+      },
+      "effect": "Once/fight: re-roll all D/C on one damage roll free"
+    },
+    {
+      "id": "fortune-finder",
+      "name": "Fortune Finder",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "LCK": 5
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 5"
+      },
+      "effect": "+3/6/10 D/C money found per rank"
+    },
+    {
+      "id": "ghost",
+      "name": "Ghost",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 5,
+          "AGI": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 5, AGI 6"
+      },
+      "effect": "First bought d20 on Sneak in darkness free"
+    },
+    {
+      "id": "grim-sprint",
+      "name": "Grim Sprint",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 8"
+      },
+      "effect": "Kill: D/C Effect = +2 AP"
+    },
+    {
+      "id": "gun-fu",
+      "name": "Gun Fu",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "AGI": 10
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 10"
+      },
+      "effect": "Hit + spend ammo/AP for extra targets Close"
+    },
+    {
+      "id": "gunsmith",
+      "name": "Gunsmith",
+      "ranks": 4,
+      "requirements": {
+        "attributes": {
+          "INT": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 6"
+      },
+      "effect": "Unlock gun mod ranks"
+    },
+    {
+      "id": "gunslinger",
+      "name": "Gunslinger",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "AGI": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 7"
+      },
+      "effect": "One-handed FRâ‰¤2: +1 D/C per rank; re-roll location"
+    },
+    {
+      "id": "hacker",
+      "name": "Hacker",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 8"
+      },
+      "effect": "Hack diff â’1 (min 0)"
+    },
+    {
+      "id": "healer",
+      "name": "Healer",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "INT": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 7"
+      },
+      "effect": "First Aid +1 HP per rank"
+    },
+    {
+      "id": "heave-ho",
+      "name": "Heave Ho!",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "STR": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 8"
+      },
+      "effect": "Thrown: 1 AP to increase range one band"
+    },
+    {
+      "id": "hunter",
+      "name": "Hunter",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6"
+      },
+      "effect": "Scavenge defeated creatures: +1 D/C quantity"
+    },
+    {
+      "id": "infiltrator",
+      "name": "Infiltrator",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 6,
+          "AGI": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 6, AGI 6"
+      },
+      "effect": "Ignore first complication on lockpick"
+    },
+    {
+      "id": "inspirational",
+      "name": "Inspirational",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 6"
+      },
+      "effect": "Allies +1 Morale (re-roll 1d20 once/scene)"
+    },
+    {
+      "id": "intense-training",
+      "name": "Intense Training",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {},
+        "levelMin": null,
+        "race": null,
+        "notes": null
+      },
+      "effect": "+1 SPECIAL per rank"
+    },
+    {
+      "id": "iron-fist",
+      "name": "Iron Fist",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "STR": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 6"
+      },
+      "effect": "Unarmed +1 D/C per rank"
+    },
+    {
+      "id": "travel-merchant",
+      "name": "Travel Merchant",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 6"
+      },
+      "effect": "+10% sell price"
+    },
+    {
+      "id": "jury-rigging",
+      "name": "Jury Rigging",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 6"
+      },
+      "effect": "Repair diff â’1 (min 0)"
+    },
+    {
+      "id": "laser-commander",
+      "name": "Laser Commander",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 6"
+      },
+      "effect": "Energy FRâ‰Ą3: +1 D/C"
+    },
+    {
+      "id": "iron-stomach",
+      "name": "Iron Stomach",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "END": 5
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 5"
+      },
+      "effect": "Re-roll 1d20 vs disease/poison ingestion"
+    },
+    {
+      "id": "life-giver",
+      "name": "Life Giver",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6"
+      },
+      "effect": "+2 max HP per rank"
+    },
+    {
+      "id": "light-step",
+      "name": "Light Step",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 8"
+      },
+      "effect": "Ignore difficult terrain AP cost"
+    },
+    {
+      "id": "master-thief",
+      "name": "Master Thief",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 8,
+          "AGI": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 8, AGI 8"
+      },
+      "effect": "Pickpocket diff â’1"
+    },
+    {
+      "id": "medic",
+      "name": "Medic",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 6"
+      },
+      "effect": "Stabilize dying: INT+Medicine diff 0"
+    },
+    {
+      "id": "meltdown",
+      "name": "Meltdown",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 7"
+      },
+      "effect": "Energy crit: D/C Effect = +2 energy damage"
+    },
+    {
+      "id": "sandman",
+      "name": "Sandman",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 7"
+      },
+      "effect": "Sleeping target: instant crit melee"
+    },
+    {
+      "id": "moving-target",
+      "name": "Moving Target",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 7"
+      },
+      "effect": "+1 Defense while moving"
+    },
+    {
+      "id": "mysterious-assist",
+      "name": "Mysterious Assist",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 6"
+      },
+      "effect": "Once/quest: ally appears, hit or assist"
+    },
+    {
+      "id": "made-in-heaven",
+      "name": "Made in Heaven",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 2
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 2"
+      },
+      "effect": "Below 20% HP: INT counts as 10 for INT tests"
+    },
+    {
+      "id": "night-person",
+      "name": "Night Person",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {},
+        "levelMin": null,
+        "race": null,
+        "notes": null
+      },
+      "effect": "Re-roll 1d20 on PER/INT tests at night"
+    },
+    {
+      "id": "ninja",
+      "name": "Ninja",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 8"
+      },
+      "effect": "Sneak attack: re-roll 1d20"
+    },
+    {
+      "id": "nuclear-savant",
+      "name": "Nuclear Savant",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "INT": 9
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 9"
+      },
+      "effect": "Energy weapon damage +1 D/C per rank"
+    },
+    {
+      "id": "bulk-charge",
+      "name": "Bulk Charge",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "STR": 9,
+          "END": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 9, END 7"
+      },
+      "effect": "Charge attack: knock prone + unarmed damage"
+    },
+    {
+      "id": "hamon-strike",
+      "name": "Hamon Strike",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "STR": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 8",
+        "requiresHamon": true
+      },
+      "effect": "Called shot unarmed gains Stun"
+    },
+    {
+      "id": "party-animal",
+      "name": "Party Animal",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "END": 6,
+          "CHA": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6, CHA 7"
+      },
+      "effect": "No alcohol addiction; drink heals +2 HP"
+    },
+    {
+      "id": "pathfinder",
+      "name": "Pathfinder",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 6,
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 6, END 6"
+      },
+      "effect": "Wilderness travel: half time on success"
+    },
+    {
+      "id": "pharma-finder",
+      "name": "Pharma Finder",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 6"
+      },
+      "effect": "Scavenge meds: +1 random item"
+    },
+    {
+      "id": "pickpocket",
+      "name": "Pickpocket",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "PER": 8,
+          "AGI": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 8, AGI 8"
+      },
+      "effect": "Ignore 1 complication; re-roll 1d20; â’1 diff"
+    },
+    {
+      "id": "piercing-strike",
+      "name": "Piercing Strike",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "STR": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 7"
+      },
+      "effect": "Unarmed/blades gain Piercing 1"
+    },
+    {
+      "id": "pyromaniac",
+      "name": "Pyromaniac",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6"
+      },
+      "effect": "Fire weapons +1 D/C per rank"
+    },
+    {
+      "id": "quick-draw",
+      "name": "Quick Draw",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 6"
+      },
+      "effect": "Draw one item free per turn"
+    },
+    {
+      "id": "quick-hands",
+      "name": "Quick Hands",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 8"
+      },
+      "effect": "2 AP: +2 Fire Rate once per attack"
+    },
+    {
+      "id": "sunlight-resistance",
+      "name": "Sunlight Resistance",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "END": 8
+        },
+        "levelMin": null,
+        "race": "vampire",
+        "notes": "END 8"
+      },
+      "effect": "+1 sunlight DR per rank (vampires)"
+    },
+    {
+      "id": "refractor",
+      "name": "Refractor",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "PER": 6,
+          "LCK": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 6, LCK 7"
+      },
+      "effect": "+1 energy DR per rank"
+    },
+    {
+      "id": "ricochet",
+      "name": "Ricochet",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 10
+        },
+        "levelMin": 5,
+        "race": null,
+        "notes": "LCK 10, Lvl 5+"
+      },
+      "effect": "Enemy ranged complication: redirect hit to them"
+    },
+    {
+      "id": "rifleman",
+      "name": "Rifleman",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "AGI": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 7"
+      },
+      "effect": "Two-handed ballistic +1 D/C per rank"
+    },
+    {
+      "id": "stand-expert",
+      "name": "Stand Expert",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 8"
+      },
+      "effect": "+1d20 vs automatic stands; shut down on crit"
+    },
+    {
+      "id": "scientist",
+      "name": "Scientist",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "INT": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "INT 8"
+      },
+      "effect": "Science diff â’1; chem recipes"
+    },
+    {
+      "id": "scoundrel",
+      "name": "Scoundrel",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 6"
+      },
+      "effect": "Energy pistols +1 D/C"
+    },
+    {
+      "id": "scrapper",
+      "name": "Scrapper",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {},
+        "levelMin": null,
+        "race": null,
+        "notes": null
+      },
+      "effect": "Break weapons/armor for components"
+    },
+    {
+      "id": "scrounger",
+      "name": "Scrounger",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "LCK": 5
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "LCK 5"
+      },
+      "effect": "Scavenge ammo: +1 D/C quantity"
+    },
+    {
+      "id": "shotgun-surgeon",
+      "name": "Shotgun Surgeon",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "AGI": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "AGI 6"
+      },
+      "effect": "Shotgun limb shot no +diff"
+    },
+    {
+      "id": "skilled",
+      "name": "Skilled",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {},
+        "levelMin": null,
+        "race": null,
+        "notes": null
+      },
+      "effect": "+1 rank each in 3 skills"
+    },
+    {
+      "id": "size-matters",
+      "name": "Size Matters",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {},
+        "levelMin": null,
+        "race": null,
+        "notes": null
+      },
+      "effect": "Big creatures: â’1 diff; Small: +1 diff"
+    },
+    {
+      "id": "slayer",
+      "name": "Slayer",
+      "ranks": 2,
+      "requirements": {
+        "attributes": {
+          "STR": 8
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 8"
+      },
+      "effect": "Big Guns +1 D/C per rank"
+    },
+    {
+      "id": "smooth-talker",
+      "name": "Smooth Talker",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 6"
+      },
+      "effect": "Speech diff â’1 (min 0)"
+    },
+    {
+      "id": "snakeater",
+      "name": "Snakeater",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6"
+      },
+      "effect": "+2 poison DR"
+    },
+    {
+      "id": "sniper",
+      "name": "Sniper",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 8,
+          "AGI": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 8, AGI 6"
+      },
+      "effect": "Aim + long range: +1 D/C"
+    },
+    {
+      "id": "solar-powered",
+      "name": "Solar Powered",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "END": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 7"
+      },
+      "effect": "Daytime: re-roll 1d20 on END tests"
+    },
+    {
+      "id": "steady-aim",
+      "name": "Steady Aim",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "PER": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "PER 7"
+      },
+      "effect": "No move this turn: +1 D/C ranged"
+    },
+    {
+      "id": "strong-back",
+      "name": "Strong Back",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "STR": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "STR 6"
+      },
+      "effect": "+25 lbs carry per rank"
+    },
+    {
+      "id": "tag",
+      "name": "Tag!",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {},
+        "levelMin": null,
+        "race": null,
+        "notes": null
+      },
+      "effect": "+1 tag skill"
+    },
+    {
+      "id": "terrifying-presence",
+      "name": "Terrifying Presence",
+      "ranks": 1,
+      "requirements": {
+        "attributes": {
+          "CHA": 7
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "CHA 7"
+      },
+      "effect": "Demoralize enemy: flee or â’1 all tests"
+    },
+    {
+      "id": "toughness",
+      "name": "Toughness",
+      "ranks": 3,
+      "requirements": {
+        "attributes": {
+          "END": 6
+        },
+        "levelMin": null,
+        "race": null,
+        "notes": "END 6"
+      },
+      "effect": "+1 physical DR all locations per rank"
+    }
+  ],
+  "weapons": [
+    {
+      "category": "small_guns",
+      "id": "revolver-38",
+      "name": "Revolver .38",
+      "damage": "3 D/C",
+      "effects": null,
+      "range": "C",
+      "fireRate": 1,
+      "rarity": "1",
+      "cost": 25
+    },
+    {
+      "category": "small_guns",
+      "id": "9mm-pistol",
+      "name": "9mm Pistol",
+      "damage": "3 D/C",
+      "effects": null,
+      "range": "C",
+      "fireRate": 2,
+      "rarity": "1",
+      "cost": 30
+    },
+    {
+      "category": "small_guns",
+      "id": "tommy-gun",
+      "name": "Tommy Gun",
+      "damage": "4 D/C",
+      "effects": "Burst",
+      "range": "C",
+      "fireRate": 3,
+      "rarity": "3",
+      "cost": 120
+    },
+    {
+      "category": "small_guns",
+      "id": "hunting-rifle",
+      "name": "Hunting Rifle",
+      "damage": "4 D/C",
+      "effects": null,
+      "range": "L",
+      "fireRate": 1,
+      "rarity": "2",
+      "cost": 80
+    },
+    {
+      "category": "small_guns",
+      "id": "combat-shotgun",
+      "name": "Combat Shotgun",
+      "damage": "5 D/C",
+      "effects": "Spread",
+      "range": "C",
+      "fireRate": 1,
+      "rarity": "3",
+      "cost": 150
+    },
+    {
+      "category": "small_guns",
+      "id": "machine-gun",
+      "name": "Machine Gun",
+      "damage": "5 D/C",
+      "effects": "Burst",
+      "range": "M",
+      "fireRate": 3,
+      "rarity": "4",
+      "cost": 300
+    },
+    {
+      "category": "big_guns",
+      "id": "rocket-launcher",
+      "name": "Rocket Launcher",
+      "damage": "6 D/C Blast",
+      "range": "L",
+      "fireRate": 1,
+      "rarity": "5"
+    },
+    {
+      "category": "big_guns",
+      "id": "heavy-machine-gun",
+      "name": "Heavy Machine Gun",
+      "damage": "6 D/C Burst",
+      "range": "M",
+      "fireRate": 4,
+      "rarity": "4"
+    },
+    {
+      "category": "energy",
+      "id": "red-stone-laser",
+      "name": "Red Stone Laser",
+      "damage": "4 D/C Energy",
+      "range": "M",
+      "notes": "Part 2; rare"
+    },
+    {
+      "category": "energy",
+      "id": "laser-pistol",
+      "name": "Laser Pistol",
+      "damage": "4 D/C Energy",
+      "range": "C",
+      "notes": "Part 3+"
+    },
+    {
+      "category": "energy",
+      "id": "plasma-rifle",
+      "name": "Plasma Rifle",
+      "damage": "5 D/C Energy Persistent",
+      "range": "M",
+      "notes": "Part 3+"
+    },
+    {
+      "category": "melee",
+      "id": "combat-knife",
+      "name": "Combat Knife",
+      "damage": "3 D/C",
+      "effects": null,
+      "rarity": "0"
+    },
+    {
+      "category": "melee",
+      "id": "machete",
+      "name": "Machete",
+      "damage": "4 D/C",
+      "effects": null,
+      "rarity": "1"
+    },
+    {
+      "category": "melee",
+      "id": "sword",
+      "name": "Sword",
+      "damage": "4 D/C",
+      "effects": "Piercing 1",
+      "rarity": "2"
+    },
+    {
+      "category": "melee",
+      "id": "razor-chain",
+      "name": "Razor Chain",
+      "damage": "4 D/C",
+      "effects": "Vicious",
+      "rarity": "2"
+    },
+    {
+      "category": "melee",
+      "id": "sledgehammer",
+      "name": "Sledgehammer",
+      "damage": "5 D/C",
+      "effects": null,
+      "rarity": "1"
+    },
+    {
+      "category": "melee",
+      "id": "steel-ball-spin",
+      "name": "Steel Ball (Spin)",
+      "damage": "3 D/C",
+      "effects": "Vicious; Thrown M",
+      "rarity": "2"
+    },
+    {
+      "category": "melee",
+      "id": "vampire-bone-blade",
+      "name": "Vampire Bone Blade",
+      "damage": "4 D/C",
+      "effects": "Piercing 1",
+      "rarity": "3"
+    },
+    {
+      "category": "explosives",
+      "id": "grenade",
+      "name": "Grenade",
+      "damage": "5 D/C Blast Physical",
+      "range": "Thrown M"
+    },
+    {
+      "category": "explosives",
+      "id": "molotov",
+      "name": "Molotov",
+      "damage": "4 D/C Persistent Energy",
+      "range": "Thrown M"
+    },
+    {
+      "category": "explosives",
+      "id": "claymore-mine",
+      "name": "Claymore Mine",
+      "damage": "6 D/C Blast",
+      "range": "Placed"
+    }
+  ],
+  "armor": [
+    {
+      "id": "fine-suit",
+      "name": "Fine Suit",
+      "physicalDr": 0,
+      "energyDr": 0,
+      "locations": [],
+      "rarity": 0
+    },
+    {
+      "id": "leather-coat",
+      "name": "Leather Coat",
+      "physicalDr": 1,
+      "energyDr": 0,
+      "locations": [
+        "arm",
+        "torso"
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "tactical-vest",
+      "name": "Tactical Vest",
+      "physicalDr": 2,
+      "energyDr": 1,
+      "locations": [
+        "torso"
+      ],
+      "rarity": 2
+    },
+    {
+      "id": "heavy-coat",
+      "name": "Heavy Coat",
+      "physicalDr": 2,
+      "energyDr": 2,
+      "locations": [
+        "head",
+        "torso",
+        "arm",
+        "leg"
+      ],
+      "rarity": 3
+    },
+    {
+      "id": "tactical-armor",
+      "name": "Tactical Armor",
+      "physicalDr": 3,
+      "energyDr": 2,
+      "locations": [
+        "head",
+        "torso",
+        "arm",
+        "leg"
+      ],
+      "rarity": 4
+    },
+    {
+      "id": "stone-mask-artifact",
+      "name": "Stone Mask (artifact)",
+      "physicalDr": 1,
+      "energyDr": 1,
+      "locations": [
+        "head"
+      ],
+      "rarity": 5
+    }
+  ],
+  "consumables": [
+    {
+      "id": "rokakaka-fruit",
+      "name": "Rokakaka Fruit",
+      "effect": "Minor action: 4 HP or treat 1 injury or stabilize at 1 HP. Roll 1 D/C â€” Effect = Equivalent Exchange (GM: â’1 test, 1 D/C to random location, or stiff limb until rest)",
+      "rarity": "4â€“5",
+      "cost": "200+",
+      "vampireOnly": false
+    },
+    {
+      "id": "bandage",
+      "name": "Bandage",
+      "effect": "1 HP",
+      "rarity": "0",
+      "cost": "5",
+      "vampireOnly": false
+    },
+    {
+      "id": "antiseptic",
+      "name": "Antiseptic",
+      "effect": "2 HP; +1 to next Medicine test",
+      "rarity": "1",
+      "cost": "15",
+      "vampireOnly": false
+    },
+    {
+      "id": "blood-pack",
+      "name": "Blood Pack",
+      "effect": "Vampire: restore 3 HP",
+      "rarity": "2",
+      "cost": "20",
+      "vampireOnly": true
+    },
+    {
+      "id": "adrenaline-shot",
+      "name": "Adrenaline Shot",
+      "effect": "+2 Initiative this scene; crash â’1 END tests after",
+      "rarity": "2",
+      "cost": "40",
+      "vampireOnly": false
+    },
+    {
+      "id": "steroid-dose",
+      "name": "Steroid Dose",
+      "effect": "+1 STR tests this scene",
+      "rarity": "2",
+      "cost": "35",
+      "vampireOnly": false
+    },
+    {
+      "id": "wine-spirits",
+      "name": "Wine / Spirits",
+      "effect": "Re-roll 1d20 STR/CHA; INT +1 diff",
+      "rarity": "1",
+      "cost": "8",
+      "vampireOnly": false
+    },
+    {
+      "id": "coffee-tea",
+      "name": "Coffee / Tea",
+      "effect": "+1 AP immediately",
+      "rarity": "0",
+      "cost": "3",
+      "vampireOnly": false
+    }
+  ],
+  "books": [
+    {
+      "id": "hamon-manual",
+      "name": "Hamon Manual",
+      "effect": "+1 Hamon test (one-time)"
+    },
+    {
+      "id": "gunsmith-weekly",
+      "name": "Gunsmith Weekly",
+      "effect": "+1 Repair for guns (one-time)"
+    },
+    {
+      "id": "spin-atlas",
+      "name": "Spin Atlas",
+      "effect": "Counts toward Spin training"
+    }
+  ],
+  "standGrades": {
+    "âž": 12,
+    "A": 10,
+    "B": 8,
+    "C": 6,
+    "D": 4,
+    "E": 2,
+    "?": 6,
+    "â…": 0
+  },
+  "standStats": [
+    "power",
+    "speed",
+    "range",
+    "durability",
+    "precision",
+    "developmentPotential"
+  ],
+  "standTypes": [
+    "Close-Range",
+    "Remote",
+    "Automatic",
+    "Colony",
+    "Tool"
+  ],
+  "formulas": {
+    "standBudget": "41 + ceil(level / 2)",
+    "hp": "END + LCK + level",
+    "initiative": "PER + AGI",
+    "defense": "1 if AGI <= 8 else 2",
+    "carryWeight": "150 + STR * 10",
+    "smallFrameCarry": "150 + STR * 5"
+  },
+  "xpTable": [
+    {
+      "level": 1,
+      "xp": 0
+    },
+    {
+      "level": 2,
+      "xp": 100
+    },
+    {
+      "level": 3,
+      "xp": 300
+    },
+    {
+      "level": 5,
+      "xp": 1000
+    },
+    {
+      "level": 10,
+      "xp": 4500
+    },
+    {
+      "level": 11,
+      "xp": 5500
+    },
+    {
+      "level": 12,
+      "xp": 6600
+    },
+    {
+      "level": 15,
+      "xp": 10500
+    },
+    {
+      "level": 20,
+      "xp": 19000
+    }
+  ],
+  "xpFormula21Plus": "(level * (level - 1) / 2) * 100",
+  "advancement": {
+    "perLevel": {
+      "hp": 1,
+      "skillRanks": 1,
+      "perks": 1
+    }
+  },
+  "races": {
+    "human": {
+      "id": "human",
+      "name": "Human",
+      "maxTraits": 2,
+      "bonusPerkOption": true
+    },
+    "vampire": {
+      "id": "vampire",
+      "name": "Vampire",
+      "hamonLocked": true,
+      "chaPerMax": 10,
+      "physicalDrBonus": 1
+    }
+  },
+  "specialAttributes": [
+    "STR",
+    "PER",
+    "END",
+    "CHA",
+    "INT",
+    "AGI",
+    "LCK"
+  ]
+}

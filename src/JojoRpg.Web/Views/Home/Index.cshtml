@@ -19,7 +19,17 @@
 
     <section style="margin-top:2rem;">
         <h2>Join as player</h2>
-        <p>Ask your GM for the room code, then open <code>/room/{code}/join</code>.</p>
+        <form method="post" action="/join">
+            <label>
+                Room code
+                <input type="text" name="roomCode" required maxlength="16" autocomplete="off" placeholder="e.g. ABC12345" style="text-transform:uppercase" />
+            </label>
+            <label>
+                Display name
+                <input type="text" name="displayName" required maxlength="128" placeholder="Your name" />
+            </label>
+            <button type="submit">Join</button>
+        </form>
     </section>
 
     <form method="post" action="/session/leave" style="margin-top:2rem;">

@@ -2,8 +2,9 @@ export interface JojoConfig {
   roomId: string;
   roomCode: string;
   playerId?: string;
-  mode: 'gm' | 'play' | 'sheet';
+  mode: 'gm' | 'play' | 'sheet' | 'player-view';
   readOnly?: boolean;
+  referenceMode?: boolean;
 }
 
 declare global {

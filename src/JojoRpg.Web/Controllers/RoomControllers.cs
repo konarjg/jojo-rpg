@@ -1,8 +1,10 @@
 using JojoRpg.Application.Rooms;
 using JojoRpg.Application.Sessions;
+using JojoRpg.Domain.Enums;
 using JojoRpg.Web.Auth;
 using JojoRpg.Web.Middleware;
 using Microsoft.AspNetCore.Mvc;
+using RoomSessionContext = JojoRpg.Web.Auth.RoomSessionContext;
 
 namespace JojoRpg.Web.Controllers;
 
@@ -11,6 +13,20 @@ public sealed class HomeController : Controller
     [HttpGet("/")]
     public IActionResult Index()
     {
+        RoomSessionContext? session = HttpContext.GetRoomSession();
+        if (session is not null)
+        {
+            if (session.Role == SessionRole.Gm)
+            {
+                return Redirect($"/room/{session.RoomCode}/gm");
+            }
+
+            if (session.Role == SessionRole.Player)
+            {
+                return Redirect($"/room/{session.RoomCode}/play");
+            }
+        }
+
         return View();
     }
 }
@@ -89,12 +105,39 @@ public sealed class RoomJoinController : Controller
     [HttpGet("/room/{roomCode}/join")]
     public IActionResult JoinForm(string roomCode)
     {
-        ViewBag.RoomCode = roomCode.ToUpperInvariant();
+        string code = roomCode.ToUpperInvariant();
+        if (HttpContext.RequirePlayer(code, out _))
+        {
+            return Redirect($"/room/{code}/play");
+        }
+
+        ViewBag.RoomCode = code;
         return View("Join");
     }
 
+    [HttpPost("/join")]
+    public async Task<IActionResult> JoinFromHome([FromForm] string? roomCode, [FromForm] string? displayName, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(roomCode))
+        {
+            TempData["Error"] = "Enter a room code.";
+            return Redirect("/");
+        }
+
+        return await JoinInternal(roomCode.Trim(), displayName, returnToHomeOnError: true, cancellationToken);
+    }
+
     [HttpPost("/room/{roomCode}/join")]
-    public async Task<IActionResult> Join(string roomCode, [FromForm] string? displayName, CancellationToken cancellationToken)
+    public Task<IActionResult> Join(string roomCode, [FromForm] string? displayName, CancellationToken cancellationToken)
+    {
+        return JoinInternal(roomCode, displayName, returnToHomeOnError: false, cancellationToken);
+    }
+
+    private async Task<IActionResult> JoinInternal(
+        string roomCode,
+        string? displayName,
+        bool returnToHomeOnError,
+        CancellationToken cancellationToken)
     {
         JoinRoomRequest request = new()
         {
@@ -106,6 +149,12 @@ public sealed class RoomJoinController : Controller
         Application.Common.UseCaseResult<JoinRoomResponse> result = await _joinRoomUseCase.ExecuteAsync(request, cancellationToken);
         if (!result.Success || result.Value is null)
         {
+            if (returnToHomeOnError)
+            {
+                TempData["Error"] = result.Error ?? "Could not join room.";
+                return Redirect("/");
+            }
+
             ViewBag.RoomCode = roomCode.ToUpperInvariant();
             ViewBag.Error = result.Error;
             return View("Join");

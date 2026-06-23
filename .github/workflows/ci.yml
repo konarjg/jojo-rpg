@@ -61,5 +61,8 @@ jobs:
         run: |
           test -f src/JojoRpg.Web/wwwroot/js/legacy/gm-state.js
           test -f src/JojoRpg.Web/wwwroot/js/legacy/gm-app.js
+          test -f src/JojoRpg.Web/wwwroot/js/legacy/sheet-app.js
+          test -f src/JojoRpg.Web/wwwroot/partials/sheet-shell.html
+          test -f src/JojoRpg.Web/wwwroot/data/jojo-catalog.json
 
       - run: dotnet test --configuration Release --no-build

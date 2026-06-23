@@ -19,6 +19,11 @@ public sealed class CampaignNotifier : ICampaignNotifier
         return _hubContext.Clients.Group(RoomGroup(roomId)).SendAsync("MapShared", map, cancellationToken);
     }
 
+    public Task MapSharingStoppedAsync(Guid roomId, CancellationToken cancellationToken)
+    {
+        return _hubContext.Clients.Group(RoomGroup(roomId)).SendAsync("MapSharingStopped", cancellationToken);
+    }
+
     public Task RollBroadcastAsync(Guid roomId, RollPayload roll, CancellationToken cancellationToken)
     {
         return _hubContext.Clients.Group(RoomGroup(roomId)).SendAsync("RollBroadcast", roll, cancellationToken);

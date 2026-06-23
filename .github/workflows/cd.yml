@@ -90,6 +90,9 @@ jobs:
         run: |
           test -f publish/wwwroot/js/legacy/gm-state.js
           test -f publish/wwwroot/js/legacy/gm-app.js
+          test -f publish/wwwroot/js/legacy/sheet-app.js
+          test -f publish/wwwroot/partials/sheet-shell.html
+          test -f publish/wwwroot/data/jojo-catalog.json
           test -f publish/web.config
 
       - uses: actions/upload-artifact@v4

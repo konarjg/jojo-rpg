@@ -1,8 +1,15 @@
 (function () {
   'use strict';
 
-  const CATALOG = JSON.parse(document.getElementById('jojo-catalog').textContent);
-  const STORAGE_KEY = 'jojo-rpg:characters';
+  const config = window.JOJO_CONFIG || {};
+  const SERVER_MODE = window.JOJO_STORAGE_MODE === 'server';
+  const READ_ONLY = !!config.readOnly;
+  const REFERENCE_MODE = !!config.referenceMode;
+  const ROOM_CODE = config.roomCode || '';
+  const SERVER_PLAYER_ID = config.playerId && String(config.playerId).length > 0 ? String(config.playerId) : null;
+
+  let CATALOG = null;
+  const STORAGE_KEY = REFERENCE_MODE ? ('jojo-rpg:reference:' + ROOM_CODE) : 'jojo-rpg:characters';
   const SCHEMA = 2;
 
   let state = null;
@@ -152,8 +159,16 @@
     if (el) el.textContent = 'Saving...';
     clearTimeout(saveTimer);
     saveTimer = setTimeout(function () {
+      if (READ_ONLY) {
+        if (el) el.textContent = 'Read-only';
+        return;
+      }
+      allCharacters[state.id] = state;
+      if (SERVER_MODE && SERVER_PLAYER_ID && !REFERENCE_MODE) {
+        saveToServer(el);
+        return;
+      }
       try {
-        allCharacters[state.id] = state;
         localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: SCHEMA, activeId: state.id, characters: allCharacters }));
         if (el) el.textContent = 'Saved';
       } catch (e) {
@@ -162,7 +177,38 @@
     }, 300);
   }
 
-  function loadAll() {
+  function payloadFromState(characterState) {
+    return {
+      id: SERVER_PLAYER_ID || characterState.id,
+      name: characterState.name || 'Character',
+      schemaVersion: SCHEMA,
+      data: characterState
+    };
+  }
+
+  function saveToServer(statusEl) {
+    const payload = payloadFromState(state);
+    fetch('/api/players/me/sheet', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
+    }).then(function (response) {
+      if (statusEl) statusEl.textContent = response.ok ? 'Saved' : 'Save failed';
+    }).catch(function () {
+      if (statusEl) statusEl.textContent = 'Save failed';
+    });
+  }
+
+  function stateFromPayload(payload) {
+    if (!payload || typeof payload !== 'object') return null;
+    if (payload.data && typeof payload.data === 'object') {
+      return mergeState(payload.data);
+    }
+    return mergeState(payload);
+  }
+
+  function loadAllLocal() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return { activeId: null, characters: {} };
@@ -171,6 +217,30 @@
     } catch (e) {
       return { activeId: null, characters: {} };
     }
+  }
+
+  function loadAllFromServer() {
+    if (REFERENCE_MODE || !SERVER_PLAYER_ID) {
+      return Promise.resolve(loadAllLocal());
+    }
+    return fetch('/api/players/' + SERVER_PLAYER_ID + '/sheet', { credentials: 'same-origin' })
+      .then(function (response) {
+        if (!response.ok) return { activeId: null, characters: {} };
+        return response.json();
+      })
+      .then(function (payload) {
+        const loaded = stateFromPayload(payload);
+        if (!loaded) return { activeId: null, characters: {} };
+        loaded.id = SERVER_PLAYER_ID;
+        return { activeId: loaded.id, characters: { [loaded.id]: loaded } };
+      })
+      .catch(function () {
+        return { activeId: null, characters: {} };
+      });
+  }
+
+  function loadAll() {
+    return SERVER_MODE ? loadAllFromServer() : Promise.resolve(loadAllLocal());
   }
 
   function mergeState(saved) {
@@ -1085,13 +1155,62 @@
       e.target.value = '';
     });
     window.addEventListener('beforeunload', function () {
+      if (READ_ONLY) return;
       allCharacters[state.id] = state;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: SCHEMA, activeId: state.id, characters: allCharacters }));
+      if (SERVER_MODE && SERVER_PLAYER_ID && !REFERENCE_MODE) {
+        const payload = payloadFromState(state);
+        navigator.sendBeacon('/api/players/me/sheet', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+        return;
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: SCHEMA, activeId: state.id, characters: allCharacters }));
+      } catch (e) { /* ignore */ }
     });
   }
 
-  function init() {
-    const stored = loadAll();
+  function applyServerUi() {
+    if (!SERVER_MODE || REFERENCE_MODE) return;
+    ['char-select', 'btn-new-char', 'btn-delete-char'].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
+  }
+
+  function applyReadOnlyUi() {
+    if (!READ_ONLY) return;
+    document.querySelectorAll('.sheet-toolbar-actions button, .sheet-toolbar-actions label, .sheet-toolbar-actions select').forEach(function (el) {
+      if (el.id === 'page-select' || el.id === 'btn-page-prev' || el.id === 'btn-page-next' || el.id === 'btn-rules') return;
+      if (el instanceof HTMLButtonElement || el instanceof HTMLLabelElement) {
+        el.classList.add('hidden');
+      }
+    });
+    document.querySelectorAll('#sheet-viewport input, #sheet-viewport select, #sheet-viewport textarea, #sheet-viewport button').forEach(function (el) {
+      if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement || el instanceof HTMLTextAreaElement || el instanceof HTMLButtonElement) {
+        el.disabled = true;
+      }
+    });
+    document.querySelectorAll('.screen-only button.pick-btn').forEach(function (el) {
+      el.classList.add('hidden');
+    });
+    const status = document.getElementById('save-status');
+    if (status) status.textContent = 'Read-only';
+  }
+
+  async function loadCatalog() {
+    const el = document.getElementById('jojo-catalog');
+    if (el && el.textContent && el.textContent.trim()) {
+      return JSON.parse(el.textContent);
+    }
+    const response = await fetch('/data/jojo-catalog.json', { credentials: 'same-origin' });
+    if (!response.ok) {
+      throw new Error('Could not load rules catalog.');
+    }
+    return response.json();
+  }
+
+  async function init() {
+    CATALOG = await loadCatalog();
+    const stored = await loadAll();
     allCharacters = stored.characters || {};
     if (stored.activeId && allCharacters[stored.activeId]) {
       state = mergeState(allCharacters[stored.activeId]);
@@ -1104,8 +1223,13 @@
     initRulesModal();
     bindStaticFields();
     initPageNav();
+    applyServerUi();
+    applyReadOnlyUi();
     renderAll();
   }
 
-  init();
+  init().catch(function (err) {
+    console.error(err);
+    alert('Could not start character sheet: ' + (err && err.message ? err.message : err));
+  });
 })();
