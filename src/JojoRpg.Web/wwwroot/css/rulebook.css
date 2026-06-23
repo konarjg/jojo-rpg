@@ -2615,45 +2615,111 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   font-weight: bold;
 }
 
+body.play-mode {
+  height: 100vh;
+  overflow: hidden;
+  padding: 0.5em;
+  box-sizing: border-box;
+  max-width: none;
+  width: 100%;
+}
+
 body.play-mode #play-app {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
-body.play-mode .player-map-panel {
-  order: 10;
-  margin-top: 1rem;
+body.play-mode .play-layout {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0.75em;
+  overflow: hidden;
 }
 
-body.play-mode .player-map-canvas {
-  min-height: 240px;
-  max-height: min(40vh, 360px);
-  flex: none;
+body.play-mode .play-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+body.play-mode .play-map-sidebar {
+  flex: 0 0 38%;
+  max-width: 42%;
+  min-width: min(320px, 40vw);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
+}
+
+body.play-mode .play-map-sidebar.play-map-sidebar--closed {
+  flex: 0 0 0 !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body.play-mode .play-map-sidebar .gm-map-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+body.play-mode .play-map-sidebar .gm-section-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--jojo-gold);
+  border: none;
+}
+
+body.play-mode .play-map-sidebar .player-map-canvas {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
 }
 
 body.play-mode .gm-stickies-board {
-  order: 9;
+  flex: 0 0 auto;
   margin-top: 0.75rem;
 }
 
-body.player-view-mode #play-app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 0.75em;
-  box-sizing: border-box;
-}
-
-body.player-view-mode .player-map-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+body.play-mode .sheet-shell {
+  flex: 1 1 auto;
   min-height: 0;
 }
 
-body.player-view-mode .player-map-canvas {
-  flex: 1;
-  min-height: calc(100vh - 8em);
+body.play-mode .sheet-viewport {
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  body.play-mode .play-layout {
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
+    flex: 0 0 auto;
+    max-width: none;
+    min-width: 0;
+    min-height: min(50vh, 420px);
+  }
+
+  body.play-mode .play-map-sidebar .player-map-canvas {
+    min-height: min(50vh, 420px);
+  }
 }
 
 .player-map-canvas {

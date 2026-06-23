@@ -97,9 +97,11 @@ public sealed class PlayerController : Controller
             return Redirect($"/room/{roomCode.ToUpperInvariant()}/join");
         }
 
-        ViewBag.RoomCode = session.RoomCode;
-        ViewBag.RoomId = session.RoomId;
-        ViewBag.IsGm = session.Role == Domain.Enums.SessionRole.Gm;
-        return View("PlayerView");
+        if (session.Role == Domain.Enums.SessionRole.Gm)
+        {
+            return Redirect($"/room/{session.RoomCode}/gm");
+        }
+
+        return Redirect($"/room/{session.RoomCode}/play");
     }
 }

@@ -73,9 +73,8 @@ public sealed class SheetPageIntegrationTests : IAsyncLifetime
         Assert.DoesNotContain("sheet-json-preview", builderHtml);
 
         HttpResponseMessage playerViewPage = await SendWithCookie(gmClient, HttpMethod.Get, $"/room/{roomCode}/player-view", gmCookieHeader);
-        Assert.Equal(HttpStatusCode.OK, playerViewPage.StatusCode);
-        string playerViewHtml = await playerViewPage.Content.ReadAsStringAsync();
-        Assert.Contains("player-map-canvas", playerViewHtml);
+        Assert.Equal(HttpStatusCode.Redirect, playerViewPage.StatusCode);
+        Assert.Contains("/gm", playerViewPage.Headers.Location?.OriginalString ?? string.Empty);
 
         HttpResponseMessage joinResponse = await playerClient.PostAsync($"/room/{roomCode}/join", new FormUrlEncodedContent(new Dictionary<string, string>
         {

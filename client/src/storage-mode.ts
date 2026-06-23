@@ -2,7 +2,7 @@ export interface JojoConfig {
   roomId: string;
   roomCode: string;
   playerId?: string;
-  mode: 'gm' | 'play' | 'sheet' | 'player-view';
+  mode: 'gm' | 'play' | 'sheet';
   readOnly?: boolean;
   referenceMode?: boolean;
 }

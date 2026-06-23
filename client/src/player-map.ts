@@ -85,16 +85,15 @@ export function setMapPanelVisible(visible: boolean): void {
     return;
   }
 
-  panel.hidden = !visible;
-  panel.classList.toggle('player-map-panel--visible', visible);
+  panel.classList.toggle('play-map-sidebar--closed', !visible);
+  panel.setAttribute('aria-hidden', visible ? 'false' : 'true');
 }
 
 export function clearSharedMap(): void {
   const title = document.getElementById('player-map-title');
   const canvas = document.getElementById('player-map-canvas');
   if (title) {
-    title.hidden = true;
-    title.textContent = '';
+    title.textContent = 'Shared map';
   }
 
   if (canvas) {
@@ -112,7 +111,6 @@ export function renderSharedMap(map: SharedMapPayload): void {
   setMapPanelVisible(true);
 
   if (title) {
-    title.hidden = false;
     title.textContent = map.mapName;
   }
 

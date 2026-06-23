@@ -12,11 +12,19 @@
         <form method="post" action="/session/leave" style="display:inline"><button type="submit" class="gm-btn">Leave</button></form>
     </header>
     <div id="player-roll-banner" class="player-roll-banner" hidden></div>
-    <partial name="_InteractiveSheetShell" />
-    <div id="player-sticky-panel" class="gm-stickies-board" hidden></div>
-    <div id="player-map-panel" class="player-map-panel" hidden>
-        <h2 id="player-map-title" hidden></h2>
-        <div id="player-map-canvas" class="gm-map-canvas player-map-canvas"></div>
+    <div class="play-layout" id="play-layout">
+        <div class="play-main">
+            <partial name="_InteractiveSheetShell" />
+            <div id="player-sticky-panel" class="gm-stickies-board" hidden></div>
+        </div>
+        <aside id="player-map-panel" class="play-map-sidebar play-map-sidebar--closed" aria-hidden="true">
+            <section class="gm-panel-section gm-map-section">
+                <div class="gm-section-head">
+                    <h2 id="player-map-title">Shared map</h2>
+                </div>
+                <div id="player-map-canvas" class="gm-map-canvas player-map-canvas"></div>
+            </section>
+        </aside>
     </div>
 </div>
 

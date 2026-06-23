@@ -36,8 +36,7 @@ dotnet test tests/JojoRpg.IntegrationTests           # requires Docker (Testcont
 | `/join` | Join by room code (POST from home) |
 | `/room/{code}/join` | Player join for a room |
 | `/room/{code}/gm` | GM panel |
-| `/room/{code}/play` | Player sheet + map |
-| `/room/{code}/player-view` | Shared map and rolls (GM or players) |
+| `/room/{code}/play` | Player sheet + live shared map sidebar |
 | `/room/{code}/gm/sheets` | GM sheet list |
 | `/room/{code}/gm/sheet/{id}` | Read-only player sheet (GM) |
 | `/room/{code}/gm/builder` | Reference character builder (GM) |

@@ -12,16 +12,10 @@ let latestMap: SharedMapPayload | null = null;
 
 async function bootstrap(): Promise<void> {
   const config = getConfig();
-
-  if (config.mode === 'play') {
-    setMapPanelVisible(false);
-  }
+  setMapPanelVisible(false);
 
   await loadSharedView(config.roomId);
-
-  if (config.mode !== 'player-view') {
-    await loadStickies();
-  }
+  await loadStickies();
 
   startCampaignHub({
     onMapShared: (map) => {
@@ -31,9 +25,7 @@ async function bootstrap(): Promise<void> {
     onMapSharingStopped: () => {
       latestMap = null;
       clearSharedMap();
-      if (config.mode === 'play') {
-        setMapPanelVisible(false);
-      }
+      setMapPanelVisible(false);
     },
     onRoll: renderRoll,
   });
