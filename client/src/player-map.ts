@@ -37,12 +37,18 @@ let interactionInstalled = false;
 let dragState: { tokenId: string; offsetX: number; offsetY: number } | null = null;
 let interactionOptions: PlayerMapInteractionOptions | null = null;
 let panelLayoutMapRefresh: (() => void) | null = null;
+const PANEL_TRANSITION_MS = 320;
 
 function notifyPanelLayoutChange(): void {
   requestAnimationFrame(() => {
     window.dispatchEvent(new Event('resize'));
     panelLayoutMapRefresh?.();
   });
+
+  window.setTimeout(() => {
+    window.dispatchEvent(new Event('resize'));
+    panelLayoutMapRefresh?.();
+  }, PANEL_TRANSITION_MS);
 }
 
 export function setPanelLayoutMapRefresh(refresh: () => void): void {
@@ -192,11 +198,18 @@ function installSheetCloseButton(): void {
 }
 
 export function initPlayPanels(): void {
+  const layout = document.getElementById('play-layout');
+  layout?.classList.add('play-layout--instant');
+
   setNotesPanelVisible(true);
   setMapPanelVisible(true);
   setSheetPanelVisible(true);
   installSheetCloseButton();
   renderEmptyMap();
+
+  requestAnimationFrame(() => {
+    layout?.classList.remove('play-layout--instant');
+  });
 
   document.querySelectorAll('.play-panel-toggle[data-panel]').forEach((button) => {
     button.addEventListener('click', () => {
