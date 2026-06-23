@@ -2057,6 +2057,49 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
   padding: 0;
 }
 
+.gm-sticky-palette-host {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.35rem;
+}
+
+.gm-sticky-palette {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.gm-sticky-palette-swatch {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.gm-sticky-palette-swatch--small {
+  width: 14px;
+  height: 14px;
+}
+
+.gm-sticky-palette-swatch--active {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+
+.gm-sticky-note-palette-host {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+}
+
+.gm-sticky-note-palette {
+  display: flex;
+  gap: 2px;
+}
+
 .gm-map-section {
   flex: 1 1 0;
   flex-shrink: 0;
@@ -2690,9 +2733,14 @@ body.play-mode .play-map-sidebar .player-map-canvas {
   height: 100%;
 }
 
-body.play-mode .gm-stickies-board {
-  flex: 0 0 auto;
+body.play-mode .player-sticky-section {
+  flex: 0 0 220px;
+  min-height: 180px;
   margin-top: 0.75rem;
+}
+
+body.play-mode .player-sticky-section .gm-sticky-board {
+  min-height: 140px;
 }
 
 body.play-mode .sheet-shell {

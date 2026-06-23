@@ -7,7 +7,6 @@
   var CHANNEL_NAME = 'jojo-gm';
   var RULES_CHAPTER_STORAGE_KEY = 'jojo-gm:rules-chapter';
   var PANEL_STORAGE_KEY = 'jojo-gm:panels';
-  var STICKY_COLORS = ['#e8c547', '#7ec8a4', '#c97b84', '#8eb4e8', '#d4a574'];
   var TOKEN_TYPES = [
     { id: 'player', label: 'Player', className: 'gm-token--player' },
     { id: 'npc', label: 'NPC', className: 'gm-token--npc' },
@@ -41,8 +40,6 @@
   var marquee = null;
   var marqueeEl = null;
   var dragOffset = { x: 0, y: 0 };
-  var stickyDrag = null;
-  var stickyOffset = { x: 0, y: 0 };
   var playerWindow = null;
   var mapSyncTimer = null;
   var currentRulesChapterIndex = 0;
@@ -379,75 +376,25 @@
     });
   }
 
-  function renderStickies() {
+  var gmStickyBoard = null;
+
+  function initGmStickyBoard() {
+    if (gmStickyBoard || typeof StickyBoard === 'undefined') return;
     var board = document.getElementById('gm-sticky-board');
-    var sess = activeSession();
-    if (!board || !sess) return;
-    board.innerHTML = '';
-    sess.stickies.forEach(function (note) {
-      var card = document.createElement('div');
-      card.className = 'gm-sticky';
-      card.style.background = note.color || STICKY_COLORS[0];
-      card.style.left = (note.x || 0) + 'px';
-      card.style.top = (note.y || 0) + 'px';
-      card.dataset.id = note.id;
-      card.innerHTML =
-        '<button type="button" class="gm-sticky-delete" title="Delete">&times;</button>' +
-        '<textarea class="gm-sticky-text sheet-input" rows="1"></textarea>';
-      var ta = card.querySelector('.gm-sticky-text');
-      ta.value = note.text || '';
-      board.appendChild(card);
-      autosizeStickyText(ta);
+    if (!board) return;
+    gmStickyBoard = StickyBoard.mount(board, {
+      getStickies: function () {
+        var sess = activeSession();
+        return sess ? sess.stickies : [];
+      },
+      onChange: function () { saveState(); },
+      addButtonEl: document.getElementById('gm-add-sticky'),
+      paletteEl: document.getElementById('gm-sticky-color-palette')
     });
   }
 
-  var stickyMirror = null;
-
-  function getStickyMirror() {
-    if (!stickyMirror) {
-      stickyMirror = document.createElement('div');
-      stickyMirror.className = 'gm-sticky-mirror';
-      stickyMirror.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(stickyMirror);
-    }
-    return stickyMirror;
-  }
-
-  function autosizeStickyText(ta) {
-    if (!ta) return;
-    var minWidth = 80;
-    var maxWidth = 168;
-    var text = ta.value.length ? ta.value : '\u00a0';
-    var style = window.getComputedStyle(ta);
-    var mirror = getStickyMirror();
-    mirror.style.font = style.font;
-    mirror.style.lineHeight = style.lineHeight;
-    mirror.style.padding = style.padding;
-    mirror.style.border = style.border;
-    mirror.style.boxSizing = style.boxSizing;
-    mirror.style.letterSpacing = style.letterSpacing;
-    mirror.style.display = 'inline-block';
-    mirror.style.whiteSpace = 'nowrap';
-    mirror.style.width = 'auto';
-    mirror.style.maxWidth = 'none';
-    var lines = text.split('\n');
-    var lineWidth = minWidth;
-    var i;
-    for (i = 0; i < lines.length; i++) {
-      mirror.textContent = lines[i].length ? lines[i] : '\u00a0';
-      lineWidth = Math.max(lineWidth, mirror.scrollWidth + 4);
-    }
-    var contentWidth = Math.min(maxWidth, Math.max(minWidth, lineWidth));
-    mirror.style.whiteSpace = 'pre-wrap';
-    mirror.style.overflowWrap = 'break-word';
-    mirror.style.wordBreak = 'break-word';
-    mirror.style.width = contentWidth + 'px';
-    mirror.style.maxWidth = maxWidth + 'px';
-    mirror.textContent = text;
-    ta.style.width = contentWidth + 'px';
-    ta.style.maxWidth = maxWidth + 'px';
-    ta.style.maxHeight = 'none';
-    ta.style.height = mirror.scrollHeight + 'px';
+  function renderStickies() {
+    if (gmStickyBoard) gmStickyBoard.render();
   }
 
   function escapeHtml(s) {
@@ -456,20 +403,6 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
-  }
-
-  function addSticky() {
-    var sess = activeSession();
-    if (!sess) return;
-    sess.stickies.push({
-      id: uid('note'),
-      text: '',
-      color: STICKY_COLORS[sess.stickies.length % STICKY_COLORS.length],
-      x: 20 + (sess.stickies.length * 12) % 120,
-      y: 20 + (sess.stickies.length * 18) % 80
-    });
-    saveState();
-    renderStickies();
   }
 
   /* ---- Map ---- */
@@ -1021,13 +954,6 @@
         });
         renderMap('gm-map-canvas', true);
       }
-      if (stickyDrag) {
-        var board = document.getElementById('gm-sticky-board');
-        var brect = board.getBoundingClientRect();
-        stickyDrag.x = Math.max(0, e.clientX - brect.left - stickyOffset.x);
-        stickyDrag.y = Math.max(0, e.clientY - brect.top - stickyOffset.y);
-        renderStickies();
-      }
     });
 
     window.addEventListener('mouseup', function () {
@@ -1042,10 +968,6 @@
       if (dragState) {
         dragState = null;
         scheduleMapSync();
-      }
-      if (stickyDrag) {
-        stickyDrag = null;
-        saveState();
       }
     });
 
@@ -1421,7 +1343,7 @@
     }
 
     renderSessionSelect();
-    renderStickies();
+    initGmStickyBoard();
     renderMapSelect();
     renderSnapshotSelect();
     renderMap('gm-map-canvas', true);
@@ -1487,43 +1409,6 @@
       renderMapSelect();
       updateMapModeUI();
       renderMap('gm-map-canvas', true);
-    });
-
-    document.getElementById('gm-add-sticky').addEventListener('click', addSticky);
-
-    var board = document.getElementById('gm-sticky-board');
-    board.addEventListener('mousedown', function (e) {
-      var card = e.target.closest('.gm-sticky');
-      if (!card || e.target.classList.contains('gm-sticky-delete')) return;
-      var id = card.dataset.id;
-      var sess = activeSession();
-      var note = sess.stickies.find(function (n) { return n.id === id; });
-      if (!note) return;
-      stickyDrag = note;
-      var brect = board.getBoundingClientRect();
-      stickyOffset.x = e.clientX - brect.left - note.x;
-      stickyOffset.y = e.clientY - brect.top - note.y;
-    });
-
-    board.addEventListener('input', function (e) {
-      if (!e.target.classList.contains('gm-sticky-text')) return;
-      autosizeStickyText(e.target);
-      var card = e.target.closest('.gm-sticky');
-      var sess = activeSession();
-      var note = sess.stickies.find(function (n) { return n.id === card.dataset.id; });
-      if (note) {
-        note.text = e.target.value;
-        saveState();
-      }
-    });
-
-    board.addEventListener('click', function (e) {
-      if (!e.target.classList.contains('gm-sticky-delete')) return;
-      var card = e.target.closest('.gm-sticky');
-      var sess = activeSession();
-      sess.stickies = sess.stickies.filter(function (n) { return n.id !== card.dataset.id; });
-      saveState();
-      renderStickies();
     });
 
     var openPlayerBtn = document.getElementById('gm-open-player');

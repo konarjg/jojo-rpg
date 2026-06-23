@@ -6,16 +6,35 @@ import {
   renderSharedMap,
   setMapPanelVisible,
 } from './player-map';
-import type { RollPayload, SharedMapPayload, SharedViewDto, StickyBoardPayload } from './types/payloads';
+import type { RollPayload, SharedMapPayload, SharedViewDto, StickyBoardPayload, StickyNotePayload } from './types/payloads';
+
+declare global {
+  interface Window {
+    StickyBoard?: {
+      mount: (
+        boardEl: HTMLElement,
+        options: {
+          getStickies: () => StickyNotePayload[];
+          onChange: () => void;
+          addButtonEl?: HTMLElement | null;
+          paletteEl?: HTMLElement | null;
+          defaultColor?: string;
+        },
+      ) => { render: () => void } | null;
+    };
+  }
+}
 
 let latestMap: SharedMapPayload | null = null;
+let stickySaveTimer: ReturnType<typeof setTimeout> | null = null;
+let playerStickyState: StickyNotePayload[] = [];
 
 async function bootstrap(): Promise<void> {
   const config = getConfig();
   setMapPanelVisible(false);
 
   await loadSharedView(config.roomId);
-  await loadStickies();
+  await initPlayerStickies();
 
   startCampaignHub({
     onMapShared: (map) => {
@@ -50,14 +69,39 @@ async function loadSharedView(roomId: string): Promise<void> {
   }
 }
 
-async function loadStickies(): Promise<void> {
-  const response = await fetch('/api/players/me/stickies', { credentials: 'same-origin' });
-  if (!response.ok) {
+async function initPlayerStickies(): Promise<void> {
+  const board = document.getElementById('player-sticky-board');
+  if (!board || !window.StickyBoard) {
     return;
   }
 
-  const board = (await response.json()) as StickyBoardPayload;
-  renderStickies(board);
+  const response = await fetch('/api/players/me/stickies', { credentials: 'same-origin' });
+  if (response.ok) {
+    const payload = (await response.json()) as StickyBoardPayload;
+    playerStickyState = payload.stickies ?? [];
+  }
+
+  window.StickyBoard.mount(board, {
+    getStickies: () => playerStickyState,
+    onChange: scheduleStickySave,
+    addButtonEl: document.getElementById('player-add-sticky'),
+    paletteEl: document.getElementById('player-sticky-color-palette'),
+  });
+}
+
+function scheduleStickySave(): void {
+  if (stickySaveTimer) {
+    clearTimeout(stickySaveTimer);
+  }
+
+  stickySaveTimer = setTimeout(() => {
+    void fetch('/api/players/me/stickies', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stickies: playerStickyState }),
+      credentials: 'same-origin',
+    });
+  }, 400);
 }
 
 function renderRoll(roll: RollPayload): void {
@@ -69,27 +113,6 @@ function renderRoll(roll: RollPayload): void {
   banner.hidden = false;
   const results = roll.results?.length ? roll.results.join(', ') : '';
   banner.textContent = `Roll: ${roll.count}${roll.die} \u2192 ${results}`;
-}
-
-function renderStickies(board: StickyBoardPayload): void {
-  const panel = document.getElementById('player-sticky-panel');
-  if (!panel) {
-    return;
-  }
-
-  if (!board.stickies.length) {
-    panel.hidden = true;
-    return;
-  }
-
-  panel.hidden = false;
-  panel.innerHTML = board.stickies
-    .map((sticky) => `<div class="gm-sticky" style="background:${escapeHtml(sticky.color)}">${escapeHtml(sticky.text)}</div>`)
-    .join('');
-}
-
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 void bootstrap();

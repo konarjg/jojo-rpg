@@ -22,7 +22,16 @@
     <div class="play-layout" id="play-layout">
         <div class="play-main">
             <partial name="_InteractiveSheetShell" />
-            <div id="player-sticky-panel" class="gm-stickies-board" hidden></div>
+            <section class="gm-panel-section gm-sticky-section player-sticky-section">
+                <div class="gm-section-head">
+                    <h2>My notes</h2>
+                    <div class="gm-section-actions">
+                        <span id="player-sticky-color-palette" class="gm-sticky-palette-host" aria-label="New note color"></span>
+                        <button type="button" id="player-add-sticky" class="pick-btn">+ Note</button>
+                    </div>
+                </div>
+                <div id="player-sticky-board" class="gm-sticky-board"></div>
+            </section>
         </div>
         <aside id="player-map-panel" class="play-map-sidebar play-map-sidebar--closed" aria-hidden="true">
             <section class="gm-panel-section gm-map-section">
@@ -49,5 +58,6 @@
     <script src="~/vendor/purify.min.js"></script>
     <script src="~/js/legacy/markdown-render.js"></script>
     <script src="~/js/legacy/dice-roller.js" asp-append-version="true"></script>
+    <script src="~/js/legacy/sticky-board.js" asp-append-version="true"></script>
     <script src="~/js/legacy/sheet-app.js" asp-append-version="true"></script>
 }
