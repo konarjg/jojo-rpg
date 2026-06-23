@@ -150,4 +150,52 @@ public class ShareMapUseCaseTests
         Assert.NotNull(rooms.RoomsById[roomId].SharedMap);
         Assert.Single(notifier.Maps);
     }
+
+    [Fact]
+    public async Task MovePlayerMapTokens_UpdatesOnlyPlayerTokens()
+    {
+        FakeRoomRepository rooms = new();
+        FakeCampaignNotifier notifier = new();
+        Guid roomId = Guid.NewGuid();
+        Room room = new()
+        {
+            Id = roomId,
+            RoomCode = "R1",
+            GmCodeHash = "h",
+            Name = "T",
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow,
+            SharedMap = new SharedMapPayload
+            {
+                MapName = "Arena",
+                Tokens = new List<MapTokenPayload>
+                {
+                    new() { Id = "p1", Type = "player", Col = 1, Row = 1 },
+                    new() { Id = "n1", Type = "npc", Col = 2, Row = 2 },
+                },
+            },
+        };
+        await rooms.AddAsync(room, CancellationToken.None);
+
+        MovePlayerMapTokensUseCase useCase = new(rooms, notifier);
+        MovePlayerMapTokensRequest request = new()
+        {
+            Moves = new List<PlayerTokenMovePayload>
+            {
+                new() { Id = "p1", Col = 5, Row = 6 },
+                new() { Id = "n1", Col = 9, Row = 9 },
+            },
+        };
+
+        Application.Common.UseCaseResult result = await useCase.ExecuteAsync(roomId, request, CancellationToken.None);
+
+        Assert.True(result.Success);
+        MapTokenPayload player = rooms.RoomsById[roomId].SharedMap!.Tokens.Single(token => token.Id == "p1");
+        MapTokenPayload npc = rooms.RoomsById[roomId].SharedMap!.Tokens.Single(token => token.Id == "n1");
+        Assert.Equal(5, player.Col);
+        Assert.Equal(6, player.Row);
+        Assert.Equal(2, npc.Col);
+        Assert.Equal(2, npc.Row);
+        Assert.Single(notifier.Maps);
+    }
 }

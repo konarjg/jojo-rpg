@@ -69,6 +69,22 @@ public sealed class RoomsApiController : ControllerBase
         return result.Success ? NoContent() : BadRequest(result.Error);
     }
 
+    [HttpPatch("/api/rooms/{roomId:guid}/shared-map/player-tokens")]
+    public async Task<IActionResult> MovePlayerTokens(
+        Guid roomId,
+        [FromBody] MovePlayerMapTokensRequest request,
+        MovePlayerMapTokensUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        if (!AuthorizePlayer(roomId))
+        {
+            return Forbid();
+        }
+
+        Application.Common.UseCaseResult result = await useCase.ExecuteAsync(roomId, request, cancellationToken);
+        return result.Success ? NoContent() : BadRequest(result.Error);
+    }
+
     [HttpPost("/api/rooms/{roomId:guid}/broadcast-roll")]
     public async Task<IActionResult> BroadcastRoll(Guid roomId, [FromBody] RollPayload roll, BroadcastRollUseCase useCase, CancellationToken cancellationToken)
     {
@@ -91,6 +107,12 @@ public sealed class RoomsApiController : ControllerBase
     {
         Auth.RoomSessionContext? session = HttpContext.GetRoomSession();
         return session is not null && session.RoomId == roomId && session.Role == Domain.Enums.SessionRole.Gm;
+    }
+
+    private bool AuthorizePlayer(Guid roomId)
+    {
+        Auth.RoomSessionContext? session = HttpContext.GetRoomSession();
+        return session is not null && session.RoomId == roomId && session.Role == Domain.Enums.SessionRole.Player;
     }
 }
 

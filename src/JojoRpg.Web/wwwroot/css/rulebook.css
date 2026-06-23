@@ -2743,6 +2743,19 @@ body.play-mode .play-notes-sidebar .gm-sticky-board {
   min-height: 0;
 }
 
+body.play-mode .play-notes-sidebar {
+  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
+}
+
+body.play-mode .play-notes-sidebar.play-notes-sidebar--closed {
+  flex: 0 0 0 !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 body.play-mode .play-map-sidebar {
   transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
 }
@@ -2773,6 +2786,38 @@ body.play-mode .play-map-sidebar .player-map-canvas {
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
+}
+
+body.play-mode .play-panel-toggles {
+  display: inline-flex;
+  gap: 0.35em;
+  margin-left: auto;
+  margin-right: 0.75em;
+}
+
+body.play-mode .gm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+body.play-mode .play-panel-toggle--active {
+  background: var(--jojo-magenta);
+  border-color: var(--jojo-gold);
+  color: var(--jojo-cream);
+}
+
+body.play-mode .player-map-canvas.gm-map-canvas {
+  cursor: default;
+}
+
+body.play-mode .gm-token--draggable {
+  cursor: grab;
+}
+
+body.play-mode .gm-token--draggable.gm-token--dragging {
+  cursor: grabbing;
+  z-index: 3;
 }
 
 body.play-mode .sheet-shell {
@@ -2832,6 +2877,11 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
     min-height: min(40vh, 320px);
   }
 
+  body.play-mode .play-notes-sidebar.play-notes-sidebar--closed,
+  body.play-mode .play-map-sidebar.play-map-sidebar--closed {
+    min-height: 0;
+  }
+
   body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
     min-height: min(50vh, 420px);
   }
@@ -2844,6 +2894,10 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
 .player-map-canvas {
   flex: 1;
   min-height: calc(100vh - 8em);
+}
+
+body.play-mode .player-map-canvas {
+  min-height: 0;
 }
 
 @media (max-width: 1100px) {

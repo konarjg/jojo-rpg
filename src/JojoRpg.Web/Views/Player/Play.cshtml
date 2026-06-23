@@ -16,6 +16,10 @@
     }
     <header class="gm-toolbar screen-only">
         <span class="gm-toolbar__title">JoJo RPG — @roomCode</span>
+        <span class="play-panel-toggles" aria-label="Show panels">
+            <button type="button" class="pick-btn play-panel-toggle play-panel-toggle--active" data-panel="notes" aria-pressed="true">Notes</button>
+            <button type="button" class="pick-btn play-panel-toggle" data-panel="map" aria-pressed="false">Map</button>
+        </span>
         <form method="post" action="/session/leave" style="display:inline"><button type="submit" class="gm-btn">Leave</button></form>
     </header>
     <div id="player-roll-banner" class="player-roll-banner" hidden></div>
@@ -30,6 +34,7 @@
                         }
                         <partial name="_StickyColorPalette" />
                         <button type="button" id="player-add-sticky" class="pick-btn">+ Note</button>
+                        <button type="button" class="gm-panel-close play-panel-close" data-panel="notes" title="Hide notes">&times;</button>
                     </div>
                 </div>
                 <div id="player-sticky-board" class="gm-sticky-board"></div>
@@ -42,6 +47,9 @@
             <section class="gm-panel-section gm-map-section">
                 <div class="gm-section-head">
                     <h2 id="player-map-title">Shared map</h2>
+                    <div class="gm-section-actions">
+                        <button type="button" class="gm-panel-close play-panel-close" data-panel="map" title="Hide map">&times;</button>
+                    </div>
                 </div>
                 <div id="player-map-canvas" class="gm-map-canvas player-map-canvas"></div>
             </section>

@@ -2,7 +2,9 @@ import { getConfig } from './storage-mode';
 import { startCampaignHub } from './gm-hub';
 import {
   clearSharedMap,
+  initPlayPanels,
   installMapResizeHandler,
+  installPlayerMapInteraction,
   renderSharedMap,
   setMapPanelVisible,
 } from './player-map';
@@ -27,19 +29,31 @@ declare global {
 
 let latestMap: SharedMapPayload | null = null;
 let stickySaveTimer: ReturnType<typeof setTimeout> | null = null;
+let tokenSaveTimer: ReturnType<typeof setTimeout> | null = null;
 let playerStickyState: StickyNotePayload[] = [];
 
 async function bootstrap(): Promise<void> {
   const config = getConfig();
-  setMapPanelVisible(false);
+  initPlayPanels();
 
   await loadSharedView(config.roomId);
   await initPlayerStickies();
 
+  installPlayerMapInteraction({
+    getMap: () => latestMap,
+    onMapChange: (map) => {
+      latestMap = map;
+    },
+    onCommitMoves: (moves) => {
+      scheduleTokenSave(config.roomId, moves);
+    },
+  });
+
   startCampaignHub({
     onMapShared: (map) => {
+      const firstShare = latestMap === null;
       latestMap = map;
-      renderSharedMap(map);
+      renderSharedMap(map, { openPanel: firstShare });
     },
     onMapSharingStopped: () => {
       latestMap = null;
@@ -61,7 +75,7 @@ async function loadSharedView(roomId: string): Promise<void> {
   const view = (await response.json()) as SharedViewDto;
   if (view.sharedMap) {
     latestMap = view.sharedMap;
-    renderSharedMap(view.sharedMap);
+    renderSharedMap(view.sharedMap, { openPanel: true });
   }
 
   if (view.lastRoll) {
@@ -102,6 +116,21 @@ function scheduleStickySave(): void {
       credentials: 'same-origin',
     });
   }, 400);
+}
+
+function scheduleTokenSave(roomId: string, moves: { id: string; col: number; row: number }[]): void {
+  if (tokenSaveTimer) {
+    clearTimeout(tokenSaveTimer);
+  }
+
+  tokenSaveTimer = setTimeout(() => {
+    void fetch(`/api/rooms/${roomId}/shared-map/player-tokens`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ moves }),
+      credentials: 'same-origin',
+    });
+  }, 150);
 }
 
 function renderRoll(roll: RollPayload): void {
