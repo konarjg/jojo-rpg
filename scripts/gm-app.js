@@ -379,10 +379,10 @@
   var gmStickyBoard = null;
 
   function initGmStickyBoard() {
-    if (gmStickyBoard || typeof StickyBoard === 'undefined') return;
+    if (gmStickyBoard || typeof window.StickyBoard === 'undefined') return;
     var board = document.getElementById('gm-sticky-board');
     if (!board) return;
-    gmStickyBoard = StickyBoard.mount(board, {
+    gmStickyBoard = window.StickyBoard.mount(board, {
       getStickies: function () {
         var sess = activeSession();
         return sess ? sess.stickies : [];

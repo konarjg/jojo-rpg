@@ -2063,6 +2063,16 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
   margin-right: 0.35rem;
 }
 
+.gm-sticky-palette-label {
+  font-size: 0.8rem;
+  color: var(--jojo-cream-dim);
+  margin-right: 0.25rem;
+}
+
+.gm-section-head .gm-section-actions {
+  flex-shrink: 0;
+}
+
 .gm-sticky-palette {
   display: inline-flex;
   gap: 4px;
