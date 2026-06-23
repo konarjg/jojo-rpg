@@ -30,8 +30,9 @@ interface PlayerMapInteractionOptions {
   onCommitMoves: (moves: { id: string; col: number; row: number }[]) => void;
 }
 
-let mapPanelOpen = false;
+let mapPanelOpen = true;
 let notesPanelOpen = true;
+let sheetPanelOpen = true;
 let interactionInstalled = false;
 let dragState: { tokenId: string; offsetX: number; offsetY: number } | null = null;
 let interactionOptions: PlayerMapInteractionOptions | null = null;
@@ -119,10 +120,22 @@ function applyTokenPosition(element: HTMLElement, token: MapTokenLike, grid: num
 function updatePlayPanelToggleButtons(): void {
   document.querySelectorAll('.play-panel-toggle[data-panel]').forEach((button) => {
     const panel = button.getAttribute('data-panel');
-    const isOpen = panel === 'notes' ? notesPanelOpen : mapPanelOpen;
+    const isOpen =
+      panel === 'notes' ? notesPanelOpen : panel === 'map' ? mapPanelOpen : panel === 'sheet' ? sheetPanelOpen : false;
     button.classList.toggle('play-panel-toggle--active', isOpen);
     button.setAttribute('aria-pressed', isOpen ? 'true' : 'false');
   });
+}
+
+export function setSheetPanelVisible(visible: boolean): void {
+  sheetPanelOpen = visible;
+  const panel = document.getElementById('player-sheet-panel');
+  if (panel) {
+    panel.classList.toggle('play-sheet-panel--closed', !visible);
+    panel.setAttribute('aria-hidden', visible ? 'false' : 'true');
+  }
+
+  updatePlayPanelToggleButtons();
 }
 
 export function setNotesPanelVisible(visible: boolean): void {
@@ -148,9 +161,27 @@ export function setMapPanelVisible(visible: boolean): void {
   updatePlayPanelToggleButtons();
 }
 
+function installSheetCloseButton(): void {
+  const toolbar = document.querySelector('#player-sheet-panel .sheet-toolbar-actions');
+  if (!toolbar || toolbar.querySelector('.play-panel-close[data-panel="sheet"]')) {
+    return;
+  }
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'gm-panel-close play-panel-close';
+  button.dataset.panel = 'sheet';
+  button.title = 'Hide character sheet';
+  button.innerHTML = '&times;';
+  toolbar.appendChild(button);
+}
+
 export function initPlayPanels(): void {
   setNotesPanelVisible(true);
-  setMapPanelVisible(false);
+  setMapPanelVisible(true);
+  setSheetPanelVisible(true);
+  installSheetCloseButton();
+  renderEmptyMap();
 
   document.querySelectorAll('.play-panel-toggle[data-panel]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -159,6 +190,8 @@ export function initPlayPanels(): void {
         setNotesPanelVisible(!notesPanelOpen);
       } else if (panel === 'map') {
         setMapPanelVisible(!mapPanelOpen);
+      } else if (panel === 'sheet') {
+        setSheetPanelVisible(!sheetPanelOpen);
       }
     });
   });
@@ -170,32 +203,35 @@ export function initPlayPanels(): void {
         setNotesPanelVisible(false);
       } else if (panel === 'map') {
         setMapPanelVisible(false);
+      } else if (panel === 'sheet') {
+        setSheetPanelVisible(false);
       }
     });
   });
 }
 
-export function clearSharedMap(): void {
+export function renderEmptyMap(): void {
   const title = document.getElementById('player-map-title');
   const canvas = document.getElementById('player-map-canvas');
   if (title) {
-    title.textContent = 'Shared map';
+    title.textContent = 'Map';
   }
 
   if (canvas) {
     canvas.innerHTML = '';
+    syncMapGrid(canvas);
   }
 }
 
-export function renderSharedMap(map: SharedMapPayload, options?: { openPanel?: boolean }): void {
+export function clearSharedMap(): void {
+  renderEmptyMap();
+}
+
+export function renderSharedMap(map: SharedMapPayload): void {
   const title = document.getElementById('player-map-title');
   const canvas = document.getElementById('player-map-canvas');
   if (!canvas) {
     return;
-  }
-
-  if (options?.openPanel) {
-    setMapPanelVisible(true);
   }
 
   if (title) {
@@ -345,7 +381,9 @@ export function installMapResizeHandler(getMap: () => SharedMapPayload | null): 
       frame = null;
       const map = getMap();
       if (map) {
-        renderSharedMap(map, { openPanel: false });
+        renderSharedMap(map);
+      } else {
+        renderEmptyMap();
       }
     });
   }).observe(canvas);

@@ -6,7 +6,6 @@ import {
   installMapResizeHandler,
   installPlayerMapInteraction,
   renderSharedMap,
-  setMapPanelVisible,
 } from './player-map';
 import type { RollPayload, SharedMapPayload, SharedViewDto, StickyBoardPayload, StickyNotePayload } from './types/payloads';
 
@@ -51,14 +50,12 @@ async function bootstrap(): Promise<void> {
 
   startCampaignHub({
     onMapShared: (map) => {
-      const firstShare = latestMap === null;
       latestMap = map;
-      renderSharedMap(map, { openPanel: firstShare });
+      renderSharedMap(map);
     },
     onMapSharingStopped: () => {
       latestMap = null;
       clearSharedMap();
-      setMapPanelVisible(false);
     },
     onRoll: renderRoll,
   });
@@ -75,7 +72,7 @@ async function loadSharedView(roomId: string): Promise<void> {
   const view = (await response.json()) as SharedViewDto;
   if (view.sharedMap) {
     latestMap = view.sharedMap;
-    renderSharedMap(view.sharedMap, { openPanel: true });
+    renderSharedMap(view.sharedMap);
   }
 
   if (view.lastRoll) {
