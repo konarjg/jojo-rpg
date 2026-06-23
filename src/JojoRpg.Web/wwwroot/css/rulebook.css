@@ -2832,7 +2832,7 @@ body.play-mode .gm-token--draggable.gm-token--dragging {
 }
 
 body.play-mode .sheet-shell {
-  flex: 1 1 auto;
+  flex: 1 1 0%;
   min-height: 0;
   max-width: 100%;
   width: 100%;
@@ -2846,9 +2846,10 @@ body.play-mode .sheet-shell .sheet-toolbar {
   flex-shrink: 0;
 }
 
-body.play-mode .sheet-viewport {
-  flex: 1 1 auto;
+body.sheet-interactive.play-mode .sheet-viewport {
+  flex: 1 1 0%;
   min-height: 0;
+  max-height: none;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -2887,6 +2888,13 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
     max-width: none;
     min-width: 0;
     min-height: min(40vh, 320px);
+    max-height: min(70vh, 640px);
+    overflow: hidden;
+  }
+
+  body.sheet-interactive.play-mode .play-main:not(.play-sheet-panel--closed) .sheet-viewport {
+    min-height: 0;
+    overflow-y: auto;
   }
 
   body.play-mode .play-notes-sidebar.play-notes-sidebar--closed,
