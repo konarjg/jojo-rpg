@@ -2745,20 +2745,11 @@ body.play-mode .play-notes-sidebar .gm-sticky-board {
 }
 
 body.play-mode .play-map-sidebar {
-  flex: 0 0 var(--play-sidebar-width);
-  width: var(--play-sidebar-width);
-  max-width: var(--play-sidebar-width);
-  min-width: var(--play-sidebar-width);
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, width 0.28s ease, opacity 0.25s ease;
+  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
 }
 
 body.play-mode .play-map-sidebar.play-map-sidebar--closed {
   flex: 0 0 0 !important;
-  width: 0 !important;
   max-width: 0 !important;
   min-width: 0 !important;
   opacity: 0;
