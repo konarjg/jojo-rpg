@@ -137,10 +137,20 @@ async function pushCurrentMap(): Promise<void> {
   });
 }
 
+function legacyScriptUrl(path: string): string {
+  const gmScript = document.querySelector('script[src*="/js/gm.js"]');
+  if (!(gmScript instanceof HTMLScriptElement) || !gmScript.src) {
+    return path;
+  }
+
+  const version = new URL(gmScript.src).searchParams.get('v');
+  return version ? `${path}?v=${encodeURIComponent(version)}` : path;
+}
+
 function loadLegacyGmApp(): Promise<void> {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = '/js/legacy/gm-app.js';
+    script.src = legacyScriptUrl('/js/legacy/gm-app.js');
     script.onload = () => resolve();
     script.onerror = () => reject(new Error('Failed to load gm-app.js'));
     document.body.appendChild(script);

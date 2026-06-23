@@ -7,15 +7,36 @@
     return prefix + '_' + Math.random().toString(36).slice(2, 10);
   }
 
+  function setPaletteActive(container, selected) {
+    container.querySelectorAll('.gm-sticky-palette-swatch').forEach(function (btn) {
+      var color = btn.getAttribute('data-color');
+      btn.classList.toggle('gm-sticky-palette-swatch--active', color === selected);
+    });
+  }
+
   function renderPalette(container, colors, selected, onSelect) {
     if (!container) return;
-    container.innerHTML = '';
     container.classList.add('gm-sticky-palette');
+    var existing = container.querySelectorAll('.gm-sticky-palette-swatch');
+    if (existing.length) {
+      existing.forEach(function (btn) {
+        var color = btn.getAttribute('data-color');
+        if (!color) return;
+        btn.onclick = function () {
+          onSelect(color);
+          setPaletteActive(container, color);
+        };
+      });
+      setPaletteActive(container, selected);
+      return;
+    }
+    container.innerHTML = '';
     colors.forEach(function (color) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'gm-sticky-palette-swatch';
       btn.style.background = color;
+      btn.setAttribute('data-color', color);
       btn.title = 'Note color';
       btn.setAttribute('aria-label', 'Note color ' + color);
       if (color === selected) {

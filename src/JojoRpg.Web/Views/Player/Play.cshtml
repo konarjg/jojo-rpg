@@ -26,7 +26,10 @@
                 <div class="gm-section-head">
                     <h2>My notes</h2>
                     <div class="gm-section-actions">
-                        <span id="player-sticky-color-palette" class="gm-sticky-palette-host" aria-label="New note color"></span>
+                        @{
+                            ViewData["PaletteId"] = "player-sticky-color-palette";
+                        }
+                        <partial name="_StickyColorPalette" />
                         <button type="button" id="player-add-sticky" class="pick-btn">+ Note</button>
                     </div>
                 </div>

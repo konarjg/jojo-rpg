@@ -1,0 +1,11 @@
+@{
+    string paletteId = ViewData["PaletteId"] as string ?? "gm-sticky-color-palette";
+}
+<label class="gm-sticky-palette-label">Color</label>
+<span id="@paletteId" class="gm-sticky-palette-host gm-sticky-palette" aria-label="New note color">
+    <button type="button" class="gm-sticky-palette-swatch gm-sticky-palette-swatch--active" style="background:#e8c547" data-color="#e8c547" title="Note color" aria-label="Note color #e8c547"></button>
+    <button type="button" class="gm-sticky-palette-swatch" style="background:#7ec8a4" data-color="#7ec8a4" title="Note color" aria-label="Note color #7ec8a4"></button>
+    <button type="button" class="gm-sticky-palette-swatch" style="background:#c97b84" data-color="#c97b84" title="Note color" aria-label="Note color #c97b84"></button>
+    <button type="button" class="gm-sticky-palette-swatch" style="background:#8eb4e8" data-color="#8eb4e8" title="Note color" aria-label="Note color #8eb4e8"></button>
+    <button type="button" class="gm-sticky-palette-swatch" style="background:#d4a574" data-color="#d4a574" title="Note color" aria-label="Note color #d4a574"></button>
+</span>
