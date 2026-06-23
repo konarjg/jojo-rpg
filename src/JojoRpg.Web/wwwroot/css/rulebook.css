@@ -2696,21 +2696,23 @@ body.play-mode .play-layout {
   min-height: 0;
   gap: 0.75em;
   overflow: hidden;
+  --play-sidebar-width: clamp(220px, 16vw, 260px);
 }
 
 body.play-mode .play-main {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 body.play-mode .play-notes-sidebar {
-  flex: 0 0 22%;
-  max-width: 28%;
-  min-width: min(280px, 32vw);
+  flex: 0 0 var(--play-sidebar-width);
+  width: var(--play-sidebar-width);
+  max-width: var(--play-sidebar-width);
+  min-width: var(--play-sidebar-width);
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -2743,18 +2745,20 @@ body.play-mode .play-notes-sidebar .gm-sticky-board {
 }
 
 body.play-mode .play-map-sidebar {
-  flex: 0 0 38%;
-  max-width: 42%;
-  min-width: min(320px, 40vw);
+  flex: 0 0 var(--play-sidebar-width);
+  width: var(--play-sidebar-width);
+  max-width: var(--play-sidebar-width);
+  min-width: var(--play-sidebar-width);
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
+  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, width 0.28s ease, opacity 0.25s ease;
 }
 
 body.play-mode .play-map-sidebar.play-map-sidebar--closed {
   flex: 0 0 0 !important;
+  width: 0 !important;
   max-width: 0 !important;
   min-width: 0 !important;
   opacity: 0;
@@ -2784,10 +2788,43 @@ body.play-mode .play-map-sidebar .player-map-canvas {
 body.play-mode .sheet-shell {
   flex: 1 1 auto;
   min-height: 0;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body.play-mode .sheet-shell .sheet-toolbar {
+  flex-shrink: 0;
 }
 
 body.play-mode .sheet-viewport {
+  flex: 1 1 auto;
   min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--jojo-gold-dim) rgba(45, 27, 78, 0.35);
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar-track {
+  background: rgba(45, 27, 78, 0.35);
+  border-radius: 4px;
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar-thumb {
+  background: var(--jojo-gold-dim);
+  border-radius: 4px;
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--jojo-gold);
 }
 
 @media (max-width: 900px) {
@@ -2796,17 +2833,16 @@ body.play-mode .sheet-viewport {
     overflow: auto;
   }
 
-  body.play-mode .play-notes-sidebar {
+  body.play-mode .play-notes-sidebar,
+  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
     flex: 0 0 auto;
+    width: auto;
     max-width: none;
     min-width: 0;
     min-height: min(40vh, 320px);
   }
 
   body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
-    flex: 0 0 auto;
-    max-width: none;
-    min-width: 0;
     min-height: min(50vh, 420px);
   }
 
