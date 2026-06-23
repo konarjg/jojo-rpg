@@ -1748,12 +1748,10 @@ body.gm-body {
 }
 
 .gm-layout {
-  display: grid;
-  grid-template-columns: minmax(15rem, 1fr) minmax(28rem, 2.8fr) minmax(20rem, 1.4fr);
-  gap: 0.75em;
+  display: flex;
   flex: 1 1 auto;
   min-height: 0;
-  align-items: stretch;
+  gap: 0.75em;
   overflow: hidden;
 }
 
@@ -1764,35 +1762,105 @@ body.gm-body {
   flex-direction: column;
   gap: 0.75em;
   overflow: hidden;
+  transition: flex 0.28s ease, max-width 0.28s ease, opacity 0.25s ease, transform 0.28s ease;
+}
+
+.gm-column[data-panel="notes"] {
+  flex: 1 1 22%;
+  max-width: 32%;
+}
+
+.gm-column[data-panel="map"] {
+  flex: 2 1 46%;
+}
+
+.gm-column[data-panel="npc"] {
+  flex: 1 1 28%;
+  max-width: 36%;
+}
+
+.gm-column.gm-column--closed {
+  flex: 0 0 0 !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  gap: 0;
+}
+
+.gm-column--npc.gm-column--closed {
+  transform: translateX(100%);
+}
+
+.gm-layout--solo .gm-column:not(.gm-column--closed) {
+  flex: 1 1 100% !important;
+  max-width: none !important;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
 .gm-column--left {
   min-height: 0;
 }
 
-.gm-notepad-section {
-  flex: 1 1 45%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0;
-}
-
 .gm-sticky-section {
-  flex: 1 1 55%;
+  flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
+  overflow: hidden;
 }
 
 .gm-column--center {
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .gm-column--npc {
   min-height: 0;
+}
+
+.gm-panel-toggles {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  align-items: center;
+}
+
+.gm-panel-toggle--active {
+  background: var(--jojo-magenta);
+  border-color: var(--jojo-gold);
+  color: var(--jojo-cream);
+}
+
+.gm-section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.gm-section-head--map {
+  flex-wrap: wrap;
+}
+
+.gm-panel-close {
+  border: none;
+  background: transparent;
+  color: var(--jojo-cream-dim);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.2em;
+}
+
+.gm-panel-close:hover {
+  color: var(--jojo-gold);
 }
 
 .gm-panel-section {
@@ -1829,13 +1897,99 @@ body.gm-body {
   margin: 0;
 }
 
-.gm-notepad {
-  width: 100%;
-  flex: 1 1 auto;
-  min-height: 0;
-  resize: none;
-  overflow-y: auto;
-  box-sizing: border-box;
+.gm-markdown--empty::before {
+  content: 'Preview';
+  color: var(--jojo-cream-dim);
+  font-style: italic;
+  opacity: 0.65;
+}
+
+.gm-markdown h1,
+.gm-markdown h2,
+.gm-markdown h3 {
+  margin: 0.6em 0 0.35em;
+  color: var(--jojo-gold);
+  line-height: 1.25;
+}
+
+.gm-markdown h1 { font-size: 1.15rem; }
+.gm-markdown h2 { font-size: 1.05rem; }
+.gm-markdown h3 { font-size: 0.95rem; }
+
+.gm-markdown p {
+  margin: 0.35em 0;
+}
+
+.gm-markdown ul,
+.gm-markdown ol {
+  margin: 0.35em 0;
+  padding-left: 1.4em;
+}
+
+.gm-markdown li {
+  margin: 0.15em 0;
+}
+
+.gm-markdown code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+.gm-markdown pre {
+  margin: 0.5em 0;
+  padding: 0.5em 0.65em;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.gm-markdown pre code {
+  background: none;
+  padding: 0;
+}
+
+.gm-markdown blockquote {
+  margin: 0.5em 0;
+  padding-left: 0.75em;
+  border-left: 3px solid var(--jojo-gold-dim);
+  color: var(--jojo-cream-dim);
+}
+
+.gm-markdown a {
+  color: var(--jojo-gold);
+}
+
+.gm-map-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.gm-map-select {
+  min-width: 8em;
+  max-width: 12em;
+}
+
+.gm-snapshot-select {
+  min-width: 9em;
+  max-width: 14em;
+}
+
+.gm-toolbar-divider {
+  display: inline-block;
+  width: 1px;
+  height: 1.4em;
+  background: var(--jojo-gold-dim);
+  margin: 0 0.15em;
+  align-self: center;
+}
+
+.gm-import-json-input {
+  display: none;
 }
 
 .gm-sticky-board {
@@ -1853,13 +2007,48 @@ body.gm-body {
 
 .gm-sticky {
   position: absolute;
-  min-width: 7em;
-  max-width: 14em;
   width: max-content;
-  padding: 0.5em;
+  padding: 0.5em 0.55em 0.45em;
   border-radius: 4px;
   box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.35);
   color: #1a0a2e;
+}
+
+.gm-sticky-mirror {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  visibility: hidden;
+  pointer-events: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+body.sheet-interactive textarea.gm-sticky-text.sheet-input {
+  display: block;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  max-width: 168px;
+  max-height: none;
+  margin-top: 1.25em;
+  padding: 0.35em 0.45em;
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  color: #1a0a2e;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  resize: none;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
+  outline: 2px solid rgba(26, 10, 46, 0.35);
+  outline-offset: 0;
 }
 
 .gm-sticky-delete {
@@ -1875,43 +2064,61 @@ body.gm-body {
   padding: 0;
 }
 
-.gm-sticky-text {
-  display: block;
-  width: 100%;
-  min-width: 6em;
-  max-width: 13em;
-  min-height: 3em;
-  max-height: 12.5em;
-  margin-top: 1.25em;
-  background: rgba(255, 255, 255, 0.35);
-  border: none;
-  color: #1a0a2e;
-  font-size: 0.85rem;
-  resize: none;
-  overflow-y: auto;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  box-sizing: border-box;
-  line-height: 1.35;
-}
-
 .gm-map-section {
-  flex: 1 1 auto;
-  min-height: 10rem;
+  flex: 1 1 0;
+  flex-shrink: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
+  overflow: hidden;
 }
 
 .gm-map-section .gm-map-canvas {
   flex: 1 1 auto;
-  min-height: 10rem;
+  min-height: 0;
+  height: 100%;
 }
 
-.gm-tokens-section,
+.gm-tokens-section {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
 .gm-dice-section {
   flex: 0 0 auto;
   margin-bottom: 0;
+}
+
+.gm-dice-section .dice-roller {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.65em 1em;
+}
+
+.gm-dice-section .dice-controls {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  align-items: flex-end;
+}
+
+.gm-dice-section .dice-result-area {
+  flex: 1 1 auto;
+  min-width: 6rem;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  margin-bottom: 0;
+}
+
+.gm-dice-section .dice-tiles--pyramid {
+  align-items: flex-start;
+}
+
+.gm-dice-section .dice-row {
+  justify-content: flex-start;
 }
 
 .gm-column--npc .gm-npc-section {
@@ -1935,15 +2142,215 @@ body.gm-body {
   margin-top: 0.5em;
 }
 
-.gm-npc-modal {
-  width: min(560px, 96vw);
+body.sheet-interactive .modal-panel.gm-npc-modal {
+  width: min(540px, 96vw);
+  z-index: 75;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+}
+
+body.sheet-interactive .gm-npc-modal .rules-modal-header {
+  padding: 0.75rem 1rem;
+}
+
+body.sheet-interactive .gm-npc-modal .modal-actions {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid var(--jojo-gold-dim);
+}
+
+.gm-npc-form-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  margin-bottom: 0;
+  padding: 0.75rem 1rem;
+}
+
+body.sheet-interactive .gm-npc-modal .sheet-input,
+body.sheet-interactive .gm-npc-modal select.sheet-input,
+body.sheet-interactive .gm-npc-modal textarea.sheet-input {
+  font-size: 0.875rem;
+  padding: 0.28em 0.45em;
+  min-height: 1.75em;
+  width: 100%;
+}
+
+.gm-npc-form-section {
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 6px;
+  margin-bottom: 0.65em;
+  padding: 0.55em 0.7em 0.65em;
+}
+
+.gm-npc-form-section:last-child {
+  margin-bottom: 0;
+}
+
+.gm-npc-form-section legend {
+  color: var(--jojo-gold);
+  font-size: 0.78rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0 0.3em;
+}
+
+.gm-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45em 0.55em;
+  align-items: flex-end;
 }
 
 .gm-form-field {
-  display: block;
-  margin-bottom: 0.75em;
-  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  margin-bottom: 0;
+  font-size: 0.78rem;
   color: var(--jojo-cream-dim);
+  min-width: 0;
+}
+
+.gm-form-field--grow {
+  flex: 1 1 10rem;
+  min-width: 8rem;
+}
+
+.gm-form-row .gm-form-field:not(.gm-form-field--grow) {
+  flex: 0 0 auto;
+}
+
+.gm-form-row .gm-form-field:nth-child(2),
+.gm-form-row .gm-form-field:nth-child(4) {
+  width: 4.25rem;
+}
+
+.gm-form-row .gm-form-field:nth-child(3) {
+  width: 6.5rem;
+}
+
+.gm-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4em 0.45em;
+  margin-bottom: 0.45em;
+}
+
+.gm-stat-grid--creature {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gm-stat-grid--stand {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gm-stat-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  min-width: 0;
+}
+
+.gm-stat-label {
+  font-size: 0.72rem;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--jojo-gold-dim);
+}
+
+.gm-stat-field .sheet-input {
+  text-transform: none;
+  font-weight: normal;
+  letter-spacing: normal;
+}
+
+.gm-npc-form-section > .gm-form-field {
+  margin-top: 0.35em;
+}
+
+.gm-stand-toggle {
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 0.85rem;
+}
+
+#npc-f-stand-fields > .gm-form-row,
+#npc-f-stand-fields > .gm-stat-grid,
+#npc-f-stand-fields > .gm-attack-list-field {
+  margin-bottom: 0.45em;
+}
+
+.gm-attack-list-field {
+  display: block;
+  margin-bottom: 0;
+}
+
+.gm-subsection-label {
+  margin: 0.15em 0 0.35em;
+  font-size: 0.78rem;
+  color: var(--jojo-cream-dim);
+}
+
+.gm-attack-list-label {
+  display: block;
+  margin-bottom: 0.3em;
+  font-size: 0.78rem;
+  color: var(--jojo-cream-dim);
+}
+
+.gm-attack-list-items {
+  list-style: none;
+  margin: 0 0 0.4em;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+
+.gm-attack-list-item {
+  display: flex;
+  gap: 0.35em;
+  align-items: center;
+}
+
+.gm-attack-list-item:has(.gm-attack-input--multiline) {
+  align-items: flex-start;
+}
+
+.gm-attack-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.gm-attack-input--multiline {
+  resize: vertical;
+  min-height: 2.2em;
+  max-height: 6em;
+}
+
+.gm-attack-list-item:has(.gm-attack-input--multiline) .gm-attack-remove {
+  margin-top: 0.15em;
+}
+
+.gm-attack-remove {
+  flex: 0 0 auto;
+  padding: 0.2em 0.45em;
+  min-height: 1.75em;
+  line-height: 1;
+  font-size: 0.85rem;
+}
+
+body.sheet-interactive .gm-npc-modal .gm-attack-add {
+  font-size: 0.82rem;
+  padding: 0.25em 0.6em;
+  min-height: 1.75em;
 }
 
 .gm-npc-body {
@@ -1956,7 +2363,8 @@ body.gm-body {
 .gm-map-canvas {
   position: relative;
   width: 100%;
-  min-height: 10rem;
+  min-height: 0;
+  overflow: hidden;
   --gm-grid-size: 48px;
   --gm-token-inset: 2px;
   background:
@@ -1975,6 +2383,16 @@ body.gm-body {
 
 .gm-map-canvas--select {
   cursor: default;
+}
+
+.gm-map-marquee {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 5;
+  border: 1px dashed var(--jojo-gold);
+  background: rgba(232, 197, 71, 0.14);
+  border-radius: 2px;
 }
 
 .gm-cursor-token {
@@ -2222,12 +2640,21 @@ body.gm-body {
   }
 
   .gm-layout {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     overflow: visible;
   }
 
   .gm-column {
     overflow: visible;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .gm-column.gm-column--closed {
+    display: none;
   }
 
   .gm-column--center {
@@ -5753,8 +6180,15 @@ body.gm-body {
 (function () {
   'use strict';
 
-  const CATALOG = JSON.parse(document.getElementById('jojo-catalog').textContent);
-  const STORAGE_KEY = 'jojo-rpg:characters';
+  const config = window.JOJO_CONFIG || {};
+  const SERVER_MODE = window.JOJO_STORAGE_MODE === 'server';
+  const READ_ONLY = !!config.readOnly;
+  const REFERENCE_MODE = !!config.referenceMode;
+  const ROOM_CODE = config.roomCode || '';
+  const SERVER_PLAYER_ID = config.playerId && String(config.playerId).length > 0 ? String(config.playerId) : null;
+
+  let CATALOG = null;
+  const STORAGE_KEY = REFERENCE_MODE ? ('jojo-rpg:reference:' + ROOM_CODE) : 'jojo-rpg:characters';
   const SCHEMA = 2;
 
   let state = null;
@@ -5904,8 +6338,16 @@ body.gm-body {
     if (el) el.textContent = 'Saving...';
     clearTimeout(saveTimer);
     saveTimer = setTimeout(function () {
+      if (READ_ONLY) {
+        if (el) el.textContent = 'Read-only';
+        return;
+      }
+      allCharacters[state.id] = state;
+      if (SERVER_MODE && SERVER_PLAYER_ID && !REFERENCE_MODE) {
+        saveToServer(el);
+        return;
+      }
       try {
-        allCharacters[state.id] = state;
         localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: SCHEMA, activeId: state.id, characters: allCharacters }));
         if (el) el.textContent = 'Saved';
       } catch (e) {
@@ -5914,7 +6356,38 @@ body.gm-body {
     }, 300);
   }
 
-  function loadAll() {
+  function payloadFromState(characterState) {
+    return {
+      id: SERVER_PLAYER_ID || characterState.id,
+      name: characterState.name || 'Character',
+      schemaVersion: SCHEMA,
+      data: characterState
+    };
+  }
+
+  function saveToServer(statusEl) {
+    const payload = payloadFromState(state);
+    fetch('/api/players/me/sheet', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
+    }).then(function (response) {
+      if (statusEl) statusEl.textContent = response.ok ? 'Saved' : 'Save failed';
+    }).catch(function () {
+      if (statusEl) statusEl.textContent = 'Save failed';
+    });
+  }
+
+  function stateFromPayload(payload) {
+    if (!payload || typeof payload !== 'object') return null;
+    if (payload.data && typeof payload.data === 'object') {
+      return mergeState(payload.data);
+    }
+    return mergeState(payload);
+  }
+
+  function loadAllLocal() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return { activeId: null, characters: {} };
@@ -5923,6 +6396,30 @@ body.gm-body {
     } catch (e) {
       return { activeId: null, characters: {} };
     }
+  }
+
+  function loadAllFromServer() {
+    if (REFERENCE_MODE || !SERVER_PLAYER_ID) {
+      return Promise.resolve(loadAllLocal());
+    }
+    return fetch('/api/players/' + SERVER_PLAYER_ID + '/sheet', { credentials: 'same-origin' })
+      .then(function (response) {
+        if (!response.ok) return { activeId: null, characters: {} };
+        return response.json();
+      })
+      .then(function (payload) {
+        const loaded = stateFromPayload(payload);
+        if (!loaded) return { activeId: null, characters: {} };
+        loaded.id = SERVER_PLAYER_ID;
+        return { activeId: loaded.id, characters: { [loaded.id]: loaded } };
+      })
+      .catch(function () {
+        return { activeId: null, characters: {} };
+      });
+  }
+
+  function loadAll() {
+    return SERVER_MODE ? loadAllFromServer() : Promise.resolve(loadAllLocal());
   }
 
   function mergeState(saved) {
@@ -6837,13 +7334,62 @@ body.gm-body {
       e.target.value = '';
     });
     window.addEventListener('beforeunload', function () {
+      if (READ_ONLY) return;
       allCharacters[state.id] = state;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: SCHEMA, activeId: state.id, characters: allCharacters }));
+      if (SERVER_MODE && SERVER_PLAYER_ID && !REFERENCE_MODE) {
+        const payload = payloadFromState(state);
+        navigator.sendBeacon('/api/players/me/sheet', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+        return;
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ schemaVersion: SCHEMA, activeId: state.id, characters: allCharacters }));
+      } catch (e) { /* ignore */ }
     });
   }
 
-  function init() {
-    const stored = loadAll();
+  function applyServerUi() {
+    if (!SERVER_MODE || REFERENCE_MODE) return;
+    ['char-select', 'btn-new-char', 'btn-delete-char'].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
+  }
+
+  function applyReadOnlyUi() {
+    if (!READ_ONLY) return;
+    document.querySelectorAll('.sheet-toolbar-actions button, .sheet-toolbar-actions label, .sheet-toolbar-actions select').forEach(function (el) {
+      if (el.id === 'page-select' || el.id === 'btn-page-prev' || el.id === 'btn-page-next' || el.id === 'btn-rules') return;
+      if (el instanceof HTMLButtonElement || el instanceof HTMLLabelElement) {
+        el.classList.add('hidden');
+      }
+    });
+    document.querySelectorAll('#sheet-viewport input, #sheet-viewport select, #sheet-viewport textarea, #sheet-viewport button').forEach(function (el) {
+      if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement || el instanceof HTMLTextAreaElement || el instanceof HTMLButtonElement) {
+        el.disabled = true;
+      }
+    });
+    document.querySelectorAll('.screen-only button.pick-btn').forEach(function (el) {
+      el.classList.add('hidden');
+    });
+    const status = document.getElementById('save-status');
+    if (status) status.textContent = 'Read-only';
+  }
+
+  async function loadCatalog() {
+    const el = document.getElementById('jojo-catalog');
+    if (el && el.textContent && el.textContent.trim()) {
+      return JSON.parse(el.textContent);
+    }
+    const response = await fetch('/data/jojo-catalog.json', { credentials: 'same-origin' });
+    if (!response.ok) {
+      throw new Error('Could not load rules catalog.');
+    }
+    return response.json();
+  }
+
+  async function init() {
+    CATALOG = await loadCatalog();
+    const stored = await loadAll();
     allCharacters = stored.characters || {};
     if (stored.activeId && allCharacters[stored.activeId]) {
       state = mergeState(allCharacters[stored.activeId]);
@@ -6856,10 +7402,15 @@ body.gm-body {
     initRulesModal();
     bindStaticFields();
     initPageNav();
+    applyServerUi();
+    applyReadOnlyUi();
     renderAll();
   }
 
-  init();
+  init().catch(function (err) {
+    console.error(err);
+    alert('Could not start character sheet: ' + (err && err.message ? err.message : err));
+  });
 })();
 
 </script>

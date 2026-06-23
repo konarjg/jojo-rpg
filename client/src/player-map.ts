@@ -58,7 +58,7 @@ function tokenPixel(token: MapTokenLike, grid: number): { left: number; top: num
 }
 
 function tokenClassName(token: MapTokenLike): string {
-  const type = token.type ?? 'player';
+  const type = (token.type ?? 'player').toLowerCase();
   return TOKEN_CLASSES[type] ?? TOKEN_CLASSES.player;
 }
 
@@ -67,7 +67,26 @@ function tokenLabel(token: MapTokenLike): string {
     return token.label;
   }
 
-  return token.type ?? 'Token';
+  const type = token.type ?? 'player';
+  const labels: Record<string, string> = {
+    player: 'Player',
+    npc: 'NPC',
+    boss: 'Boss',
+    cover: 'Cover',
+    obstacle: 'Obstacle',
+  };
+
+  return labels[type.toLowerCase()] ?? type;
+}
+
+export function setMapPanelVisible(visible: boolean): void {
+  const panel = document.getElementById('player-map-panel');
+  if (!panel) {
+    return;
+  }
+
+  panel.hidden = !visible;
+  panel.classList.toggle('player-map-panel--visible', visible);
 }
 
 export function clearSharedMap(): void {
@@ -89,6 +108,8 @@ export function renderSharedMap(map: SharedMapPayload): void {
   if (!canvas) {
     return;
   }
+
+  setMapPanelVisible(true);
 
   if (title) {
     title.hidden = false;

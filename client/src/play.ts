@@ -1,12 +1,22 @@
 import { getConfig } from './storage-mode';
 import { startCampaignHub } from './gm-hub';
-import { clearSharedMap, installMapResizeHandler, renderSharedMap } from './player-map';
+import {
+  clearSharedMap,
+  installMapResizeHandler,
+  renderSharedMap,
+  setMapPanelVisible,
+} from './player-map';
 import type { RollPayload, SharedMapPayload, SharedViewDto, StickyBoardPayload } from './types/payloads';
 
 let latestMap: SharedMapPayload | null = null;
 
 async function bootstrap(): Promise<void> {
   const config = getConfig();
+
+  if (config.mode === 'play') {
+    setMapPanelVisible(false);
+  }
+
   await loadSharedView(config.roomId);
 
   if (config.mode !== 'player-view') {
@@ -21,6 +31,9 @@ async function bootstrap(): Promise<void> {
     onMapSharingStopped: () => {
       latestMap = null;
       clearSharedMap();
+      if (config.mode === 'play') {
+        setMapPanelVisible(false);
+      }
     },
     onRoll: renderRoll,
   });
@@ -63,7 +76,7 @@ function renderRoll(roll: RollPayload): void {
 
   banner.hidden = false;
   const results = roll.results?.length ? roll.results.join(', ') : '';
-  banner.textContent = `Roll: ${roll.count}${roll.die} → ${results}`;
+  banner.textContent = `Roll: ${roll.count}${roll.die} \u2192 ${results}`;
 }
 
 function renderStickies(board: StickyBoardPayload): void {
@@ -72,6 +85,12 @@ function renderStickies(board: StickyBoardPayload): void {
     return;
   }
 
+  if (!board.stickies.length) {
+    panel.hidden = true;
+    return;
+  }
+
+  panel.hidden = false;
   panel.innerHTML = board.stickies
     .map((sticky) => `<div class="gm-sticky" style="background:${escapeHtml(sticky.color)}">${escapeHtml(sticky.text)}</div>`)
     .join('');

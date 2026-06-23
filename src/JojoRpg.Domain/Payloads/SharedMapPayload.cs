@@ -16,9 +16,15 @@ public record MapTokenPayload
 
     public string Label { get; init; } = string.Empty;
 
+    public string Type { get; init; } = "player";
+
     public int X { get; init; }
 
     public int Y { get; init; }
+
+    public int? Col { get; init; }
+
+    public int? Row { get; init; }
 
     public string Color { get; init; } = string.Empty;
 }

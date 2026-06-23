@@ -38,6 +38,11 @@ jobs:
       - run: npm run build
         working-directory: client
 
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Generate interactive sheet assets
+        run: uv run scripts/build-interactive-sheet.py
+
       - run: dotnet tool restore
 
       - name: Generate linq2db entities

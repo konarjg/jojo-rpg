@@ -2615,6 +2615,47 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   font-weight: bold;
 }
 
+body.play-mode #play-app {
+  display: flex;
+  flex-direction: column;
+}
+
+body.play-mode .player-map-panel {
+  order: 10;
+  margin-top: 1rem;
+}
+
+body.play-mode .player-map-canvas {
+  min-height: 240px;
+  max-height: min(40vh, 360px);
+  flex: none;
+}
+
+body.play-mode .gm-stickies-board {
+  order: 9;
+  margin-top: 0.75rem;
+}
+
+body.player-view-mode #play-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75em;
+  box-sizing: border-box;
+}
+
+body.player-view-mode .player-map-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+body.player-view-mode .player-map-canvas {
+  flex: 1;
+  min-height: calc(100vh - 8em);
+}
+
 .player-map-canvas {
   flex: 1;
   min-height: calc(100vh - 8em);

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 1,
   "skills": [
     {
@@ -134,19 +134,19 @@
         "id": "gifted",
         "name": "Gifted",
         "benefit": "+1 to two SPECIAL",
-        "penalty": "Max Luck points â’1"
+        "penalty": "Max Luck points −1"
       },
       {
         "id": "heavy-handed",
         "name": "Heavy Handed",
         "benefit": "+1 D/C melee bonus",
-        "penalty": "Complication on 19â€“20 melee"
+        "penalty": "Complication on 19–20 melee"
       },
       {
         "id": "small-frame",
         "name": "Small Frame",
         "benefit": "Re-roll 1d20 on balance AGI tests",
-        "penalty": "Carry 150+5Ă—STR"
+        "penalty": "Carry 150+5×STR"
       }
     ],
     "vampire": {
@@ -227,7 +227,7 @@
         "race": null,
         "notes": "END 5"
       },
-      "effect": "Hold breath 2Ă—; rank 2 harder to detect underwater"
+      "effect": "Hold breath 2×; rank 2 harder to detect underwater"
     },
     {
       "id": "armorer",
@@ -270,7 +270,7 @@
         "race": null,
         "notes": "STR 7, Lvl 4+"
       },
-      "effect": "Physical DR from STR (7â€“8:+1, 9â€“10:+2, 11+:+3)"
+      "effect": "Physical DR from STR (7–8:+1, 9–10:+2, 11+:+3)"
     },
     {
       "id": "basher",
@@ -368,7 +368,7 @@
         "race": null,
         "notes": "CHA 5"
       },
-      "effect": "Barter Â±10% price"
+      "effect": "Barter ±10% price"
     },
     {
       "id": "cautious-nature",
@@ -410,7 +410,7 @@
         "race": null,
         "notes": "END 7"
       },
-      "effect": "â’1 D/C addiction roll; rank 2 immune"
+      "effect": "−1 D/C addiction roll; rank 2 immune"
     },
     {
       "id": "chemist",
@@ -424,7 +424,7 @@
         "race": null,
         "notes": "INT 7"
       },
-      "effect": "Crafted chems last 2Ă—; unlock recipes"
+      "effect": "Crafted chems last 2×; unlock recipes"
     },
     {
       "id": "commando",
@@ -438,7 +438,7 @@
         "race": null,
         "notes": "AGI 8, Lvl 2+"
       },
-      "effect": "Fire Rate â‰Ą3 ranged: +1 D/C per rank"
+      "effect": "Fire Rate ≥3 ranged: +1 D/C per rank"
     },
     {
       "id": "comprehension",
@@ -510,7 +510,7 @@
         "race": null,
         "notes": "AGI 6, Lvl 4+"
       },
-      "effect": "Defend â’1 diff; rank 2 +1 Defense costs 1 AP"
+      "effect": "Defend −1 diff; rank 2 +1 Defense costs 1 AP"
     },
     {
       "id": "loyal-companion",
@@ -665,7 +665,7 @@
         "race": null,
         "notes": "AGI 7"
       },
-      "effect": "One-handed FRâ‰¤2: +1 D/C per rank; re-roll location"
+      "effect": "One-handed FR≤2: +1 D/C per rank; re-roll location"
     },
     {
       "id": "hacker",
@@ -679,7 +679,7 @@
         "race": null,
         "notes": "INT 8"
       },
-      "effect": "Hack diff â’1 (min 0)"
+      "effect": "Hack diff −1 (min 0)"
     },
     {
       "id": "healer",
@@ -804,7 +804,7 @@
         "race": null,
         "notes": "INT 6"
       },
-      "effect": "Repair diff â’1 (min 0)"
+      "effect": "Repair diff −1 (min 0)"
     },
     {
       "id": "laser-commander",
@@ -818,7 +818,7 @@
         "race": null,
         "notes": "PER 6"
       },
-      "effect": "Energy FRâ‰Ą3: +1 D/C"
+      "effect": "Energy FR≥3: +1 D/C"
     },
     {
       "id": "iron-stomach",
@@ -875,7 +875,7 @@
         "race": null,
         "notes": "PER 8, AGI 8"
       },
-      "effect": "Pickpocket diff â’1"
+      "effect": "Pickpocket diff −1"
     },
     {
       "id": "medic",
@@ -1088,7 +1088,7 @@
         "race": null,
         "notes": "PER 8, AGI 8"
       },
-      "effect": "Ignore 1 complication; re-roll 1d20; â’1 diff"
+      "effect": "Ignore 1 complication; re-roll 1d20; −1 diff"
     },
     {
       "id": "piercing-strike",
@@ -1229,7 +1229,7 @@
         "race": null,
         "notes": "INT 8"
       },
-      "effect": "Science diff â’1; chem recipes"
+      "effect": "Science diff −1; chem recipes"
     },
     {
       "id": "scoundrel",
@@ -1307,7 +1307,7 @@
         "race": null,
         "notes": null
       },
-      "effect": "Big creatures: â’1 diff; Small: +1 diff"
+      "effect": "Big creatures: −1 diff; Small: +1 diff"
     },
     {
       "id": "slayer",
@@ -1335,7 +1335,7 @@
         "race": null,
         "notes": "CHA 6"
       },
-      "effect": "Speech diff â’1 (min 0)"
+      "effect": "Speech diff −1 (min 0)"
     },
     {
       "id": "snakeater",
@@ -1432,7 +1432,7 @@
         "race": null,
         "notes": "CHA 7"
       },
-      "effect": "Demoralize enemy: flee or â’1 all tests"
+      "effect": "Demoralize enemy: flee or −1 all tests"
     },
     {
       "id": "toughness",
@@ -1707,8 +1707,8 @@
     {
       "id": "rokakaka-fruit",
       "name": "Rokakaka Fruit",
-      "effect": "Minor action: 4 HP or treat 1 injury or stabilize at 1 HP. Roll 1 D/C â€” Effect = Equivalent Exchange (GM: â’1 test, 1 D/C to random location, or stiff limb until rest)",
-      "rarity": "4â€“5",
+      "effect": "Minor action: 4 HP or treat 1 injury or stabilize at 1 HP. Roll 1 D/C — Effect = Equivalent Exchange (GM: −1 test, 1 D/C to random location, or stiff limb until rest)",
+      "rarity": "4–5",
       "cost": "200+",
       "vampireOnly": false
     },
@@ -1739,7 +1739,7 @@
     {
       "id": "adrenaline-shot",
       "name": "Adrenaline Shot",
-      "effect": "+2 Initiative this scene; crash â’1 END tests after",
+      "effect": "+2 Initiative this scene; crash −1 END tests after",
       "rarity": "2",
       "cost": "40",
       "vampireOnly": false
@@ -1787,14 +1787,14 @@
     }
   ],
   "standGrades": {
-    "âž": 12,
+    "∞": 12,
     "A": 10,
     "B": 8,
     "C": 6,
     "D": 4,
     "E": 2,
     "?": 6,
-    "â…": 0
+    "∅": 0
   },
   "standStats": [
     "power",

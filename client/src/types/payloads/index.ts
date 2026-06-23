@@ -15,10 +15,13 @@ export interface SharedMapPayload {
 
 export interface MapTokenPayload {
   id: string;
-  label: string;
+  label?: string;
+  type?: string;
   x: number;
   y: number;
-  color: string;
+  col?: number;
+  row?: number;
+  color?: string;
 }
 
 export interface RollPayload {

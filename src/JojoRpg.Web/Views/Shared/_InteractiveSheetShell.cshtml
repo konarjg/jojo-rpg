@@ -1,6 +1,7 @@
 ﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostEnvironment
+@using System.Text
 @{
     string shellPath = System.IO.Path.Combine(HostEnvironment.WebRootPath, "partials", "sheet-shell.html");
-    string html = System.IO.File.ReadAllText(shellPath);
+    string html = System.IO.File.ReadAllText(shellPath, Encoding.UTF8);
 }
 @Html.Raw(html)
