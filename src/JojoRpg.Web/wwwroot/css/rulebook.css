@@ -2846,6 +2846,7 @@ body.play-mode .sheet-shell .sheet-toolbar {
   flex-shrink: 0;
 }
 
+body.sheet-interactive.play-mode #sheet-viewport,
 body.sheet-interactive.play-mode .sheet-viewport {
   flex: 1 1 0%;
   min-height: 0;
@@ -2856,20 +2857,24 @@ body.sheet-interactive.play-mode .sheet-viewport {
   scrollbar-color: var(--jojo-gold-dim) rgba(45, 27, 78, 0.35);
 }
 
+body.play-mode #sheet-viewport::-webkit-scrollbar,
 body.play-mode .sheet-viewport::-webkit-scrollbar {
   width: 8px;
 }
 
+body.play-mode #sheet-viewport::-webkit-scrollbar-track,
 body.play-mode .sheet-viewport::-webkit-scrollbar-track {
   background: rgba(45, 27, 78, 0.35);
   border-radius: 4px;
 }
 
+body.play-mode #sheet-viewport::-webkit-scrollbar-thumb,
 body.play-mode .sheet-viewport::-webkit-scrollbar-thumb {
   background: var(--jojo-gold-dim);
   border-radius: 4px;
 }
 
+body.play-mode #sheet-viewport::-webkit-scrollbar-thumb:hover,
 body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
   background: var(--jojo-gold);
 }
@@ -2892,6 +2897,7 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
     overflow: hidden;
   }
 
+  body.sheet-interactive.play-mode .play-main:not(.play-sheet-panel--closed) #sheet-viewport,
   body.sheet-interactive.play-mode .play-main:not(.play-sheet-panel--closed) .sheet-viewport {
     min-height: 0;
     overflow-y: auto;
