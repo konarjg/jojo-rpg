@@ -30,9 +30,14 @@ interface PlayerMapInteractionOptions {
   onCommitMoves: (moves: { id: string; col: number; row: number }[]) => void;
 }
 
+type PlayPanelId = 'notes' | 'sheet' | 'map';
+
+const MOBILE_PLAY_QUERY = '(max-width: 1100px)';
+
 let mapPanelOpen = true;
 let notesPanelOpen = true;
 let sheetPanelOpen = true;
+let mobileActivePanel: PlayPanelId = 'sheet';
 let interactionInstalled = false;
 let dragState: { tokenId: string; offsetX: number; offsetY: number } | null = null;
 let interactionOptions: PlayerMapInteractionOptions | null = null;
@@ -135,6 +140,93 @@ function applyTokenPosition(element: HTMLElement, token: MapTokenLike, grid: num
   element.style.top = `${position.top}px`;
 }
 
+function isMobilePlayLayout(): boolean {
+  return window.matchMedia(MOBILE_PLAY_QUERY).matches;
+}
+
+function syncPlayLayoutModeClass(): void {
+  document.body.classList.toggle('play-mode-mobile', isMobilePlayLayout());
+}
+
+function applyPanelDomState(): void {
+  const notesPanel = document.querySelector('.play-notes-sidebar');
+  if (notesPanel) {
+    notesPanel.classList.toggle('play-notes-sidebar--closed', !notesPanelOpen);
+    notesPanel.setAttribute('aria-hidden', notesPanelOpen ? 'false' : 'true');
+  }
+
+  const sheetPanel = document.getElementById('player-sheet-panel');
+  if (sheetPanel) {
+    sheetPanel.classList.toggle('play-sheet-panel--closed', !sheetPanelOpen);
+    sheetPanel.setAttribute('aria-hidden', sheetPanelOpen ? 'false' : 'true');
+  }
+
+  const mapPanel = document.getElementById('player-map-panel');
+  if (mapPanel) {
+    mapPanel.classList.toggle('play-map-sidebar--closed', !mapPanelOpen);
+    mapPanel.setAttribute('aria-hidden', mapPanelOpen ? 'false' : 'true');
+  }
+
+  updatePlayPanelToggleButtons();
+}
+
+function setPlayPanelVisibility(notes: boolean, sheet: boolean, map: boolean): void {
+  notesPanelOpen = notes;
+  sheetPanelOpen = sheet;
+  mapPanelOpen = map;
+  applyPanelDomState();
+  notifyPanelLayoutChange();
+}
+
+function showMobilePanel(panel: PlayPanelId): void {
+  mobileActivePanel = panel;
+  setPlayPanelVisibility(panel === 'notes', panel === 'sheet', panel === 'map');
+}
+
+function syncPlayLayoutMode(): void {
+  syncPlayLayoutModeClass();
+  if (isMobilePlayLayout()) {
+    const active: PlayPanelId = notesPanelOpen
+      ? 'notes'
+      : mapPanelOpen
+        ? 'map'
+        : sheetPanelOpen
+          ? 'sheet'
+          : mobileActivePanel;
+    showMobilePanel(active);
+    return;
+  }
+
+  const openCount = Number(notesPanelOpen) + Number(sheetPanelOpen) + Number(mapPanelOpen);
+  if (openCount <= 1) {
+    setPlayPanelVisibility(true, true, true);
+    return;
+  }
+
+  applyPanelDomState();
+  notifyPanelLayoutChange();
+}
+
+function toggleDesktopPanel(panel: PlayPanelId): void {
+  if (panel === 'notes') {
+    setPlayPanelVisibility(!notesPanelOpen, sheetPanelOpen, mapPanelOpen);
+  } else if (panel === 'sheet') {
+    setPlayPanelVisibility(notesPanelOpen, !sheetPanelOpen, mapPanelOpen);
+  } else {
+    setPlayPanelVisibility(notesPanelOpen, sheetPanelOpen, !mapPanelOpen);
+  }
+}
+
+function closeDesktopPanel(panel: PlayPanelId): void {
+  if (panel === 'notes') {
+    setPlayPanelVisibility(false, sheetPanelOpen, mapPanelOpen);
+  } else if (panel === 'sheet') {
+    setPlayPanelVisibility(notesPanelOpen, false, mapPanelOpen);
+  } else {
+    setPlayPanelVisibility(notesPanelOpen, sheetPanelOpen, false);
+  }
+}
+
 function updatePlayPanelToggleButtons(): void {
   document.querySelectorAll('.play-panel-toggle[data-panel]').forEach((button) => {
     const panel = button.getAttribute('data-panel');
@@ -146,40 +238,36 @@ function updatePlayPanelToggleButtons(): void {
 }
 
 export function setSheetPanelVisible(visible: boolean): void {
-  sheetPanelOpen = visible;
-  const panel = document.getElementById('player-sheet-panel');
-  if (panel) {
-    panel.classList.toggle('play-sheet-panel--closed', !visible);
-    panel.setAttribute('aria-hidden', visible ? 'false' : 'true');
-  }
-
-  updatePlayPanelToggleButtons();
-  notifyPanelLayoutChange();
-}
-
-export function setNotesPanelVisible(visible: boolean): void {
-  notesPanelOpen = visible;
-  const panel = document.querySelector('.play-notes-sidebar');
-  if (panel) {
-    panel.classList.toggle('play-notes-sidebar--closed', !visible);
-    panel.setAttribute('aria-hidden', visible ? 'false' : 'true');
-  }
-
-  updatePlayPanelToggleButtons();
-  notifyPanelLayoutChange();
-}
-
-export function setMapPanelVisible(visible: boolean): void {
-  mapPanelOpen = visible;
-  const panel = document.getElementById('player-map-panel');
-  if (!panel) {
+  if (isMobilePlayLayout()) {
+    if (visible) {
+      showMobilePanel('sheet');
+    }
     return;
   }
 
-  panel.classList.toggle('play-map-sidebar--closed', !visible);
-  panel.setAttribute('aria-hidden', visible ? 'false' : 'true');
-  updatePlayPanelToggleButtons();
-  notifyPanelLayoutChange();
+  setPlayPanelVisibility(notesPanelOpen, visible, mapPanelOpen);
+}
+
+export function setNotesPanelVisible(visible: boolean): void {
+  if (isMobilePlayLayout()) {
+    if (visible) {
+      showMobilePanel('notes');
+    }
+    return;
+  }
+
+  setPlayPanelVisibility(visible, sheetPanelOpen, mapPanelOpen);
+}
+
+export function setMapPanelVisible(visible: boolean): void {
+  if (isMobilePlayLayout()) {
+    if (visible) {
+      showMobilePanel('map');
+    }
+    return;
+  }
+
+  setPlayPanelVisibility(notesPanelOpen, sheetPanelOpen, visible);
 }
 
 function installSheetCloseButton(): void {
@@ -201,9 +289,13 @@ export function initPlayPanels(): void {
   const layout = document.getElementById('play-layout');
   layout?.classList.add('play-layout--instant');
 
-  setNotesPanelVisible(true);
-  setMapPanelVisible(true);
-  setSheetPanelVisible(true);
+  syncPlayLayoutModeClass();
+  if (isMobilePlayLayout()) {
+    showMobilePanel('sheet');
+  } else {
+    setPlayPanelVisibility(true, true, true);
+  }
+
   installSheetCloseButton();
   renderEmptyMap();
 
@@ -211,29 +303,39 @@ export function initPlayPanels(): void {
     layout?.classList.remove('play-layout--instant');
   });
 
+  window.matchMedia(MOBILE_PLAY_QUERY).addEventListener('change', () => {
+    syncPlayLayoutMode();
+  });
+
   document.querySelectorAll('.play-panel-toggle[data-panel]').forEach((button) => {
     button.addEventListener('click', () => {
-      const panel = button.getAttribute('data-panel');
-      if (panel === 'notes') {
-        setNotesPanelVisible(!notesPanelOpen);
-      } else if (panel === 'map') {
-        setMapPanelVisible(!mapPanelOpen);
-      } else if (panel === 'sheet') {
-        setSheetPanelVisible(!sheetPanelOpen);
+      const panel = button.getAttribute('data-panel') as PlayPanelId | null;
+      if (!panel) {
+        return;
       }
+
+      if (isMobilePlayLayout()) {
+        showMobilePanel(panel);
+        return;
+      }
+
+      toggleDesktopPanel(panel);
     });
   });
 
   document.querySelectorAll('.play-panel-close[data-panel]').forEach((button) => {
     button.addEventListener('click', () => {
-      const panel = button.getAttribute('data-panel');
-      if (panel === 'notes') {
-        setNotesPanelVisible(false);
-      } else if (panel === 'map') {
-        setMapPanelVisible(false);
-      } else if (panel === 'sheet') {
-        setSheetPanelVisible(false);
+      const panel = button.getAttribute('data-panel') as PlayPanelId | null;
+      if (!panel) {
+        return;
       }
+
+      if (isMobilePlayLayout()) {
+        showMobilePanel('sheet');
+        return;
+      }
+
+      closeDesktopPanel(panel);
     });
   });
 }

@@ -2724,13 +2724,13 @@ body.play-mode .play-layout--instant .play-main {
   transition: none !important;
 }
 
-body.play-mode .play-notes-sidebar:not(.play-notes-sidebar--closed) {
+body.play-mode:not(.play-mode-mobile) .play-notes-sidebar:not(.play-notes-sidebar--closed) {
   flex: 2 1 0%;
   min-width: min(260px, 28vw);
   margin-right: 0;
 }
 
-body.play-mode .play-notes-sidebar.play-notes-sidebar--closed {
+body.play-mode:not(.play-mode-mobile) .play-notes-sidebar.play-notes-sidebar--closed {
   flex: 0 0 0;
   min-width: 0;
   max-width: 0;
@@ -2740,14 +2740,14 @@ body.play-mode .play-notes-sidebar.play-notes-sidebar--closed {
   pointer-events: none;
 }
 
-body.play-mode .play-main:not(.play-sheet-panel--closed) {
+body.play-mode:not(.play-mode-mobile) .play-main:not(.play-sheet-panel--closed) {
   flex: 3 1 0%;
   min-width: min(280px, 30vw);
   margin-left: 0;
   margin-right: 0;
 }
 
-body.play-mode .play-main.play-sheet-panel--closed {
+body.play-mode:not(.play-mode-mobile) .play-main.play-sheet-panel--closed {
   flex: 0 0 0;
   min-width: 0;
   max-width: 0;
@@ -2758,13 +2758,13 @@ body.play-mode .play-main.play-sheet-panel--closed {
   pointer-events: none;
 }
 
-body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
+body.play-mode:not(.play-mode-mobile) .play-map-sidebar:not(.play-map-sidebar--closed) {
   flex: 2 1 0%;
   min-width: min(260px, 28vw);
   margin-left: 0;
 }
 
-body.play-mode .play-map-sidebar.play-map-sidebar--closed {
+body.play-mode:not(.play-mode-mobile) .play-map-sidebar.play-map-sidebar--closed {
   flex: 0 0 0;
   min-width: 0;
   max-width: 0;
@@ -2906,67 +2906,150 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
   background: var(--jojo-gold);
 }
 
-@media (max-width: 900px) {
-  body.play-mode .play-layout {
-    flex-direction: column;
-    overflow: auto;
-  }
+/* Mobile / tablet: one full-screen panel at a time (tabs in toolbar). */
+body.play-mode.play-mode-mobile {
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: 0.35em;
+  padding-bottom: max(0.35em, env(safe-area-inset-bottom));
+}
 
-  body.play-mode .play-notes-sidebar:not(.play-notes-sidebar--closed),
-  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed),
-  body.play-mode .play-main:not(.play-sheet-panel--closed) {
-    flex: 1 1 auto;
-    width: auto;
-    min-width: 0;
-    max-width: none;
-    min-height: min(40vh, 320px);
-    max-height: none;
-    margin: 0;
-    overflow: hidden;
-  }
+body.play-mode.play-mode-mobile #play-app {
+  max-height: 100dvh;
+}
 
-  body.play-mode .play-notes-sidebar.play-notes-sidebar--closed {
-    flex: 0 0 0;
-    min-height: 0;
-    max-height: 0;
-    margin-right: 0;
-    margin-bottom: -0.75em;
-    transform: translateY(-12px);
-  }
+body.play-mode.play-mode-mobile .gm-toolbar {
+  flex-wrap: wrap;
+  gap: 0.4em;
+  flex-shrink: 0;
+}
 
-  body.play-mode .play-main.play-sheet-panel--closed {
-    flex: 0 0 0;
-    min-height: 0;
-    max-height: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: -0.75em;
-    margin-bottom: -0.75em;
-    transform: scale(0.98);
-  }
+body.play-mode.play-mode-mobile .gm-toolbar__title {
+  flex: 1 1 100%;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
 
-  body.play-mode .play-map-sidebar.play-map-sidebar--closed {
-    flex: 0 0 0;
-    min-height: 0;
-    max-height: 0;
-    margin-left: 0;
-    margin-top: -0.75em;
-    transform: translateY(12px);
-  }
+body.play-mode.play-mode-mobile .play-panel-toggles {
+  flex: 1 1 auto;
+  margin-right: 0;
+}
 
-  body.sheet-interactive.play-mode .play-main:not(.play-sheet-panel--closed) #sheet-viewport,
-  body.sheet-interactive.play-mode .play-main:not(.play-sheet-panel--closed) .sheet-viewport {
-    min-height: 0;
-    overflow-y: auto;
-  }
+body.play-mode.play-mode-mobile .play-panel-toggle,
+body.play-mode.play-mode-mobile .gm-toolbar .gm-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.55em 0.9em;
+  font-size: 1rem;
+  touch-action: manipulation;
+}
 
-  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
-    min-height: min(50vh, 420px);
-  }
+body.play-mode.play-mode-mobile .play-layout {
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0;
+  overflow: hidden;
+}
 
-  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) .player-map-canvas {
-    min-height: min(50vh, 420px);
-  }
+body.play-mode.play-mode-mobile .play-notes-sidebar,
+body.play-mode.play-mode-mobile .play-main,
+body.play-mode.play-mode-mobile .play-map-sidebar {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  transform: none;
+  transition: opacity 0.2s ease;
+}
+
+body.play-mode.play-mode-mobile .play-notes-sidebar.play-notes-sidebar--closed,
+body.play-mode.play-mode-mobile .play-main.play-sheet-panel--closed,
+body.play-mode.play-mode-mobile .play-map-sidebar.play-map-sidebar--closed {
+  display: none;
+  flex: 0 0 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.play-mode.play-mode-mobile .play-panel-close {
+  display: none;
+}
+
+body.play-mode.play-mode-mobile .sheet-toolbar {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+body.play-mode.play-mode-mobile .sheet-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+body.play-mode.play-mode-mobile .sheet-toolbar h1 {
+  display: none;
+}
+
+body.play-mode.play-mode-mobile .sheet-toolbar-actions {
+  flex-wrap: nowrap;
+  gap: 0.45em;
+  padding-bottom: 0.15em;
+}
+
+body.play-mode.play-mode-mobile .sheet-input,
+body.play-mode.play-mode-mobile select.sheet-input,
+body.play-mode.play-mode-mobile textarea.sheet-input {
+  font-size: 16px;
+  min-height: 44px;
+  padding: 0.6em 0.75em;
+  touch-action: manipulation;
+}
+
+body.play-mode.play-mode-mobile .pick-btn {
+  min-height: 44px;
+  font-size: 16px;
+  touch-action: manipulation;
+}
+
+body.play-mode.play-mode-mobile .field-row {
+  flex-wrap: wrap;
+  gap: 0.35em;
+}
+
+body.play-mode.play-mode-mobile .field-row > span:first-child {
+  flex: 1 1 100%;
+}
+
+body.play-mode.play-mode-mobile .sheet-table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.sheet-interactive.play-mode.play-mode-mobile #sheet-viewport,
+body.play-mode.play-mode-mobile #sheet-viewport,
+body.play-mode.play-mode-mobile .sheet-viewport {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.85rem 0.9rem;
+}
+
+body.play-mode.play-mode-mobile .play-map-sidebar .player-map-canvas {
+  min-height: 0;
+}
+
+body.play-mode.play-mode-mobile .gm-sticky-board {
+  -webkit-overflow-scrolling: touch;
+}
+
+body.play-mode.play-mode-mobile textarea.gm-sticky-text.sheet-input {
+  font-size: 16px;
+  min-height: 5rem;
 }
 
 .player-map-canvas {
