@@ -416,13 +416,13 @@
 
     function availableSkills(ctx) {
       var catalog = ctx.catalog || fallbackCatalog;
-      var skills = catalog.skills || [];
-      var mode = skillModeEl.value;
-      var attr = attrEl.value;
-      if (mode === 'stand') return skills.slice();
-      return skills.filter(function (skill) {
-        return skill.attribute === attr;
-      });
+      return (catalog.skills || []).slice();
+    }
+
+    function skillOptionLabel(skill, ctx) {
+      var data = selectedSkillData(ctx, skill.id);
+      var tagged = data.tagged ? ' (tagged)' : '';
+      return skill.name + ' (' + skill.attribute + ')' + tagged;
     }
 
     function populateSkills() {
@@ -431,9 +431,7 @@
       var previous = skillEl.value;
       skillEl.innerHTML = '';
       skills.forEach(function (skill) {
-        var data = selectedSkillData(ctx, skill.id);
-        var suffix = data.tagged ? ' (tagged)' : '';
-        skillEl.innerHTML += '<option value="' + escapeHtml(skill.id) + '">' + escapeHtml(skill.name + suffix) + '</option>';
+        skillEl.innerHTML += '<option value="' + escapeHtml(skill.id) + '">' + escapeHtml(skillOptionLabel(skill, ctx)) + '</option>';
       });
       if (previous) skillEl.value = previous;
       if (!skillEl.value && skills.length > 0) skillEl.value = skills[0].id;
@@ -606,7 +604,7 @@
       populateSkills();
       updateSkillControls();
     });
-    attrEl.addEventListener('change', populateSkills);
+    attrEl.addEventListener('change', updateSkillControls);
     standStatEl.addEventListener('change', updateSkillControls);
     skillEl.addEventListener('change', updateSkillControls);
     manualStatEl.addEventListener('input', updateSkillControls);
