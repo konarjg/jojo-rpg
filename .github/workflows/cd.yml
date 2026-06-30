@@ -119,21 +119,6 @@ jobs:
           name: web-publish
           path: publish
 
-      - name: Take site offline
-        run: |
-          mkdir offline-only
-          echo "<html><body><p>Updating...</p></body></html>" > offline-only/app_offline.htm
-
-      - name: Upload app_offline
-        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
-        with:
-          server: site75760.siteasp.net
-          username: site75760
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: offline-only/
-          server-dir: /wwwroot/
-          protocol: ftps
-
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
