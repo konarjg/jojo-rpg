@@ -1103,7 +1103,18 @@
     if (diceClose) diceClose.addEventListener('click', closeDice);
     if (typeof DiceRoller !== 'undefined') {
       var diceRoot = document.getElementById('dice-modal-root');
-      if (diceRoot) DiceRoller.mount(diceRoot);
+      if (diceRoot) {
+        DiceRoller.mount(diceRoot, {
+          getContext: function () {
+            return {
+              catalog: CATALOG,
+              special: state.special,
+              skills: state.skills,
+              standGrades: state.stand.grades
+            };
+          }
+        });
+      }
     }
     document.getElementById('btn-rules').addEventListener('click', openRules);
     document.getElementById('btn-rules-close').addEventListener('click', closeRules);

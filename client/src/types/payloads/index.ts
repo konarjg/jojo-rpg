@@ -25,9 +25,20 @@ export interface MapTokenPayload {
 }
 
 export interface RollPayload {
+  mode?: 'skill-test' | 'dc' | 'plain' | string;
+  rollMode?: 'normal' | 'stand' | string;
+  label?: string;
   die: string;
   count: number;
   results: number[];
+  tn?: number;
+  skillRank?: number;
+  tagged?: boolean;
+  totalSuccesses?: number;
+  totalComplications?: number;
+  totalDamage?: number;
+  totalEffects?: number;
+  perDie?: unknown[];
 }
 
 export interface StickyBoardPayload {

@@ -1161,9 +1161,20 @@
   function broadcastRoll(entry) {
     var msg = {
       type: 'roll',
+      mode: entry.mode,
+      rollMode: entry.rollMode,
+      label: entry.label,
       die: entry.die,
       count: entry.count,
-      results: entry.results.slice()
+      results: entry.results.slice(),
+      tn: entry.tn,
+      skillRank: entry.skillRank,
+      tagged: entry.tagged,
+      totalSuccesses: entry.totalSuccesses,
+      totalComplications: entry.totalComplications,
+      totalDamage: entry.totalDamage,
+      totalEffects: entry.totalEffects,
+      perDie: entry.perDie
     };
     broadcast(msg);
     if (window.JOJO_STORAGE_MODE === 'server') {

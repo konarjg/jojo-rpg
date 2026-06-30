@@ -1817,6 +1817,33 @@ body.sheet-interactive .stand-toggle {
   font-family: Arial, sans-serif;
 }
 
+.dice-roller {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+}
+
+.dice-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+}
+
+.dice-tab {
+  opacity: 0.72;
+}
+
+.dice-tab--active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(232, 197, 71, 0.28);
+}
+
+.dice-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
 .dice-controls {
   display: flex;
   flex-wrap: wrap;
@@ -1837,6 +1864,32 @@ body.sheet-interactive .stand-toggle {
   min-width: 5em;
 }
 
+.dice-field output {
+  min-height: 2.15em;
+  min-width: 7em;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35em 0.55em;
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 4px;
+  background: rgba(26, 10, 46, 0.72);
+  color: var(--jojo-gold);
+  box-sizing: border-box;
+}
+
+.dice-rules-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 0.75em;
+  padding: 0.55em 0.65em;
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 6px;
+  background: rgba(26, 10, 46, 0.45);
+  color: var(--jojo-cream-dim);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
 .dice-count {
   width: 4.5em;
 }
@@ -1848,6 +1901,31 @@ body.sheet-interactive .stand-toggle {
 .dice-result-area {
   min-height: 4.5em;
   margin-bottom: 0.75em;
+}
+
+.dice-resolution {
+  text-align: center;
+  margin: 0 0 0.55em;
+  padding: 0.55em 0.75em;
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 7px;
+  background: rgba(45, 27, 78, 0.68);
+  color: var(--jojo-gold);
+  box-shadow: 0 4px 14px var(--jojo-shadow);
+}
+
+.dice-resolution strong {
+  font-size: 1rem;
+}
+
+.dice-resolution-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35em 0.85em;
+  margin-top: 0.25em;
+  color: var(--jojo-cream-dim);
+  font-size: 0.84rem;
 }
 
 .dice-tiles {
@@ -1930,6 +2008,42 @@ body.sheet-interactive .stand-toggle {
   filter: drop-shadow(0 0 6px rgba(123, 237, 159, 0.45));
 }
 
+.dice-face--crit.dice-face--d20 .dice-d20-body,
+.dice-face--dc-effect.dice-face--d6 {
+  stroke: #ffdf6e;
+  border-color: #ffdf6e;
+  box-shadow: 0 0 10px rgba(255, 223, 110, 0.55);
+}
+
+.dice-face--crit.dice-face--d20 {
+  filter: drop-shadow(0 0 8px rgba(255, 223, 110, 0.6));
+}
+
+.dice-face--complication.dice-face--d20 .dice-d20-body {
+  stroke: #ff7b7b;
+}
+
+.dice-face--complication.dice-face--d20 {
+  filter: drop-shadow(0 0 8px rgba(255, 123, 123, 0.58));
+}
+
+.dice-face--fail.dice-face--d20 {
+  opacity: 0.62;
+}
+
+.dice-face--dc-one {
+  border-color: #7bed9f;
+}
+
+.dice-face--dc-two {
+  border-color: #7bed9f;
+  box-shadow: 0 0 8px rgba(123, 237, 159, 0.45);
+}
+
+.dice-face--dc-blank {
+  opacity: 0.55;
+}
+
 .dice-face--d6 .dice-pip-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1990,7 +2104,7 @@ body.sheet-interactive .stand-toggle {
 }
 
 body.sheet-interactive .dice-modal {
-  width: min(520px, 96vw);
+  width: min(640px, 96vw);
 }
 
 /* ---- GM Panel ---- */
@@ -2471,20 +2585,27 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 
 .gm-dice-section .dice-roller {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
   align-items: flex-start;
-  gap: 0.65em 1em;
+  gap: 0.65em;
 }
 
 .gm-dice-section .dice-controls {
-  flex: 0 0 auto;
+  width: 100%;
   margin-bottom: 0;
   align-items: flex-end;
 }
 
+.gm-dice-section .dice-tabs,
+.gm-dice-section .dice-panel,
+.gm-dice-section .dice-rules-panel,
 .gm-dice-section .dice-result-area {
-  flex: 1 1 auto;
+  width: 100%;
+}
+
+.gm-dice-section .dice-result-area {
+  flex: 0 0 auto;
   min-width: 6rem;
   min-height: 0;
   max-height: none;

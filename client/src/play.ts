@@ -148,6 +148,20 @@ function renderRoll(roll: RollPayload): void {
 
   banner.hidden = false;
   const results = roll.results?.length ? roll.results.join(', ') : '';
+  if (roll.mode === 'skill-test') {
+    const label = roll.label ? `${roll.label}: ` : '';
+    const successes = roll.totalSuccesses ?? 0;
+    const complications = roll.totalComplications ?? 0;
+    const tn = roll.tn == null ? '' : ` (TN ${roll.tn})`;
+    banner.textContent = `${label}${successes} successes · ${complications} complications${tn}`;
+    return;
+  }
+
+  if (roll.mode === 'dc') {
+    banner.textContent = `${roll.count}${roll.die}: ${roll.totalDamage ?? 0} damage · ${roll.totalEffects ?? 0} effects`;
+    return;
+  }
+
   banner.textContent = `Roll: ${roll.count}${roll.die} \u2192 ${results}`;
 }
 
