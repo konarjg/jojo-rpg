@@ -26,6 +26,12 @@ public sealed class FakeRoomRepository : IRoomRepository
         return Task.FromResult(room);
     }
 
+    public Task<IReadOnlyList<Room>> ListByOwnerAccountAsync(Guid accountId, CancellationToken cancellationToken)
+    {
+        IReadOnlyList<Room> list = RoomsById.Values.Where(room => room.OwnerAccountId == accountId).ToList();
+        return Task.FromResult(list);
+    }
+
     public Task AddAsync(Room room, CancellationToken cancellationToken)
     {
         RoomsById[room.Id] = room;
@@ -53,6 +59,14 @@ public sealed class FakeSessionRepository : ISessionRepository
         }
 
         return Task.FromResult<RoomSession?>(null);
+    }
+
+    public Task<IReadOnlyList<RoomSession>> ListActiveByAccountAsync(Guid accountId, CancellationToken cancellationToken)
+    {
+        IReadOnlyList<RoomSession> list = Sessions.Values
+            .Where(session => session.AccountId == accountId && session.RevokedAt is null)
+            .ToList();
+        return Task.FromResult(list);
     }
 
     public Task AddAsync(RoomSession session, CancellationToken cancellationToken)
@@ -88,6 +102,18 @@ public sealed class FakePlayerRepository : IPlayerRepository
     {
         IReadOnlyList<Player> list = Players.Values.Where(p => p.RoomId == roomId).ToList();
         return Task.FromResult(list);
+    }
+
+    public Task<IReadOnlyList<Player>> ListByAccountAsync(Guid accountId, CancellationToken cancellationToken)
+    {
+        IReadOnlyList<Player> list = Players.Values.Where(p => p.AccountId == accountId).ToList();
+        return Task.FromResult(list);
+    }
+
+    public Task<Player?> GetByRoomAndAccountAsync(Guid roomId, Guid accountId, CancellationToken cancellationToken)
+    {
+        Player? player = Players.Values.FirstOrDefault(p => p.RoomId == roomId && p.AccountId == accountId);
+        return Task.FromResult(player);
     }
 
     public Task<Player?> GetByRoomAndPlayerCodeHashAsync(Guid roomId, string playerCodeHash, CancellationToken cancellationToken)
@@ -136,11 +162,50 @@ public sealed class FakeCampaignNotifier : ICampaignNotifier
     public Task PlayerSheetChangedAsync(Guid roomId, Guid playerId, string displayName, CancellationToken cancellationToken) => Task.CompletedTask;
 }
 
+public sealed class FakeAccountRepository : IAccountRepository
+{
+    public Dictionary<Guid, Account> AccountsById { get; } = new();
+    public Dictionary<string, Account> AccountsByEmail { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+    public Task<Account?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        AccountsById.TryGetValue(id, out Account? account);
+        return Task.FromResult(account);
+    }
+
+    public Task<Account?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        AccountsByEmail.TryGetValue(email, out Account? account);
+        return Task.FromResult(account);
+    }
+
+    public Task AddAsync(Account account, CancellationToken cancellationToken)
+    {
+        AccountsById[account.Id] = account;
+        AccountsByEmail[account.Email] = account;
+        return Task.CompletedTask;
+    }
+
+    public Task SaveAsync(Account account, CancellationToken cancellationToken)
+    {
+        AccountsById[account.Id] = account;
+        AccountsByEmail[account.Email] = account;
+        return Task.CompletedTask;
+    }
+}
+
 public sealed class FakeGmCodeHasher : IGmCodeHasher
 {
     public string Hash(string gmCode) => "hash-" + gmCode;
 
     public bool Verify(string gmCode, string hash) => hash == Hash(gmCode);
+}
+
+public sealed class FakeAccountPasswordHasher : IAccountPasswordHasher
+{
+    public string HashPassword(Account account, string password) => "pw-" + password;
+
+    public bool VerifyPassword(Account account, string password) => account.PasswordHash == HashPassword(account, password);
 }
 
 public sealed class FakeRoomCodeGenerator : IRoomCodeGenerator

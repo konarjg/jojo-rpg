@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/sheets.css" asp-append-version="true" />
 </head>
 <body class="@ViewData["BodyClass"]">
+    <partial name="_AccountNav" />
     @RenderBody()
     @await RenderSectionAsync("Scripts", required: false)
 </body>

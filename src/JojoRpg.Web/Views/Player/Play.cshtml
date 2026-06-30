@@ -14,6 +14,12 @@
             <div style="font-size:0.9rem;margin-top:0.35rem;color:#ccc;">We also saved it in this browser. Enter it manually to rejoin from another device.</div>
         </div>
     }
+    @if (ViewBag.ShowAccountClaimBanner is true)
+    {
+        ViewData["ClaimType"] = ViewBag.ClaimType;
+        ViewData["ReturnUrl"] = $"/room/{roomCode}/play";
+        <partial name="_AccountClaimBanner" />
+    }
     <header class="gm-toolbar screen-only">
         <span class="gm-toolbar__title">JoJo RPG — @roomCode</span>
         <span class="play-panel-toggles" aria-label="Show panels">

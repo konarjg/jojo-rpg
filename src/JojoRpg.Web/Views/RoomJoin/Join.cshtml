@@ -5,22 +5,24 @@
     string? savedPlayerCode = ViewBag.SavedPlayerCode as string;
 }
 
-<main style="max-width:480px;margin:2rem auto;padding:1rem;">
+<main class="auth-page">
+    <section class="auth-card">
     <h1>Join room @roomCode</h1>
     @if (ViewBag.Error is string error)
     {
-        <p style="color:#c44;">@error</p>
+        <p class="auth-error">@error</p>
     }
-    <form method="post" action="/room/@roomCode/join">
-        <label>
-            Display name
-            <input type="text" name="displayName" required maxlength="128" placeholder="Your name" />
+    <form method="post" action="/room/@roomCode/join" class="auth-form">
+        <label class="auth-field">
+            <span>Display name</span>
+            <input class="auth-input" type="text" name="displayName" required maxlength="128" placeholder="Your name" autocomplete="name" />
         </label>
-        <label>
-            Player code <span style="font-weight:normal;color:#888">(optional)</span>
-            <input type="text" name="playerCode" maxlength="16" autocomplete="off" value="@savedPlayerCode" placeholder="Saved automatically in this browser" style="text-transform:uppercase" />
+        <label class="auth-field">
+            <span>Player code <small>(optional)</small></span>
+            <input class="auth-input auth-input--code" type="text" name="playerCode" maxlength="16" autocomplete="off" value="@savedPlayerCode" placeholder="Saved automatically in this browser" />
         </label>
-        <button type="submit">Join</button>
+        <button type="submit" class="auth-btn">Join</button>
     </form>
-    <p style="font-size:0.9rem;color:#888;margin-top:0.75rem;">Leave player code blank to create a new character. Use your saved code to recover an existing sheet.</p>
+    <p class="auth-intro">Leave player code blank to create a new character. If you are signed in, your account will remember this character on other devices.</p>
+    </section>
 </main>

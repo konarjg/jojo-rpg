@@ -1,3 +1,4 @@
+using JojoRpg.Application.Accounts;
 using JojoRpg.Application.Rooms;
 using JojoRpg.Application.Sessions;
 using JojoRpg.Application.Tests.Fakes;
@@ -5,6 +6,35 @@ using JojoRpg.Domain.Aggregates;
 using JojoRpg.Domain.Payloads;
 
 namespace JojoRpg.Application.Tests;
+
+public class AccountUseCaseTests
+{
+    [Fact]
+    public async Task RegisterAndLogin_UsesNormalizedEmail()
+    {
+        FakeAccountRepository accounts = new();
+        FakeAccountPasswordHasher hasher = new();
+        RegisterAccountUseCase register = new(accounts, hasher);
+        LoginAccountUseCase login = new(accounts, hasher);
+
+        Application.Common.UseCaseResult<AccountAuthResponse> registered = await register.ExecuteAsync(new RegisterAccountRequest
+        {
+            Email = "USER@Example.COM",
+            Password = "password123",
+            DisplayName = "User",
+        }, CancellationToken.None);
+
+        Application.Common.UseCaseResult<AccountAuthResponse> loggedIn = await login.ExecuteAsync(new LoginAccountRequest
+        {
+            Email = "user@example.com",
+            Password = "password123",
+        }, CancellationToken.None);
+
+        Assert.True(registered.Success);
+        Assert.True(loggedIn.Success);
+        Assert.Equal(registered.Value!.AccountId, loggedIn.Value!.AccountId);
+    }
+}
 
 public class CreateRoomUseCaseTests
 {
@@ -119,6 +149,108 @@ public class JoinRoomUseCaseTests
 
         Assert.False(result.Success);
         Assert.Empty(players.Players);
+    }
+
+    [Fact]
+    public async Task JoinRoom_RejoinsByAccountWithoutPlayerCode()
+    {
+        FakeRoomRepository rooms = new();
+        FakeSessionRepository sessions = new();
+        FakePlayerRepository players = new();
+        Guid roomId = Guid.NewGuid();
+        Guid accountId = Guid.NewGuid();
+        Guid playerId = Guid.NewGuid();
+        Room room = new() { Id = roomId, RoomCode = "ABC12345", GmCodeHash = "x", Name = "T", CreatedAt = DateTimeOffset.UtcNow, UpdatedAt = DateTimeOffset.UtcNow };
+        await rooms.AddAsync(room, CancellationToken.None);
+        await players.AddAsync(new Player
+        {
+            Id = playerId,
+            RoomId = roomId,
+            AccountId = accountId,
+            DisplayName = "Alice",
+            JoinedAt = DateTimeOffset.UtcNow,
+            LastSeenAt = DateTimeOffset.UtcNow,
+        }, CancellationToken.None);
+
+        JoinRoomUseCase useCase = new(rooms, players, sessions, new FakeRoomCodeGenerator(), new FakeGmCodeHasher());
+        Application.Common.UseCaseResult<JoinRoomResponse> result = await useCase.ExecuteAsync(new JoinRoomRequest
+        {
+            RoomCode = "ABC12345",
+            DisplayName = "Alice Phone",
+            AccountId = accountId,
+        }, CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.True(result.Value!.RejoinedExistingPlayer);
+        Assert.Equal(playerId, result.Value.PlayerId);
+        Assert.Equal(accountId, sessions.Sessions[result.Value.SessionId].AccountId);
+    }
+}
+
+public class ClaimUseCaseTests
+{
+    [Fact]
+    public async Task ClaimPlayer_LinksPlayerAndIssuesAccountSession()
+    {
+        FakePlayerRepository players = new();
+        FakeSessionRepository sessions = new();
+        Guid accountId = Guid.NewGuid();
+        Guid roomId = Guid.NewGuid();
+        Guid playerId = Guid.NewGuid();
+        Guid oldSessionId = Guid.NewGuid();
+        await players.AddAsync(new Player
+        {
+            Id = playerId,
+            RoomId = roomId,
+            DisplayName = "Alice",
+            JoinedAt = DateTimeOffset.UtcNow,
+            LastSeenAt = DateTimeOffset.UtcNow,
+        }, CancellationToken.None);
+        await sessions.AddAsync(new RoomSession
+        {
+            Id = oldSessionId,
+            RoomId = roomId,
+            PlayerId = playerId,
+            Role = Domain.Enums.SessionRole.Player,
+            CreatedAt = DateTimeOffset.UtcNow,
+        }, CancellationToken.None);
+
+        ClaimPlayerUseCase useCase = new(players, sessions);
+        Application.Common.UseCaseResult<ClaimSessionResponse> result = await useCase.ExecuteAsync(new ClaimPlayerRequest
+        {
+            AccountId = accountId,
+            RoomId = roomId,
+            PlayerId = playerId,
+            ExistingSessionId = oldSessionId,
+        }, CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.Equal(accountId, players.Players[playerId].AccountId);
+        Assert.NotNull(sessions.Sessions[oldSessionId].RevokedAt);
+        Assert.Equal(accountId, sessions.Sessions[result.Value!.SessionId].AccountId);
+    }
+
+    [Fact]
+    public async Task ClaimRoom_LinksRoomAndIssuesGmSession()
+    {
+        FakeRoomRepository rooms = new();
+        FakeSessionRepository sessions = new();
+        Guid accountId = Guid.NewGuid();
+        Guid roomId = Guid.NewGuid();
+        Room room = new() { Id = roomId, RoomCode = "ABC12345", GmCodeHash = "x", Name = "T", CreatedAt = DateTimeOffset.UtcNow, UpdatedAt = DateTimeOffset.UtcNow };
+        await rooms.AddAsync(room, CancellationToken.None);
+
+        ClaimRoomUseCase useCase = new(rooms, sessions);
+        Application.Common.UseCaseResult<ClaimSessionResponse> result = await useCase.ExecuteAsync(new ClaimRoomRequest
+        {
+            AccountId = accountId,
+            RoomId = roomId,
+        }, CancellationToken.None);
+
+        Assert.True(result.Success);
+        Assert.Equal(accountId, rooms.RoomsById[roomId].OwnerAccountId);
+        Assert.Equal(accountId, sessions.Sessions[result.Value!.SessionId].AccountId);
+        Assert.Equal(Domain.Enums.SessionRole.Gm, sessions.Sessions[result.Value.SessionId].Role);
     }
 }
 

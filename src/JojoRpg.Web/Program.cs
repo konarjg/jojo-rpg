@@ -17,6 +17,7 @@ builder.Services.AddSignalR();
 builder.Services.AddApplication();
 builder.Services.AddJojoRpgData(connectionString);
 builder.Services.AddScoped<ISessionCookieService, SessionCookieService>();
+builder.Services.AddScoped<IAccountAuthCookieService, AccountAuthCookieService>();
 builder.Services.AddScoped<IPlayerCodeCookieService, PlayerCodeCookieService>();
 builder.Services.AddScoped<IRoomLookup, RoomLookup>();
 builder.Services.AddScoped<ICampaignNotifier, CampaignNotifier>();
@@ -30,6 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAccountAuth();
 app.UseRoomSession();
 app.MapControllers();
 app.MapHub<CampaignHub>("/hubs/campaign");

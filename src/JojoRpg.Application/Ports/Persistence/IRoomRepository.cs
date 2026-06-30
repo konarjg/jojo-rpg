@@ -8,6 +8,8 @@ public interface IRoomRepository
 
     Task<Room?> GetByCodeAsync(string roomCode, CancellationToken cancellationToken);
 
+    Task<IReadOnlyList<Room>> ListByOwnerAccountAsync(Guid accountId, CancellationToken cancellationToken);
+
     Task AddAsync(Room room, CancellationToken cancellationToken);
 
     Task SaveAsync(Room room, CancellationToken cancellationToken);

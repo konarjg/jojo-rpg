@@ -1,0 +1,31 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Sign in";
+    string returnUrl = ViewBag.ReturnUrl as string ?? "/account";
+    string claim = ViewBag.Claim as string ?? "";
+}
+
+<main class="auth-page">
+    <section class="auth-card">
+        <h1>Sign in</h1>
+        <p class="auth-intro">Open your campaigns and characters from this device.</p>
+        @if (ViewBag.Error is string error)
+        {
+            <p class="auth-error">@error</p>
+        }
+        <form method="post" action="/account/login" class="auth-form">
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            <input type="hidden" name="claim" value="@claim" />
+            <label class="auth-field">
+                <span>Email</span>
+                <input class="auth-input" type="email" name="email" value="@ViewBag.Email" required maxlength="256" autocomplete="email" inputmode="email" />
+            </label>
+            <label class="auth-field">
+                <span>Password</span>
+                <input class="auth-input" type="password" name="password" required autocomplete="current-password" />
+            </label>
+            <button type="submit" class="auth-btn">Sign in</button>
+        </form>
+        <p class="auth-alt">Need an account? <a href="/account/register?returnUrl=@Uri.EscapeDataString(returnUrl)&claim=@Uri.EscapeDataString(claim)">Create one</a>.</p>
+    </section>
+</main>

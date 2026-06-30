@@ -1,0 +1,29 @@
+@{
+    string claimType = ViewData["ClaimType"] as string ?? "";
+    string returnUrl = ViewData["ReturnUrl"] as string ?? Context.Request.Path + Context.Request.QueryString;
+    bool isSignedIn = Context.GetAccount() is not null;
+    string loginUrl = $"/account/login?returnUrl={Uri.EscapeDataString(returnUrl)}&claim={Uri.EscapeDataString(claimType)}";
+    string registerUrl = $"/account/register?returnUrl={Uri.EscapeDataString(returnUrl)}&claim={Uri.EscapeDataString(claimType)}";
+}
+
+<section class="account-banner screen-only">
+    <div>
+        <strong>Access this campaign on every device.</strong>
+        <span>Link this legacy session to an account without changing your character or room data.</span>
+    </div>
+    @if (isSignedIn)
+    {
+        <form method="post" action="/account/claim">
+            <input type="hidden" name="claimType" value="@claimType" />
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            <button type="submit" class="auth-btn">Link account</button>
+        </form>
+    }
+    else
+    {
+        <div class="account-banner__actions">
+            <a class="auth-btn" href="@loginUrl">Sign in to sync</a>
+            <a class="auth-btn auth-btn--secondary" href="@registerUrl">Create account</a>
+        </div>
+    }
+</section>

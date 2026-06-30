@@ -12,6 +12,8 @@ public class RoomSession
 
     public Guid? PlayerId { get; set; }
 
+    public Guid? AccountId { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; }
 
     public DateTimeOffset? LastSeenAt { get; set; }

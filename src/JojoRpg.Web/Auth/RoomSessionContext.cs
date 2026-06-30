@@ -13,6 +13,8 @@ public sealed class RoomSessionContext
     public Domain.Enums.SessionRole Role { get; init; }
 
     public Guid? PlayerId { get; init; }
+
+    public Guid? AccountId { get; init; }
 }
 
 public static class RoomSessionCookie

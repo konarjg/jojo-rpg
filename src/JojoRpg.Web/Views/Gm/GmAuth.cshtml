@@ -4,15 +4,21 @@
     string roomCode = ViewBag.RoomCode as string ?? "";
 }
 
-<main style="max-width:480px;margin:2rem auto;padding:1rem;">
+<main class="auth-page">
+    <section class="auth-card">
     <h1>GM access — @roomCode</h1>
     @if (TempData["Error"] is string error)
     {
-        <p style="color:#c44;">@error</p>
+        <p class="auth-error">@error</p>
     }
-    <p>Enter your GM code to open this room.</p>
-    <form method="post" action="/room/@roomCode/gm/auth">
-        <label>GM code <input type="password" name="gmCode" required autocomplete="off" /></label>
-        <button type="submit">Authenticate</button>
+    <p class="auth-intro">Enter your GM code to open this room. If this room is linked to your account, signing in will skip this step.</p>
+    <form method="post" action="/room/@roomCode/gm/auth" class="auth-form">
+        <label class="auth-field">
+            <span>GM code</span>
+            <input class="auth-input auth-input--code" type="password" name="gmCode" required autocomplete="off" />
+        </label>
+        <button type="submit" class="auth-btn">Authenticate</button>
     </form>
+    <p class="auth-alt"><a href="/account/login?returnUrl=@Uri.EscapeDataString($"/room/{roomCode}/gm")">Sign in with account</a></p>
+    </section>
 </main>

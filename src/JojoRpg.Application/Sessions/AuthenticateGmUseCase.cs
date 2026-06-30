@@ -12,6 +12,8 @@ public sealed class AuthenticateGmRequest
 
     public string GmCode { get; init; } = string.Empty;
 
+    public Guid? AccountId { get; init; }
+
     public Guid? ExistingSessionId { get; init; }
 }
 
@@ -46,7 +48,8 @@ public sealed class AuthenticateGmUseCase
             return UseCaseResult<AuthenticateGmResponse>.Fail("Room not found.");
         }
 
-        if (!_gmCodeHasher.Verify(request.GmCode, room.GmCodeHash))
+        bool accountOwnsRoom = request.AccountId is Guid accountId && room.OwnerAccountId == accountId;
+        if (!accountOwnsRoom && !_gmCodeHasher.Verify(request.GmCode, room.GmCodeHash))
         {
             return UseCaseResult<AuthenticateGmResponse>.Fail("Invalid GM code.");
         }
@@ -62,6 +65,7 @@ public sealed class AuthenticateGmUseCase
             Id = sessionId,
             RoomId = room.Id,
             Role = SessionRole.Gm,
+            AccountId = request.AccountId,
             CreatedAt = DateTimeOffset.UtcNow
         };
 

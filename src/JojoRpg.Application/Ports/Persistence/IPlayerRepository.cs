@@ -8,6 +8,10 @@ public interface IPlayerRepository
 
     Task<IReadOnlyList<Player>> ListByRoomAsync(Guid roomId, CancellationToken cancellationToken);
 
+    Task<IReadOnlyList<Player>> ListByAccountAsync(Guid accountId, CancellationToken cancellationToken);
+
+    Task<Player?> GetByRoomAndAccountAsync(Guid roomId, Guid accountId, CancellationToken cancellationToken);
+
     Task<Player?> GetByRoomAndPlayerCodeHashAsync(Guid roomId, string playerCodeHash, CancellationToken cancellationToken);
 
     Task AddAsync(Player player, CancellationToken cancellationToken);

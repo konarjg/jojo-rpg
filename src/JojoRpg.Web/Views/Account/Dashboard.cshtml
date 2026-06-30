@@ -1,0 +1,78 @@
+@using JojoRpg.Web.Controllers
+@model AccountDashboardViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Account";
+}
+
+<main class="account-dashboard">
+    <header class="account-dashboard__header">
+        <div>
+            <p class="account-eyebrow">Signed in as</p>
+            <h1>@(Model.Account.DisplayName ?? Model.Account.Email)</h1>
+            <p>@Model.Account.Email</p>
+        </div>
+        <form method="post" action="/account/logout">
+            <button type="submit" class="auth-btn auth-btn--secondary">Log out</button>
+        </form>
+    </header>
+
+    <section class="account-section">
+        <h2>Campaigns you GM</h2>
+        @if (Model.Rooms.Count == 0)
+        {
+            <p class="account-empty">No claimed GM campaigns yet.</p>
+        }
+        else
+        {
+            <div class="account-card-list">
+                @foreach (var room in Model.Rooms)
+                {
+                    <a class="account-card" href="/room/@room.RoomCode/gm">
+                        <span>
+                            <strong>@room.Name</strong>
+                            <small>Room @room.RoomCode</small>
+                        </span>
+                        <span class="account-card__action">Open GM</span>
+                    </a>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="account-section">
+        <h2>Your characters</h2>
+        @if (Model.PlayerCards.Count == 0)
+        {
+            <p class="account-empty">No claimed characters yet.</p>
+        }
+        else
+        {
+            <div class="account-card-list">
+                @foreach (var card in Model.PlayerCards)
+                {
+                    <a class="account-card" href="/room/@card.RoomCode/play">
+                        <span>
+                            <strong>@card.DisplayName</strong>
+                            <small>@card.RoomName · Room @card.RoomCode</small>
+                        </span>
+                        <span class="account-card__action">Play</span>
+                    </a>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="account-section">
+        <h2>Start or join</h2>
+        <div class="account-card-list">
+            <a class="account-card" href="/">
+                <span>
+                    <strong>Create or join a room</strong>
+                    <small>Use your account automatically when entering a campaign.</small>
+                </span>
+                <span class="account-card__action">Go</span>
+            </a>
+        </div>
+    </section>
+</main>

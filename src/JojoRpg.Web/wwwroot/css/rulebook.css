@@ -1482,6 +1482,286 @@ body.sheet-interactive .stand-toggle {
 
 /* ---- Dice roller (shared) ---- */
 
+/* ---- Account and auth surfaces ---- */
+
+.auth-page,
+.account-dashboard {
+  width: min(760px, calc(100vw - 2rem));
+  margin: 2rem auto;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  box-sizing: border-box;
+}
+
+.auth-card,
+.account-dashboard__header,
+.account-section,
+.account-card {
+  background: rgba(45, 27, 78, 0.72);
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px var(--jojo-shadow);
+}
+
+.auth-card {
+  padding: 1.25rem;
+}
+
+.auth-card h1,
+.account-dashboard h1,
+.account-dashboard h2 {
+  color: var(--jojo-gold);
+  margin-top: 0;
+}
+
+.auth-intro,
+.auth-alt,
+.account-dashboard p,
+.account-empty,
+.account-card small {
+  color: var(--jojo-cream-dim);
+}
+
+.auth-error {
+  color: #ffb3b3;
+  background: rgba(120, 0, 32, 0.28);
+  border: 1px solid rgba(255, 179, 179, 0.55);
+  border-radius: 6px;
+  padding: 0.65rem 0.8rem;
+}
+
+.auth-form,
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.auth-form {
+  gap: 0.9rem;
+}
+
+.auth-input,
+.auth-btn {
+  min-height: 44px;
+  font: inherit;
+  font-size: 16px;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.auth-input {
+  width: 100%;
+  color: var(--jojo-cream);
+  background: rgba(26, 10, 46, 0.88);
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 5px;
+  padding: 0.62rem 0.75rem;
+}
+
+.auth-input:focus {
+  outline: 2px solid var(--jojo-magenta);
+  outline-offset: 2px;
+}
+
+.auth-input--code {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.auth-field small {
+  color: var(--jojo-cream-dim);
+  font-weight: normal;
+}
+
+.auth-btn,
+.account-card__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 5px;
+  padding: 0.62rem 1rem;
+  color: var(--jojo-cream);
+  background: var(--jojo-magenta);
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-btn--secondary {
+  background: var(--jojo-bg-row);
+}
+
+.account-dashboard {
+  width: min(980px, calc(100vw - 2rem));
+}
+
+.account-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.account-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.account-section {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.account-section--embedded {
+  background: rgba(26, 10, 46, 0.38);
+  box-shadow: none;
+}
+
+.account-card-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.account-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem;
+  color: var(--jojo-cream);
+  text-decoration: none;
+}
+
+.account-card span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.account-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--jojo-cream);
+  background: rgba(45, 27, 78, 0.92);
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px var(--jojo-shadow);
+}
+
+.account-banner > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.account-banner span {
+  color: var(--jojo-cream-dim);
+}
+
+.account-banner form,
+.account-banner__actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+}
+
+.account-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.5rem 1rem 0;
+}
+
+.account-nav a,
+.account-nav button {
+  color: var(--jojo-cream);
+  background: rgba(45, 27, 78, 0.75);
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 5px;
+  min-height: 38px;
+  padding: 0.45rem 0.75rem;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.account-nav form {
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .auth-page,
+  .account-dashboard {
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 0.75rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .auth-card,
+  .account-dashboard__header,
+  .account-section {
+    border-radius: 8px;
+  }
+
+  .account-dashboard__header,
+  .account-card,
+  .account-banner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .account-card__action,
+  .auth-btn,
+  .account-banner form,
+  .account-banner__actions {
+    width: 100%;
+  }
+
+  .account-nav {
+    justify-content: stretch;
+    flex-wrap: wrap;
+    padding: 0.5rem 0.75rem 0;
+  }
+
+  .account-nav a,
+  .account-nav form,
+  .account-nav button {
+    flex: 1 1 auto;
+  }
+
+  .account-nav button {
+    width: 100%;
+  }
+
+  .account-banner {
+    position: sticky;
+    top: 0.35rem;
+    z-index: 4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-card,
+  .auth-btn {
+    transition: none;
+  }
+}
+
 .dice-roller-root,
 .dice-roller {
   font-family: Arial, sans-serif;
@@ -3065,6 +3345,7 @@ body.play-mode .player-map-canvas {
   body.gm-body {
     height: auto;
     overflow: auto;
+    padding: 0.5rem;
   }
 
   .gm-app {
@@ -3076,6 +3357,7 @@ body.play-mode .player-map-canvas {
   .gm-layout {
     flex-direction: column;
     overflow: visible;
+    gap: 0.75rem;
   }
 
   .gm-column {
@@ -3093,6 +3375,44 @@ body.play-mode .player-map-canvas {
 
   .gm-column--center {
     overflow-y: visible;
+  }
+
+  .gm-toolbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .gm-toolbar h1,
+  .gm-toolbar__title {
+    flex: 1 1 100%;
+    font-size: 1rem;
+  }
+
+  .gm-toolbar-actions,
+  .gm-panel-toggles,
+  .gm-section-actions {
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .gm-toolbar .gm-btn,
+  .gm-panel-toggle,
+  .gm-section-actions .pick-btn,
+  .gm-panel-close {
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 16px;
+    touch-action: manipulation;
+  }
+
+  .gm-panel-section {
+    max-height: none;
+  }
+
+  .gm-map-canvas,
+  .gm-sticky-board,
+  .gm-npc-list {
+    -webkit-overflow-scrolling: touch;
   }
 
   .gm-map-section .gm-map-canvas {

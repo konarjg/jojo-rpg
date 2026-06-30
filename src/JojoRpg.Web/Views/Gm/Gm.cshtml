@@ -18,6 +18,12 @@
         <strong>Save your GM code</strong> (shown once): <code>@gmCode</code>
     </div>
 }
+@if (ViewBag.ShowAccountClaimBanner is true)
+{
+    ViewData["ClaimType"] = ViewBag.ClaimType;
+    ViewData["ReturnUrl"] = $"/room/{ViewBag.RoomCode}/gm";
+    <partial name="_AccountClaimBanner" />
+}
 <partial name="_GmPanelBody" />
 <script>
     window.JOJO_CONFIG = { roomId: '@ViewBag.RoomId', roomCode: '@ViewBag.RoomCode', mode: 'gm' };

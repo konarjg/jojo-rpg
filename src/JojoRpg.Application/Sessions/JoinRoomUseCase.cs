@@ -16,6 +16,8 @@ public sealed class JoinRoomRequest
 
     public string? PlayerCode { get; init; }
 
+    public Guid? AccountId { get; init; }
+
     public Guid? ExistingSessionId { get; init; }
 }
 
@@ -82,7 +84,70 @@ public sealed class JoinRoomUseCase
         bool rejoined = false;
         bool issuedNewCode = false;
 
-        if (!string.IsNullOrEmpty(normalizedPlayerCode))
+        if (request.AccountId is Guid accountId)
+        {
+            Player? accountPlayer = await _playerRepository.GetByRoomAndAccountAsync(room.Id, accountId, cancellationToken);
+            if (accountPlayer is not null)
+            {
+                playerId = accountPlayer.Id;
+                playerCodeForCookie = normalizedPlayerCode ?? string.Empty;
+                rejoined = true;
+                accountPlayer.DisplayName = displayName;
+                accountPlayer.LastSeenAt = now;
+                await _playerRepository.SaveAsync(accountPlayer, cancellationToken);
+            }
+            else if (!string.IsNullOrEmpty(normalizedPlayerCode))
+            {
+                string playerCodeHash = _codeHasher.Hash(normalizedPlayerCode);
+                Player? existingPlayer = await _playerRepository.GetByRoomAndPlayerCodeHashAsync(room.Id, playerCodeHash, cancellationToken);
+                if (existingPlayer is null)
+                {
+                    return UseCaseResult<JoinRoomResponse>.Fail("Invalid player code for this room.");
+                }
+
+                if (existingPlayer.AccountId is Guid ownerAccountId && ownerAccountId != accountId)
+                {
+                    return UseCaseResult<JoinRoomResponse>.Fail("That character is already claimed by another account.");
+                }
+
+                playerId = existingPlayer.Id;
+                playerCodeForCookie = normalizedPlayerCode;
+                rejoined = true;
+                existingPlayer.AccountId = accountId;
+                existingPlayer.DisplayName = displayName;
+                existingPlayer.LastSeenAt = now;
+                await _playerRepository.SaveAsync(existingPlayer, cancellationToken);
+            }
+            else
+            {
+                playerId = Guid.NewGuid();
+                playerCodeForCookie = _roomCodeGenerator.GeneratePlayerCode(PlayerCodeLength);
+                string playerCodeHash = _codeHasher.Hash(playerCodeForCookie);
+                issuedNewCode = true;
+
+                Player player = new()
+                {
+                    Id = playerId,
+                    RoomId = room.Id,
+                    DisplayName = displayName,
+                    JoinedAt = now,
+                    LastSeenAt = now,
+                    PlayerCodeHash = playerCodeHash,
+                    AccountId = accountId,
+                    SheetSchemaVersion = 2,
+                    Sheet = new CharacterSheetPayload
+                    {
+                        Id = playerId.ToString(),
+                        Name = displayName,
+                        Data = JsonSerializer.SerializeToElement(new { id = playerId.ToString(), name = displayName })
+                    },
+                    StickyBoard = new StickyBoardPayload()
+                };
+
+                await _playerRepository.AddAsync(player, cancellationToken);
+            }
+        }
+        else if (!string.IsNullOrEmpty(normalizedPlayerCode))
         {
             string playerCodeHash = _codeHasher.Hash(normalizedPlayerCode);
             Player? existingPlayer = await _playerRepository.GetByRoomAndPlayerCodeHashAsync(room.Id, playerCodeHash, cancellationToken);
@@ -133,6 +198,7 @@ public sealed class JoinRoomUseCase
             RoomId = room.Id,
             Role = SessionRole.Player,
             PlayerId = playerId,
+            AccountId = request.AccountId,
             CreatedAt = now
         };
 

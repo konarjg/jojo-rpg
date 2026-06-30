@@ -41,6 +41,22 @@ public sealed class Linq2DbRoomRepository : IRoomRepository
         return await MapRoomAsync(roomRow, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<Room>> ListByOwnerAccountAsync(Guid accountId, CancellationToken cancellationToken)
+    {
+        List<RoomEntity> rows = await _db.Rooms
+            .Where(r => r.OwnerAccountId == accountId)
+            .OrderByDescending(r => r.UpdatedAt)
+            .ToListAsync(cancellationToken);
+
+        List<Room> rooms = new();
+        foreach (RoomEntity row in rows)
+        {
+            rooms.Add(await MapRoomAsync(row, cancellationToken));
+        }
+
+        return rooms;
+    }
+
     public async Task AddAsync(Room room, CancellationToken cancellationToken)
     {
         await using DataConnectionTransaction transaction = await _db.BeginTransactionAsync(cancellationToken);
@@ -56,6 +72,7 @@ public sealed class Linq2DbRoomRepository : IRoomRepository
             .Set(r => r.RoomCode, room.RoomCode)
             .Set(r => r.GmCodeHash, room.GmCodeHash)
             .Set(r => r.Name, room.Name)
+            .Set(r => r.OwnerAccountId, room.OwnerAccountId)
             .Set(r => r.UpdatedAt, room.UpdatedAt)
             .UpdateAsync(cancellationToken);
 
@@ -112,6 +129,7 @@ public sealed class Linq2DbRoomRepository : IRoomRepository
             RoomCode = room.RoomCode,
             GmCodeHash = room.GmCodeHash,
             Name = room.Name,
+            OwnerAccountId = room.OwnerAccountId,
             CreatedAt = room.CreatedAt,
             UpdatedAt = room.UpdatedAt
         }, token: cancellationToken);
@@ -149,6 +167,7 @@ public sealed class Linq2DbRoomRepository : IRoomRepository
             RoomCode = roomRow.RoomCode,
             GmCodeHash = roomRow.GmCodeHash,
             Name = roomRow.Name,
+            OwnerAccountId = roomRow.OwnerAccountId,
             CreatedAt = roomRow.CreatedAt,
             UpdatedAt = roomRow.UpdatedAt,
             WorkspaceSchemaVersion = workspaceRow?.SchemaVersion ?? workspace.SchemaVersion,

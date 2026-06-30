@@ -12,6 +12,8 @@ public sealed class CreateRoomRequest
 {
     public string? Name { get; init; }
 
+    public Guid? AccountId { get; init; }
+
     public Guid? ExistingSessionId { get; init; }
 }
 
@@ -65,6 +67,7 @@ public sealed class CreateRoomUseCase
             RoomCode = roomCode,
             GmCodeHash = _gmCodeHasher.Hash(gmCode),
             Name = string.IsNullOrWhiteSpace(request.Name) ? "Campaign" : request.Name.Trim(),
+            OwnerAccountId = request.AccountId,
             CreatedAt = now,
             UpdatedAt = now,
             WorkspaceSchemaVersion = 2,
@@ -86,6 +89,7 @@ public sealed class CreateRoomUseCase
             Id = sessionId,
             RoomId = roomId,
             Role = SessionRole.Gm,
+            AccountId = request.AccountId,
             CreatedAt = now
         };
 

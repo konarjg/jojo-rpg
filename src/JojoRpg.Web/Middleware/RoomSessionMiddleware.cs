@@ -32,7 +32,8 @@ public sealed class RoomSessionMiddleware
                         RoomId = session.RoomId,
                         RoomCode = roomCode,
                         Role = session.Role,
-                        PlayerId = session.PlayerId
+                        PlayerId = session.PlayerId,
+                        AccountId = session.AccountId
                     };
                 }
             }

@@ -1,3 +1,4 @@
+using JojoRpg.Application.Accounts;
 using JojoRpg.Application.Players;
 using JojoRpg.Application.Rooms;
 using JojoRpg.Application.Sessions;
@@ -13,9 +14,15 @@ public static class DependencyInjection
     {
         services.AddSingleton<IGmCodeHasher, GmCodeHasher>();
         services.AddSingleton<IRoomCodeGenerator, RoomCodeGenerator>();
+        services.AddSingleton<IAccountPasswordHasher, AccountPasswordHasher>();
 
+        services.AddScoped<RegisterAccountUseCase>();
+        services.AddScoped<LoginAccountUseCase>();
+        services.AddScoped<LogoutAccountUseCase>();
         services.AddScoped<CreateRoomUseCase>();
         services.AddScoped<JoinRoomUseCase>();
+        services.AddScoped<ClaimPlayerUseCase>();
+        services.AddScoped<ClaimRoomUseCase>();
         services.AddScoped<LeaveSessionUseCase>();
         services.AddScoped<AuthenticateGmUseCase>();
         services.AddScoped<GetActiveSessionUseCase>();

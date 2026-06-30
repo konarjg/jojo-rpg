@@ -16,6 +16,8 @@ public class Player
 
     public string? PlayerCodeHash { get; set; }
 
+    public Guid? AccountId { get; set; }
+
     public int SheetSchemaVersion { get; set; } = 2;
 
     public CharacterSheetPayload Sheet { get; set; } = new();

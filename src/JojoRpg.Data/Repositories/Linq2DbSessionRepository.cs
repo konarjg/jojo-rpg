@@ -24,6 +24,16 @@ public sealed class Linq2DbSessionRepository : ISessionRepository
         return row is null ? null : Map(row);
     }
 
+    public async Task<IReadOnlyList<RoomSession>> ListActiveByAccountAsync(Guid accountId, CancellationToken cancellationToken)
+    {
+        List<RoomSessionEntity> rows = await _db.RoomSessions
+            .Where(s => s.AccountId == accountId && s.RevokedAt == null)
+            .OrderByDescending(s => s.LastSeenAt ?? s.CreatedAt)
+            .ToListAsync(cancellationToken);
+
+        return rows.Select(Map).ToList();
+    }
+
     public async Task AddAsync(RoomSession session, CancellationToken cancellationToken)
     {
         await _db.InsertAsync(new RoomSessionEntity
@@ -32,6 +42,7 @@ public sealed class Linq2DbSessionRepository : ISessionRepository
             RoomId = session.RoomId,
             Role = session.Role.ToString(),
             PlayerId = session.PlayerId,
+            AccountId = session.AccountId,
             CreatedAt = session.CreatedAt,
             LastSeenAt = session.LastSeenAt,
             RevokedAt = session.RevokedAt
@@ -62,6 +73,7 @@ public sealed class Linq2DbSessionRepository : ISessionRepository
             RoomId = row.RoomId,
             Role = Enum.Parse<SessionRole>(row.Role),
             PlayerId = row.PlayerId,
+            AccountId = row.AccountId,
             CreatedAt = row.CreatedAt,
             LastSeenAt = row.LastSeenAt,
             RevokedAt = row.RevokedAt

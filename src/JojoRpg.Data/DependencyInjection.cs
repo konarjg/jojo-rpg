@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IRoomRepository, Linq2DbRoomRepository>();
         services.AddScoped<IPlayerRepository, Linq2DbPlayerRepository>();
         services.AddScoped<ISessionRepository, Linq2DbSessionRepository>();
+        services.AddScoped<IAccountRepository, Linq2DbAccountRepository>();
 
         return services;
     }

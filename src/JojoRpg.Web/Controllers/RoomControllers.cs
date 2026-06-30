@@ -49,6 +49,7 @@ public sealed class RoomsController : Controller
         CreateRoomRequest request = new()
         {
             Name = name,
+            AccountId = HttpContext.GetAccount()?.AccountId,
             ExistingSessionId = existing
         };
 
@@ -164,6 +165,7 @@ public sealed class RoomJoinController : Controller
             RoomCode = normalizedRoomCode,
             DisplayName = displayName,
             PlayerCode = resolvedPlayerCode,
+            AccountId = HttpContext.GetAccount()?.AccountId,
             ExistingSessionId = _cookieService.GetSessionId(HttpContext)
         };
 
@@ -212,6 +214,7 @@ public sealed class GmAuthController : Controller
         {
             RoomCode = roomCode,
             GmCode = gmCode,
+            AccountId = HttpContext.GetAccount()?.AccountId,
             ExistingSessionId = _cookieService.GetSessionId(HttpContext)
         };
 

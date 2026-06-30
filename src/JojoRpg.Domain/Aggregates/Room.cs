@@ -13,6 +13,8 @@ public class Room
 
     public string Name { get; set; } = string.Empty;
 
+    public Guid? OwnerAccountId { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; }
 
     public DateTimeOffset UpdatedAt { get; set; }

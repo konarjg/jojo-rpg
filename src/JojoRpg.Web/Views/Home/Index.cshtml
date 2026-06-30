@@ -2,42 +2,52 @@
     ViewData["Title"] = "JoJo RPG";
 }
 
-<main class="home-page" style="max-width:480px;margin:2rem auto;padding:1rem;">
+<main class="auth-page home-page">
+    <section class="auth-card">
     <h1>JoJo RPG</h1>
     @if (TempData["Error"] is string error)
     {
-        <p class="error" style="color:#c44;">@error</p>
+        <p class="auth-error">@error</p>
     }
 
-    <section>
+    @if (Context.GetAccount() is not null)
+    {
+        <p><a class="auth-btn" href="/account">Open my campaigns</a></p>
+    }
+
+    <section class="account-section account-section--embedded">
         <h2>Create campaign (GM)</h2>
-        <form method="post" action="/rooms">
-            <label>Campaign name <input type="text" name="name" placeholder="Campaign" /></label>
-            <button type="submit">Create room</button>
+        <form method="post" action="/rooms" class="auth-form">
+            <label class="auth-field">
+                <span>Campaign name</span>
+                <input class="auth-input" type="text" name="name" placeholder="Campaign" autocomplete="off" />
+            </label>
+            <button type="submit" class="auth-btn">Create room</button>
         </form>
     </section>
 
-    <section style="margin-top:2rem;">
+    <section class="account-section account-section--embedded">
         <h2>Join as player</h2>
-        <form method="post" action="/join">
-            <label>
-                Room code
-                <input type="text" name="roomCode" required maxlength="16" autocomplete="off" placeholder="e.g. ABC12345" style="text-transform:uppercase" />
+        <form method="post" action="/join" class="auth-form">
+            <label class="auth-field">
+                <span>Room code</span>
+                <input class="auth-input auth-input--code" type="text" name="roomCode" required maxlength="16" autocomplete="off" placeholder="e.g. ABC12345" />
             </label>
-            <label>
-                Display name
-                <input type="text" name="displayName" required maxlength="128" placeholder="Your name" />
+            <label class="auth-field">
+                <span>Display name</span>
+                <input class="auth-input" type="text" name="displayName" required maxlength="128" placeholder="Your name" autocomplete="name" />
             </label>
-            <label>
-                Player code <span style="font-weight:normal;color:#888">(optional — rejoin an existing character)</span>
-                <input type="text" name="playerCode" maxlength="16" autocomplete="off" placeholder="Leave blank for a new character" style="text-transform:uppercase" />
+            <label class="auth-field">
+                <span>Player code <small>(optional — rejoin an existing character)</small></span>
+                <input class="auth-input auth-input--code" type="text" name="playerCode" maxlength="16" autocomplete="off" placeholder="Leave blank for a new character" />
             </label>
-            <button type="submit">Join</button>
+            <button type="submit" class="auth-btn">Join</button>
         </form>
-        <p style="font-size:0.9rem;color:#888;margin-top:0.75rem;">Your player code is saved in this browser after your first join. Enter it manually to rejoin from another device.</p>
+        <p class="auth-intro">Your player code is saved in this browser after your first join. Sign in to rejoin from another device without the code.</p>
     </section>
 
-    <form method="post" action="/session/leave" style="margin-top:2rem;">
-        <button type="submit">Leave session</button>
+    <form method="post" action="/session/leave" class="auth-form">
+        <button type="submit" class="auth-btn auth-btn--secondary">Leave session</button>
     </form>
+    </section>
 </main>
