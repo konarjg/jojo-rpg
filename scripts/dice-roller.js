@@ -304,16 +304,24 @@
     var onBroadcast = typeof options.onBroadcast === 'function' ? options.onBroadcast : null;
     var hasSheetContext = typeof options.getContext === 'function';
     var rolling = false;
-    var activeTab = 'skill';
+    var activeTab = 'free';
     var fallbackCatalog = { skills: [], standGrades: FALLBACK_STAND_GRADES };
 
     container.innerHTML =
       '<div class="dice-roller">' +
       '  <div class="dice-tabs" role="tablist" aria-label="Dice modes">' +
-      '    <button type="button" class="pick-btn dice-tab dice-tab--active" data-dice-tab="skill">Skill Test</button>' +
-      '    <button type="button" class="pick-btn dice-tab" data-dice-tab="quick">Quick Roll / D/C</button>' +
+      '    <button type="button" class="pick-btn dice-tab dice-tab--active" data-dice-tab="free">Free Roll</button>' +
+      '    <button type="button" class="pick-btn dice-tab" data-dice-tab="skill">Skill Test</button>' +
+      '    <button type="button" class="pick-btn dice-tab" data-dice-tab="damage">Damage Roll</button>' +
       '  </div>' +
-      '  <div class="dice-panel dice-panel--skill">' +
+      '  <div class="dice-panel dice-panel--free">' +
+      '    <div class="dice-controls dice-controls--free">' +
+      '      <label class="dice-field">Type <select class="sheet-input dice-free-type"><option value="d20">d20</option><option value="d6">d6</option></select></label>' +
+      '      <label class="dice-field">Count <input type="number" class="sheet-input dice-free-count dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
+      '      <button type="button" class="pick-btn dice-free-roll-btn">Roll</button>' +
+      '    </div>' +
+      '  </div>' +
+      '  <div class="dice-panel dice-panel--skill" hidden>' +
       '    <div class="dice-controls dice-controls--skill">' +
       '      <label class="dice-field">Mode <select class="sheet-input dice-skill-mode"><option value="normal">Normal</option><option value="stand">Stand</option></select></label>' +
       '      <label class="dice-field dice-normal-stat-field">Attribute <select class="sheet-input dice-attr"></select></label>' +
@@ -335,13 +343,13 @@
       '      <span>Nat 20 = complication.</span>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="dice-panel dice-panel--quick" hidden>' +
-      '    <div class="dice-controls dice-controls--quick">' +
-      '      <label class="dice-field">Type <select class="sheet-input dice-type"><option value="d20">d20</option><option value="d6">d6</option></select></label>' +
-      '      <label class="dice-field">Count <input type="number" class="sheet-input dice-quick-count dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
-      '      <button type="button" class="pick-btn dice-quick-roll-btn">Roll</button>' +
+      '  <div class="dice-panel dice-panel--damage" hidden>' +
+      '    <div class="dice-controls dice-controls--damage">' +
+      '      <label class="dice-field">Dice <output class="dice-fixed-die">d6</output></label>' +
+      '      <label class="dice-field">Count <input type="number" class="sheet-input dice-damage-count dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
+      '      <button type="button" class="pick-btn dice-damage-roll-btn">Roll</button>' +
       '    </div>' +
-      '    <div class="dice-rules-panel dice-dc-rules" hidden>' +
+      '    <div class="dice-rules-panel dice-dc-rules">' +
       '      <span>1 → 1 dmg.</span>' +
       '      <span>2 → 2 dmg.</span>' +
       '      <span>3-4 → 0.</span>' +
@@ -352,8 +360,9 @@
       '</div>';
 
     var tabs = container.querySelectorAll('.dice-tab');
+    var freePanel = container.querySelector('.dice-panel--free');
     var skillPanel = container.querySelector('.dice-panel--skill');
-    var quickPanel = container.querySelector('.dice-panel--quick');
+    var damagePanel = container.querySelector('.dice-panel--damage');
     var skillModeEl = container.querySelector('.dice-skill-mode');
     var attrEl = container.querySelector('.dice-attr');
     var standStatEl = container.querySelector('.dice-stand-stat');
@@ -369,12 +378,13 @@
     var tnOutput = container.querySelector('.dice-tn-output');
     var skillCountEl = container.querySelector('.dice-skill-count');
     var skillRollBtn = container.querySelector('.dice-skill-roll-btn');
-    var typeEl = container.querySelector('.dice-type');
-    var countEl = container.querySelector('.dice-quick-count');
-    var quickRollBtn = container.querySelector('.dice-quick-roll-btn');
+    var freeTypeEl = container.querySelector('.dice-free-type');
+    var freeCountEl = container.querySelector('.dice-free-count');
+    var freeRollBtn = container.querySelector('.dice-free-roll-btn');
+    var damageCountEl = container.querySelector('.dice-damage-count');
+    var damageRollBtn = container.querySelector('.dice-damage-roll-btn');
     var resultArea = container.querySelector('.dice-result-area');
     var broadcastCheck = container.querySelector('.dice-broadcast-check');
-    var dcRules = container.querySelector('.dice-dc-rules');
 
     SPECIAL_ATTRS.forEach(function (attr) {
       attrEl.innerHTML += '<option value="' + attr + '">' + attr + '</option>';
@@ -389,8 +399,9 @@
         var active = tabs[i].getAttribute('data-dice-tab') === tab;
         tabs[i].classList.toggle('dice-tab--active', active);
       }
+      freePanel.hidden = tab !== 'free';
       skillPanel.hidden = tab !== 'skill';
-      quickPanel.hidden = tab !== 'quick';
+      damagePanel.hidden = tab !== 'damage';
       resultArea.innerHTML = '';
     }
 
@@ -481,10 +492,6 @@
       tnOutput.textContent = 'TN ' + setup.tn + ' = ' + setup.statDetail + ' + ' + setup.skillRank;
     }
 
-    function updateQuickRules() {
-      dcRules.hidden = typeEl.value !== 'd6';
-    }
-
     function showSettled(entry) {
       resultArea.innerHTML = resultHtml(entry, false);
     }
@@ -541,29 +548,45 @@
       finishRoll(entry, skillRollBtn);
     }
 
-    function doQuickRoll() {
+    function doFreeRoll() {
       if (rolling) return;
       rolling = true;
-      quickRollBtn.disabled = true;
+      freeRollBtn.disabled = true;
 
-      var die = typeEl.value === 'd6' ? 'd6' : 'd20';
-      var count = clampCount(countEl.value);
-      countEl.value = String(count);
+      var die = freeTypeEl.value === 'd6' ? 'd6' : 'd20';
+      var count = clampCount(freeCountEl.value);
+      freeCountEl.value = String(count);
       var results = makeResults(count, die === 'd6' ? 6 : 20);
       var entry = {
-        mode: die === 'd6' ? 'dc' : 'plain',
+        mode: 'plain',
         die: die,
         count: count,
         results: results,
         time: Date.now()
       };
-      if (die === 'd6') {
-        var resolved = resolveDcPool(results);
-        entry.totalDamage = resolved.totalDamage;
-        entry.totalEffects = resolved.totalEffects;
-        entry.perDie = resolved.perDie;
-      }
-      finishRoll(entry, quickRollBtn);
+      finishRoll(entry, freeRollBtn);
+    }
+
+    function doDamageRoll() {
+      if (rolling) return;
+      rolling = true;
+      damageRollBtn.disabled = true;
+
+      var count = clampCount(damageCountEl.value);
+      damageCountEl.value = String(count);
+      var results = makeResults(count, 6);
+      var resolved = resolveDcPool(results);
+      var entry = {
+        mode: 'dc',
+        die: 'd6',
+        count: count,
+        results: results,
+        totalDamage: resolved.totalDamage,
+        totalEffects: resolved.totalEffects,
+        perDie: resolved.perDie,
+        time: Date.now()
+      };
+      finishRoll(entry, damageRollBtn);
     }
 
     for (var t = 0; t < tabs.length; t++) {
@@ -572,7 +595,8 @@
       });
     }
     skillRollBtn.addEventListener('click', doSkillRoll);
-    quickRollBtn.addEventListener('click', doQuickRoll);
+    freeRollBtn.addEventListener('click', doFreeRoll);
+    damageRollBtn.addEventListener('click', doDamageRoll);
     skillModeEl.addEventListener('change', function () {
       populateSkills();
       updateSkillControls();
@@ -586,11 +610,12 @@
     skillCountEl.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') doSkillRoll();
     });
-    typeEl.addEventListener('change', updateQuickRules);
-    countEl.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') doQuickRoll();
+    freeCountEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doFreeRoll();
     });
-    updateQuickRules();
+    damageCountEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doDamageRoll();
+    });
     populateSkills();
     if (!hasSheetContext) {
       loadCatalog().then(function (catalog) {
@@ -602,7 +627,8 @@
     return {
       roll: function () {
         if (activeTab === 'skill') doSkillRoll();
-        else doQuickRoll();
+        else if (activeTab === 'damage') doDamageRoll();
+        else doFreeRoll();
       }
     };
   }

@@ -1877,6 +1877,11 @@ body.sheet-interactive .stand-toggle {
   box-sizing: border-box;
 }
 
+.dice-fixed-die {
+  justify-content: center;
+  font-weight: 700;
+}
+
 .dice-rules-panel {
   display: flex;
   flex-wrap: wrap;
