@@ -298,6 +298,11 @@
     return results;
   }
 
+  function setVisible(el, visible) {
+    if (!el) return;
+    el.classList.toggle('hidden', !visible);
+  }
+
   function mount(container, options) {
     options = options || {};
     var showBroadcast = !!options.showBroadcast;
@@ -321,15 +326,15 @@
       '      <button type="button" class="pick-btn dice-free-roll-btn">Roll</button>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="dice-panel dice-panel--skill" hidden>' +
+      '  <div class="dice-panel dice-panel--skill hidden">' +
       '    <div class="dice-controls dice-controls--skill">' +
       '      <label class="dice-field">Mode <select class="sheet-input dice-skill-mode"><option value="normal">Normal</option><option value="stand">Stand</option></select></label>' +
       '      <label class="dice-field dice-normal-stat-field">Attribute <select class="sheet-input dice-attr"></select></label>' +
-      '      <label class="dice-field dice-stand-stat-field" hidden>Stand stat <select class="sheet-input dice-stand-stat"></select></label>' +
-      '      <label class="dice-field dice-manual-stat-field" hidden>Stat value <input type="number" class="sheet-input dice-manual-stat" min="0" value="0"></label>' +
+      '      <label class="dice-field dice-stand-stat-field hidden">Stand stat <select class="sheet-input dice-stand-stat"></select></label>' +
+      '      <label class="dice-field dice-manual-stat-field hidden">Stat value <input type="number" class="sheet-input dice-manual-stat" min="0" value="0"></label>' +
       '      <label class="dice-field">Skill <select class="sheet-input dice-skill"></select></label>' +
-      '      <label class="dice-field dice-manual-rank-field" hidden>Skill rank <input type="number" class="sheet-input dice-manual-rank" min="0" value="0"></label>' +
-      '      <label class="dice-field dice-manual-tag-field" hidden>Tagged <span class="sheet-toggle"><input type="checkbox" class="dice-manual-tag"> Yes</span></label>' +
+      '      <label class="dice-field dice-manual-rank-field hidden">Skill rank <input type="number" class="sheet-input dice-manual-rank" min="0" value="0"></label>' +
+      '      <label class="dice-field dice-manual-tag-field hidden">Tagged <span class="sheet-toggle"><input type="checkbox" class="dice-manual-tag"> Yes</span></label>' +
       '      <label class="dice-field">TN <output class="dice-tn-output">TN —</output></label>' +
       '      <label class="dice-field">Pool <input type="number" class="sheet-input dice-skill-count dice-count" min="' + SKILL_DICE_MIN + '" max="' + SKILL_DICE_MAX + '" value="2"></label>' +
       '      <button type="button" class="pick-btn dice-skill-roll-btn">Roll</button>' +
@@ -343,7 +348,7 @@
       '      <span>Nat 20 = complication.</span>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="dice-panel dice-panel--damage" hidden>' +
+      '  <div class="dice-panel dice-panel--damage hidden">' +
       '    <div class="dice-controls dice-controls--damage">' +
       '      <label class="dice-field">Dice <output class="dice-fixed-die">d6</output></label>' +
       '      <label class="dice-field">Count <input type="number" class="sheet-input dice-damage-count dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
@@ -399,9 +404,9 @@
         var active = tabs[i].getAttribute('data-dice-tab') === tab;
         tabs[i].classList.toggle('dice-tab--active', active);
       }
-      freePanel.hidden = tab !== 'free';
-      skillPanel.hidden = tab !== 'skill';
-      damagePanel.hidden = tab !== 'damage';
+      setVisible(freePanel, tab === 'free');
+      setVisible(skillPanel, tab === 'skill');
+      setVisible(damagePanel, tab === 'damage');
       resultArea.innerHTML = '';
     }
 
@@ -479,11 +484,11 @@
     function updateSkillControls() {
       var mode = skillModeEl.value;
       var setup = getSkillRollSetup();
-      normalStatField.hidden = mode !== 'normal';
-      standStatField.hidden = mode !== 'stand';
-      manualStatField.hidden = hasSheetContext;
-      manualRankField.hidden = hasSheetContext;
-      manualTagField.hidden = hasSheetContext;
+      setVisible(normalStatField, mode === 'normal');
+      setVisible(standStatField, mode === 'stand');
+      setVisible(manualStatField, !hasSheetContext);
+      setVisible(manualRankField, !hasSheetContext);
+      setVisible(manualTagField, !hasSheetContext);
       skillRollBtn.disabled = !skillEl.value;
       if (!skillEl.value) {
         tnOutput.textContent = 'TN —';
@@ -616,6 +621,7 @@
     damageCountEl.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') doDamageRoll();
     });
+    setActiveTab('free');
     populateSkills();
     if (!hasSheetContext) {
       loadCatalog().then(function (catalog) {
