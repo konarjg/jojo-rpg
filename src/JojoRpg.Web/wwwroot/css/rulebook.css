@@ -1488,14 +1488,12 @@ body.sheet-interactive .stand-toggle {
 .account-dashboard {
   width: min(720px, calc(100vw - 2rem));
   margin: 0 auto;
-  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  padding: max(0.75rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
   box-sizing: border-box;
 }
 
 .auth-page {
-  min-height: 100dvh;
-  padding-top: 1.25rem;
-  background: linear-gradient(180deg, rgba(45, 27, 78, 0.78), rgba(84, 31, 88, 0.62));
+  min-height: auto;
 }
 
 .auth-card,
@@ -1510,7 +1508,7 @@ body.sheet-interactive .stand-toggle {
 
 .auth-card {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   padding: clamp(1.25rem, 2.6vw, 1.75rem);
   color: var(--jojo-cream);
   box-sizing: border-box;
@@ -1717,14 +1715,14 @@ body.sheet-interactive .stand-toggle {
   align-items: center;
   width: min(720px, calc(100vw - 2rem));
   margin: 0 auto;
-  padding: 0.75rem 0 0;
+  padding: 0.75rem 0 0.25rem;
   box-sizing: border-box;
 }
 
 .account-nav a,
 .account-nav button {
   color: var(--jojo-cream);
-  background: rgba(45, 27, 78, 0.75);
+  background: transparent;
   border: 1px solid var(--jojo-gold-dim);
   border-radius: 5px;
   min-height: 38px;
@@ -1742,7 +1740,7 @@ body.sheet-interactive .stand-toggle {
   .auth-page,
   .account-dashboard {
     width: 100%;
-    min-height: 100dvh;
+    min-height: auto;
     margin: 0;
     padding: 0.75rem;
     overflow-y: auto;
@@ -1750,7 +1748,7 @@ body.sheet-interactive .stand-toggle {
   }
 
   .auth-page {
-    padding-top: 0.75rem;
+    padding-top: 0.5rem;
   }
 
   .auth-card,
@@ -1761,7 +1759,7 @@ body.sheet-interactive .stand-toggle {
 
   .auth-card {
     width: 100%;
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
     padding: 1rem;
   }
 
