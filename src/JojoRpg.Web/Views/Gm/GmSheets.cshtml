@@ -1,6 +1,7 @@
 @model IReadOnlyList<JojoRpg.Domain.Aggregates.Player>
 @{
     ViewData["Title"] = "Player sheets";
+    ViewData["HideAccountNav"] = true;
     string roomCode = Context.Request.RouteValues["roomCode"]?.ToString() ?? "";
 }
 

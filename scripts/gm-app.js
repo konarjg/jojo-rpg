@@ -1438,7 +1438,7 @@
     if (typeof DiceRoller !== 'undefined') {
       var diceRoot = document.getElementById('gm-dice-root');
       if (diceRoot) {
-        DiceRoller.mount(diceRoot, { showBroadcast: true, onBroadcast: broadcastRoll });
+        DiceRoller.mount(diceRoot);
       }
     }
 

@@ -1,6 +1,7 @@
 @{
     ViewData["Title"] = ViewBag.ReferenceMode is true ? "Reference character builder" : "Character sheet";
     ViewData["BodyClass"] = "sheet-body sheet-interactive";
+    ViewData["HideAccountNav"] = true;
     string roomCode = ViewBag.RoomCode as string ?? "";
     bool readOnly = ViewBag.ReadOnly is bool ro && ro;
     bool referenceMode = ViewBag.ReferenceMode is true;

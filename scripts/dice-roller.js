@@ -305,8 +305,6 @@
 
   function mount(container, options) {
     options = options || {};
-    var showBroadcast = !!options.showBroadcast;
-    var onBroadcast = typeof options.onBroadcast === 'function' ? options.onBroadcast : null;
     var hasSheetContext = typeof options.getContext === 'function';
     var rolling = false;
     var activeTab = 'free';
@@ -338,7 +336,6 @@
       '      <label class="dice-field">TN <output class="dice-tn-output">TN —</output></label>' +
       '      <label class="dice-field">Pool <input type="number" class="sheet-input dice-skill-count dice-count" min="' + SKILL_DICE_MIN + '" max="' + SKILL_DICE_MAX + '" value="2"></label>' +
       '      <button type="button" class="pick-btn dice-skill-roll-btn">Roll</button>' +
-      (showBroadcast ? '      <label class="dice-broadcast sheet-toggle"><input type="checkbox" class="dice-broadcast-check"> Show on player view</label>' : '') +
       '    </div>' +
       '    <div class="dice-rules-panel">' +
       '      <span>Normal: attr + skill = TN.</span>' +
@@ -389,7 +386,6 @@
     var damageCountEl = container.querySelector('.dice-damage-count');
     var damageRollBtn = container.querySelector('.dice-damage-roll-btn');
     var resultArea = container.querySelector('.dice-result-area');
-    var broadcastCheck = container.querySelector('.dice-broadcast-check');
 
     SPECIAL_ATTRS.forEach(function (attr) {
       attrEl.innerHTML += '<option value="' + attr + '">' + attr + '</option>';
@@ -515,9 +511,6 @@
       setTimeout(function () {
         rolling = false;
         button.disabled = false;
-        if (showBroadcast && broadcastCheck && broadcastCheck.checked && onBroadcast) {
-          onBroadcast(entry);
-        }
       }, ROLL_MS);
     }
 
