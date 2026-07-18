@@ -2236,9 +2236,9 @@ body.gm-body {
 }
 
 .gm-sticky-section {
-  flex: 0 0 22rem;
-  min-height: 18rem;
-  height: 22rem;
+  flex: 0 0 max(40vh, 22rem);
+  min-height: max(40vh, 22rem);
+  height: max(40vh, 22rem);
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2616,9 +2616,9 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-column--npc .gm-npc-section {
-  flex: 0 0 28rem;
-  min-height: 22rem;
-  height: 28rem;
+  flex: 0 0 max(40vh, 28rem);
+  min-height: max(40vh, 28rem);
+  height: max(40vh, 28rem);
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
