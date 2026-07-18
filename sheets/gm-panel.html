@@ -1494,6 +1494,33 @@ body.sheet-interactive .stand-toggle {
   font-family: Arial, sans-serif;
 }
 
+.dice-roller {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+}
+
+.dice-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+}
+
+.dice-tab {
+  opacity: 0.72;
+}
+
+.dice-tab--active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(232, 197, 71, 0.28);
+}
+
+.dice-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
 .dice-controls {
   display: flex;
   flex-wrap: wrap;
@@ -1514,6 +1541,37 @@ body.sheet-interactive .stand-toggle {
   min-width: 5em;
 }
 
+.dice-field output {
+  min-height: 2.15em;
+  min-width: 7em;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35em 0.55em;
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 4px;
+  background: rgba(26, 10, 46, 0.72);
+  color: var(--jojo-gold);
+  box-sizing: border-box;
+}
+
+.dice-fixed-die {
+  justify-content: center;
+  font-weight: 700;
+}
+
+.dice-rules-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 0.75em;
+  padding: 0.55em 0.65em;
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 6px;
+  background: rgba(26, 10, 46, 0.45);
+  color: var(--jojo-cream-dim);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
 .dice-count {
   width: 4.5em;
 }
@@ -1525,6 +1583,31 @@ body.sheet-interactive .stand-toggle {
 .dice-result-area {
   min-height: 4.5em;
   margin-bottom: 0.75em;
+}
+
+.dice-resolution {
+  text-align: center;
+  margin: 0 0 0.55em;
+  padding: 0.55em 0.75em;
+  border: 1px solid var(--jojo-gold-dim);
+  border-radius: 7px;
+  background: rgba(45, 27, 78, 0.68);
+  color: var(--jojo-gold);
+  box-shadow: 0 4px 14px var(--jojo-shadow);
+}
+
+.dice-resolution strong {
+  font-size: 1rem;
+}
+
+.dice-resolution-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35em 0.85em;
+  margin-top: 0.25em;
+  color: var(--jojo-cream-dim);
+  font-size: 0.84rem;
 }
 
 .dice-tiles {
@@ -1607,6 +1690,42 @@ body.sheet-interactive .stand-toggle {
   filter: drop-shadow(0 0 6px rgba(123, 237, 159, 0.45));
 }
 
+.dice-face--crit.dice-face--d20 .dice-d20-body,
+.dice-face--dc-effect.dice-face--d6 {
+  stroke: #ffdf6e;
+  border-color: #ffdf6e;
+  box-shadow: 0 0 10px rgba(255, 223, 110, 0.55);
+}
+
+.dice-face--crit.dice-face--d20 {
+  filter: drop-shadow(0 0 8px rgba(255, 223, 110, 0.6));
+}
+
+.dice-face--complication.dice-face--d20 .dice-d20-body {
+  stroke: #ff7b7b;
+}
+
+.dice-face--complication.dice-face--d20 {
+  filter: drop-shadow(0 0 8px rgba(255, 123, 123, 0.58));
+}
+
+.dice-face--fail.dice-face--d20 {
+  opacity: 0.62;
+}
+
+.dice-face--dc-one {
+  border-color: #7bed9f;
+}
+
+.dice-face--dc-two {
+  border-color: #7bed9f;
+  box-shadow: 0 0 8px rgba(123, 237, 159, 0.45);
+}
+
+.dice-face--dc-blank {
+  opacity: 0.55;
+}
+
 .dice-face--d6 .dice-pip-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1667,7 +1786,7 @@ body.sheet-interactive .stand-toggle {
 }
 
 body.sheet-interactive .dice-modal {
-  width: min(520px, 96vw);
+  width: min(640px, 96vw);
 }
 
 /* ---- GM Panel ---- */
@@ -1749,56 +1868,44 @@ body.gm-body {
 
 .gm-layout {
   display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
   gap: 0.75em;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 0.25em;
 }
 
 .gm-column {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
   min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75em;
-  overflow: hidden;
-  transition: flex 0.28s ease, max-width 0.28s ease, opacity 0.25s ease, transform 0.28s ease;
-}
-
-.gm-column[data-panel="notes"] {
-  flex: 1 1 22%;
-  max-width: 32%;
-}
-
-.gm-column[data-panel="map"] {
-  flex: 2 1 46%;
-}
-
-.gm-column[data-panel="npc"] {
-  flex: 1 1 28%;
-  max-width: 36%;
+  overflow: visible;
+  transition: max-height 0.28s ease, opacity 0.25s ease, transform 0.28s ease;
 }
 
 .gm-column.gm-column--closed {
   flex: 0 0 0 !important;
-  max-width: 0 !important;
+  width: 0;
+  height: 0;
+  max-height: 0 !important;
   min-width: 0 !important;
+  min-height: 0 !important;
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
   gap: 0;
 }
 
-.gm-column--npc.gm-column--closed {
-  transform: translateX(100%);
-}
-
 .gm-layout--solo .gm-column:not(.gm-column--closed) {
-  flex: 1 1 100% !important;
-  max-width: none !important;
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(0);
 }
 
 .gm-column--left {
@@ -1806,8 +1913,9 @@ body.gm-body {
 }
 
 .gm-sticky-section {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 22rem;
+  min-height: 18rem;
+  height: 22rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -1816,7 +1924,7 @@ body.gm-body {
 
 .gm-column--center {
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
@@ -2008,7 +2116,8 @@ body.gm-body {
 .gm-sticky {
   position: absolute;
   width: max-content;
-  padding: 0.5em 0.55em 0.45em;
+  min-width: 8.5em;
+  padding: 0.55em 0.6em 0.5em;
   border-radius: 4px;
   box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.35);
   color: #1a0a2e;
@@ -2029,15 +2138,15 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input {
   display: block;
   width: auto;
   min-width: 0;
-  min-height: 0;
-  max-width: 168px;
+  min-height: 2.4em;
+  max-width: 220px;
   max-height: none;
-  margin-top: 1.25em;
-  padding: 0.35em 0.45em;
+  margin-top: 1.65em;
+  padding: 0.4em 0.5em;
   background: rgba(255, 255, 255, 0.35);
   border: none;
   color: #1a0a2e;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   line-height: 1.35;
   resize: none;
   overflow: hidden;
@@ -2064,10 +2173,65 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
   padding: 0;
 }
 
-.gm-map-section {
-  flex: 1 1 0;
+.gm-sticky-palette-host {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.35rem;
+}
+
+.gm-sticky-palette-label {
+  font-size: 0.8rem;
+  color: var(--jojo-cream-dim);
+  margin-right: 0.25rem;
+}
+
+.gm-section-head .gm-section-actions {
   flex-shrink: 0;
-  min-height: 0;
+}
+
+.gm-sticky-palette {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.gm-sticky-palette-swatch {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.gm-sticky-palette-swatch--small {
+  width: 20px;
+  height: 20px;
+}
+
+.gm-sticky-palette-swatch--active {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+
+.gm-sticky-note-palette-host {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+}
+
+.gm-sticky-note-palette {
+  display: flex;
+  gap: 4px;
+}
+
+.gm-map-section {
+  flex: 0 0 32rem;
+  min-height: 26rem;
+  height: 32rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2092,20 +2256,27 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 
 .gm-dice-section .dice-roller {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
   align-items: flex-start;
-  gap: 0.65em 1em;
+  gap: 0.65em;
 }
 
 .gm-dice-section .dice-controls {
-  flex: 0 0 auto;
+  width: 100%;
   margin-bottom: 0;
   align-items: flex-end;
 }
 
+.gm-dice-section .dice-tabs,
+.gm-dice-section .dice-panel,
+.gm-dice-section .dice-rules-panel,
 .gm-dice-section .dice-result-area {
-  flex: 1 1 auto;
+  width: 100%;
+}
+
+.gm-dice-section .dice-result-area {
+  flex: 0 0 auto;
   min-width: 6rem;
   min-height: 0;
   max-height: none;
@@ -2122,8 +2293,9 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-column--npc .gm-npc-section {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 28rem;
+  min-height: 22rem;
+  height: 28rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2622,45 +2794,182 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   font-weight: bold;
 }
 
+body.play-mode {
+  height: 100vh;
+  overflow: hidden;
+  padding: 0.5em;
+  box-sizing: border-box;
+  max-width: none;
+  width: 100%;
+}
+
+body.play-mode #play-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+body.play-mode .play-layout {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0.75em;
+  overflow: hidden;
+}
+
+body.play-mode .play-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body.play-mode .play-notes-sidebar,
+body.play-mode .play-map-sidebar {
+  flex: 0 0 22%;
+  max-width: 28%;
+  min-width: min(280px, 32vw);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body.play-mode .play-notes-sidebar .player-sticky-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body.play-mode .play-notes-sidebar .gm-section-head {
+  flex-wrap: wrap;
+}
+
+body.play-mode .play-notes-sidebar .gm-section-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--jojo-gold);
+  border: none;
+}
+
+body.play-mode .play-notes-sidebar .gm-sticky-board {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+body.play-mode .play-map-sidebar {
+  transition: flex 0.28s ease, max-width 0.28s ease, min-width 0.28s ease, opacity 0.25s ease;
+}
+
+body.play-mode .play-map-sidebar.play-map-sidebar--closed {
+  flex: 0 0 0 !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body.play-mode .play-map-sidebar .gm-map-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+body.play-mode .play-map-sidebar .gm-section-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--jojo-gold);
+  border: none;
+}
+
+body.play-mode .play-map-sidebar .player-map-canvas {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+body.play-mode .sheet-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body.play-mode .sheet-shell .sheet-toolbar {
+  flex-shrink: 0;
+}
+
+body.play-mode .sheet-viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--jojo-gold-dim) rgba(45, 27, 78, 0.35);
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar-track {
+  background: rgba(45, 27, 78, 0.35);
+  border-radius: 4px;
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar-thumb {
+  background: var(--jojo-gold-dim);
+  border-radius: 4px;
+}
+
+body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--jojo-gold);
+}
+
+@media (max-width: 900px) {
+  body.play-mode .play-layout {
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  body.play-mode .play-notes-sidebar,
+  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    min-height: min(40vh, 320px);
+  }
+
+  body.play-mode .play-map-sidebar:not(.play-map-sidebar--closed) {
+    min-height: min(50vh, 420px);
+  }
+
+  body.play-mode .play-map-sidebar .player-map-canvas {
+    min-height: min(50vh, 420px);
+  }
+}
+
 .player-map-canvas {
   flex: 1;
   min-height: calc(100vh - 8em);
 }
 
 @media (max-width: 1100px) {
-  body.gm-body {
-    height: auto;
-    overflow: auto;
-  }
-
-  .gm-app {
-    height: auto;
-    max-height: none;
-    overflow: visible;
-  }
-
-  .gm-layout {
-    flex-direction: column;
-    overflow: visible;
-  }
-
-  .gm-column {
-    overflow: visible;
-    max-width: none !important;
-    flex: 1 1 auto !important;
-    transform: none !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
-  .gm-column.gm-column--closed {
-    display: none;
-  }
-
-  .gm-column--center {
-    overflow-y: visible;
-  }
-
   .gm-map-section .gm-map-canvas {
     min-height: 16rem;
   }
@@ -3103,8 +3412,8 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     <tr><td>Thrown</td><td>AGI + Throwing or PER + Explosives</td></tr>
     <tr><td>Hamon</td><td>END + Hamon (energy)</td></tr>
     <tr><td>Spin</td><td>AGI + Spin or STR + Spin</td></tr>
-    <tr><td>Stand (Power)</td><td>TN = Power (numeric)</td></tr>
-    <tr><td>Stand (Precision)</td><td>TN = Precision (numeric)</td></tr>
+    <tr><td>Stand (Power)</td><td>Power (numeric) + skill</td></tr>
+    <tr><td>Stand (Precision)</td><td>Precision (numeric) + skill</td></tr>
   </table>
 
   <h3>Range Modifiers</h3>
@@ -4145,6 +4454,20 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
 
   var ROLL_MS = 600;
   var MAX_DICE = 20;
+  var SKILL_DICE_MIN = 2;
+  var SKILL_DICE_MAX = 5;
+  var CATALOG_URL = '/data/jojo-catalog.json';
+  var SPECIAL_ATTRS = ['STR', 'PER', 'END', 'CHA', 'INT', 'AGI', 'LCK'];
+  var STAND_STATS = [
+    { id: 'power', label: 'Power' },
+    { id: 'speed', label: 'Speed' },
+    { id: 'range', label: 'Range' },
+    { id: 'durability', label: 'Durability' },
+    { id: 'precision', label: 'Precision' },
+    { id: 'developmentPotential', label: 'Dev. Potential' }
+  ];
+  var FALLBACK_STAND_GRADES = { '∞': 12, A: 10, B: 8, C: 6, D: 4, E: 2, '?': 6, '∅': 0 };
+  var catalogPromise = null;
 
   var D6_PIPS = {
     1: [4],
@@ -4159,6 +4482,20 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     return Math.floor(Math.random() * sides) + 1;
   }
 
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function toNumber(value) {
+    var n = parseInt(value, 10);
+    return isNaN(n) ? 0 : n;
+  }
+
   function clampCount(n) {
     var v = parseInt(n, 10);
     if (isNaN(v) || v < 1) return 1;
@@ -4166,14 +4503,80 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     return v;
   }
 
-  function d6FaceHtml(value) {
+  function clampSkillCount(n) {
+    var v = parseInt(n, 10);
+    if (isNaN(v) || v < SKILL_DICE_MIN) return SKILL_DICE_MIN;
+    if (v > SKILL_DICE_MAX) return SKILL_DICE_MAX;
+    return v;
+  }
+
+  function computeTn(mode, statValue, skillRank) {
+    return toNumber(statValue) + toNumber(skillRank);
+  }
+
+  function resolveDie(roll, tn, skillRank, tagged) {
+    if (roll === 20) {
+      return { roll: roll, successes: 0, complication: 1, kind: 'complication' };
+    }
+    if (roll === 1 || (tagged && skillRank > 0 && roll <= skillRank)) {
+      return { roll: roll, successes: 2, complication: 0, kind: 'crit' };
+    }
+    if (roll <= tn) {
+      return { roll: roll, successes: 1, complication: 0, kind: 'success' };
+    }
+    return { roll: roll, successes: 0, complication: 0, kind: 'fail' };
+  }
+
+  function resolveSkillPool(results, tn, skillRank, tagged) {
+    var perDie = [];
+    var totalSuccesses = 0;
+    var totalComplications = 0;
+    results.forEach(function (roll) {
+      var resolved = resolveDie(roll, tn, skillRank, tagged);
+      perDie.push(resolved);
+      totalSuccesses += resolved.successes;
+      totalComplications += resolved.complication;
+    });
+    return {
+      totalSuccesses: totalSuccesses,
+      totalComplications: totalComplications,
+      perDie: perDie
+    };
+  }
+
+  function resolveDcDie(roll) {
+    if (roll === 1) return { roll: roll, damage: 1, effects: 0, kind: 'one' };
+    if (roll === 2) return { roll: roll, damage: 2, effects: 0, kind: 'two' };
+    if (roll === 5 || roll === 6) return { roll: roll, damage: 1, effects: 1, kind: 'effect' };
+    return { roll: roll, damage: 0, effects: 0, kind: 'blank' };
+  }
+
+  function resolveDcPool(results) {
+    var perDie = [];
+    var totalDamage = 0;
+    var totalEffects = 0;
+    results.forEach(function (roll) {
+      var resolved = resolveDcDie(roll);
+      perDie.push(resolved);
+      totalDamage += resolved.damage;
+      totalEffects += resolved.effects;
+    });
+    return {
+      totalDamage: totalDamage,
+      totalEffects: totalEffects,
+      perDie: perDie
+    };
+  }
+
+  function d6FaceHtml(value, kind) {
     var pips = D6_PIPS[value] || D6_PIPS[1];
     var cells = [];
     for (var i = 0; i < 9; i++) {
       var on = pips.indexOf(i) >= 0;
       cells.push('<span class="dice-pip' + (on ? ' dice-pip--on' : '') + '"></span>');
     }
-    return '<div class="dice-face dice-face--d6" data-value="' + value + '"><div class="dice-pip-grid">' + cells.join('') + '</div></div>';
+    var cls = 'dice-face dice-face--d6' + (kind ? ' dice-face--dc-' + kind : '');
+    return '<div class="' + cls + '" data-value="' + value + '"><div class="dice-pip-grid">' + cells.join('') + '</div></div>';
   }
 
   function d20ShapeSvg(display) {
@@ -4183,8 +4586,13 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       '</svg>';
   }
 
-  function d20FaceHtml(value) {
-    return '<div class="dice-face dice-face--d20" data-value="' + value + '">' +
+  function d20FaceHtml(value, kind) {
+    var cls = 'dice-face dice-face--d20';
+    if (kind === 'success') cls += ' dice-face--success';
+    if (kind === 'crit') cls += ' dice-face--crit';
+    if (kind === 'complication') cls += ' dice-face--complication';
+    if (kind === 'fail') cls += ' dice-face--fail';
+    return '<div class="' + cls + '" data-value="' + value + '">' +
       d20ShapeSvg(String(value)) +
       '</div>';
   }
@@ -4196,8 +4604,8 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     return '<div class="dice-face dice-face--rolling dice-face--d6">?</div>';
   }
 
-  function dieFaceHtml(die, value) {
-    return die === 'd6' ? d6FaceHtml(value) : d20FaceHtml(value);
+  function dieFaceHtml(die, value, kind) {
+    return die === 'd6' ? d6FaceHtml(value, kind) : d20FaceHtml(value, kind);
   }
 
   function pyramidRowSizes(count) {
@@ -4213,14 +4621,16 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     return rows;
   }
 
-  function buildPyramidHtml(die, values, rolling) {
+  function buildPyramidHtml(die, values, rolling, perDie) {
     var rows = pyramidRowSizes(values.length);
     var html = '<div class="dice-tiles dice-tiles--pyramid' + (rolling ? '' : ' dice-tiles--settled') + '">';
     var idx = 0;
     rows.forEach(function (rowSize) {
       html += '<div class="dice-row">';
       for (var i = 0; i < rowSize; i++) {
-        html += rolling ? rollingTileHtml(die) : dieFaceHtml(die, values[idx++]);
+        var resolved = perDie && perDie[idx] ? perDie[idx] : null;
+        html += rolling ? rollingTileHtml(die) : dieFaceHtml(die, values[idx], resolved ? resolved.kind : null);
+        idx++;
       }
       html += '</div>';
     });
@@ -4228,42 +4638,317 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     return html;
   }
 
+  function plural(n, singular, pluralValue) {
+    return n === 1 ? singular : (pluralValue || singular + 's');
+  }
+
+  function skillSummaryHtml(entry) {
+    var successText = entry.totalSuccesses + ' ' + plural(entry.totalSuccesses, 'success', 'successes');
+    var complicationText = entry.totalComplications + ' ' + plural(entry.totalComplications, 'complication');
+    var meta = entry.label ? '<span>' + escapeHtml(entry.label) + '</span>' : '';
+    if (entry.tn != null) {
+      meta += '<span>TN ' + escapeHtml(entry.tn) + '</span>';
+    }
+    return '<div class="dice-resolution dice-resolution--skill">' +
+      '<strong>' + successText + ' · ' + complicationText + '</strong>' +
+      (meta ? '<div class="dice-resolution-meta">' + meta + '</div>' : '') +
+      '</div>';
+  }
+
+  function dcSummaryHtml(entry) {
+    return '<div class="dice-resolution dice-resolution--dc">' +
+      '<strong>' + entry.totalDamage + ' damage · ' + entry.totalEffects + ' ' + plural(entry.totalEffects, 'effect') + '</strong>' +
+      '</div>';
+  }
+
+  function plainSummaryHtml(entry) {
+    var results = entry.results && entry.results.length ? entry.results.join(', ') : '';
+    return '<div class="dice-resolution"><strong>' + escapeHtml(entry.count + entry.die) + '</strong>' +
+      (results ? '<div class="dice-resolution-meta"><span>Results: ' + escapeHtml(results) + '</span></div>' : '') +
+      '</div>';
+  }
+
+  function resultHtml(entry, rolling) {
+    if (rolling) {
+      var placeholders = [];
+      for (var i = 0; i < entry.count; i++) {
+        placeholders.push(0);
+      }
+      return buildPyramidHtml(entry.die, placeholders, true);
+    }
+    var summary = '';
+    if (entry.mode === 'skill-test') summary = skillSummaryHtml(entry);
+    else if (entry.mode === 'dc') summary = dcSummaryHtml(entry);
+    else summary = plainSummaryHtml(entry);
+    return summary + buildPyramidHtml(entry.die, entry.results, false, entry.perDie);
+  }
+
+  function loadCatalog() {
+    if (catalogPromise) return catalogPromise;
+    catalogPromise = fetch(CATALOG_URL, { credentials: 'same-origin' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Catalog fetch failed');
+        return response.json();
+      })
+      .catch(function () {
+        return { skills: [], standGrades: FALLBACK_STAND_GRADES };
+      });
+    return catalogPromise;
+  }
+
+  function getContext(options, fallbackCatalog) {
+    var ctx = {};
+    if (typeof options.getContext === 'function') {
+      try {
+        ctx = options.getContext() || {};
+      } catch (e) {
+        ctx = {};
+      }
+    }
+    ctx.catalog = ctx.catalog || fallbackCatalog || { skills: [], standGrades: FALLBACK_STAND_GRADES };
+    ctx.special = ctx.special || {};
+    ctx.skills = ctx.skills || {};
+    ctx.standGrades = ctx.standGrades || {};
+    return ctx;
+  }
+
+  function skillById(catalog, id) {
+    var skills = catalog && catalog.skills ? catalog.skills : [];
+    for (var i = 0; i < skills.length; i++) {
+      if (skills[i].id === id) return skills[i];
+    }
+    return null;
+  }
+
+  function standStatLabel(id) {
+    for (var i = 0; i < STAND_STATS.length; i++) {
+      if (STAND_STATS[i].id === id) return STAND_STATS[i].label;
+    }
+    return id;
+  }
+
+  function gradeValue(catalog, grade) {
+    var grades = catalog && catalog.standGrades ? catalog.standGrades : FALLBACK_STAND_GRADES;
+    if (grades[grade] == null) return 0;
+    return toNumber(grades[grade]);
+  }
+
+  function selectedSkillData(ctx, skillId) {
+    var sheetSkill = ctx.skills && ctx.skills[skillId] ? ctx.skills[skillId] : {};
+    return {
+      rank: toNumber(sheetSkill.rank),
+      tagged: !!sheetSkill.tagged
+    };
+  }
+
+  function makeResults(count, sides) {
+    var results = [];
+    for (var i = 0; i < count; i++) {
+      results.push(rollDie(sides));
+    }
+    return results;
+  }
+
+  function setVisible(el, visible) {
+    if (!el) return;
+    el.classList.toggle('hidden', !visible);
+  }
+
   function mount(container, options) {
     options = options || {};
-    var showBroadcast = !!options.showBroadcast;
-    var onBroadcast = typeof options.onBroadcast === 'function' ? options.onBroadcast : null;
+    var hasSheetContext = typeof options.getContext === 'function';
     var rolling = false;
+    var activeTab = 'free';
+    var fallbackCatalog = { skills: [], standGrades: FALLBACK_STAND_GRADES };
 
     container.innerHTML =
       '<div class="dice-roller">' +
-      '  <div class="dice-controls">' +
-      '    <label class="dice-field">Type ' +
-      '      <select class="sheet-input dice-type"><option value="d20">d20</option><option value="d6">d6</option></select>' +
-      '    </label>' +
-      '    <label class="dice-field">Count <input type="number" class="sheet-input dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
-      '    <button type="button" class="pick-btn dice-roll-btn">Roll</button>' +
-      (showBroadcast ? '    <label class="dice-broadcast sheet-toggle"><input type="checkbox" class="dice-broadcast-check"> Show on player view</label>' : '') +
+      '  <div class="dice-tabs" role="tablist" aria-label="Dice modes">' +
+      '    <button type="button" class="pick-btn dice-tab dice-tab--active" data-dice-tab="free">Free Roll</button>' +
+      '    <button type="button" class="pick-btn dice-tab" data-dice-tab="skill">Skill Test</button>' +
+      '    <button type="button" class="pick-btn dice-tab" data-dice-tab="damage">Damage Roll</button>' +
+      '  </div>' +
+      '  <div class="dice-panel dice-panel--free">' +
+      '    <div class="dice-controls dice-controls--free">' +
+      '      <label class="dice-field">Type <select class="sheet-input dice-free-type"><option value="d20">d20</option><option value="d6">d6</option></select></label>' +
+      '      <label class="dice-field">Count <input type="number" class="sheet-input dice-free-count dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
+      '      <button type="button" class="pick-btn dice-free-roll-btn">Roll</button>' +
+      '    </div>' +
+      '  </div>' +
+      '  <div class="dice-panel dice-panel--skill hidden">' +
+      '    <div class="dice-controls dice-controls--skill">' +
+      '      <label class="dice-field">Mode <select class="sheet-input dice-skill-mode"><option value="normal">Normal</option><option value="stand">Stand</option></select></label>' +
+      '      <label class="dice-field dice-normal-stat-field">Attribute <select class="sheet-input dice-attr"></select></label>' +
+      '      <label class="dice-field dice-stand-stat-field hidden">Stand stat <select class="sheet-input dice-stand-stat"></select></label>' +
+      '      <label class="dice-field dice-manual-stat-field hidden">Stat value <input type="number" class="sheet-input dice-manual-stat" min="0" value="0"></label>' +
+      '      <label class="dice-field">Skill <select class="sheet-input dice-skill"></select></label>' +
+      '      <label class="dice-field dice-manual-rank-field hidden">Skill rank <input type="number" class="sheet-input dice-manual-rank" min="0" value="0"></label>' +
+      '      <label class="dice-field dice-manual-tag-field hidden">Tagged <span class="sheet-toggle"><input type="checkbox" class="dice-manual-tag"> Yes</span></label>' +
+      '      <label class="dice-field">TN <output class="dice-tn-output">TN —</output></label>' +
+      '      <label class="dice-field">Pool <input type="number" class="sheet-input dice-skill-count dice-count" min="' + SKILL_DICE_MIN + '" max="' + SKILL_DICE_MAX + '" value="2"></label>' +
+      '      <button type="button" class="pick-btn dice-skill-roll-btn">Roll</button>' +
+      '    </div>' +
+      '    <div class="dice-rules-panel">' +
+      '      <span>Normal: attr + skill = TN.</span>' +
+      '      <span>Stand: stand grade + skill = TN.</span>' +
+      '      <span>d20 ≤ TN = 1 success.</span>' +
+      '      <span>Nat 1 or tagged ≤ rank = 2 successes.</span>' +
+      '      <span>Nat 20 = complication.</span>' +
+      '    </div>' +
+      '  </div>' +
+      '  <div class="dice-panel dice-panel--damage hidden">' +
+      '    <div class="dice-controls dice-controls--damage">' +
+      '      <label class="dice-field">Dice <output class="dice-fixed-die">d6</output></label>' +
+      '      <label class="dice-field">Count <input type="number" class="sheet-input dice-damage-count dice-count" min="1" max="' + MAX_DICE + '" value="1"></label>' +
+      '      <button type="button" class="pick-btn dice-damage-roll-btn">Roll</button>' +
+      '    </div>' +
+      '    <div class="dice-rules-panel dice-dc-rules">' +
+      '      <span>1 → 1 dmg.</span>' +
+      '      <span>2 → 2 dmg.</span>' +
+      '      <span>3-4 → 0.</span>' +
+      '      <span>5-6 → 1 dmg + effect.</span>' +
+      '    </div>' +
       '  </div>' +
       '  <div class="dice-result-area" aria-live="polite"></div>' +
       '</div>';
 
-    var typeEl = container.querySelector('.dice-type');
-    var countEl = container.querySelector('.dice-count');
-    var rollBtn = container.querySelector('.dice-roll-btn');
+    var tabs = container.querySelectorAll('.dice-tab');
+    var freePanel = container.querySelector('.dice-panel--free');
+    var skillPanel = container.querySelector('.dice-panel--skill');
+    var damagePanel = container.querySelector('.dice-panel--damage');
+    var skillModeEl = container.querySelector('.dice-skill-mode');
+    var attrEl = container.querySelector('.dice-attr');
+    var standStatEl = container.querySelector('.dice-stand-stat');
+    var normalStatField = container.querySelector('.dice-normal-stat-field');
+    var standStatField = container.querySelector('.dice-stand-stat-field');
+    var manualStatField = container.querySelector('.dice-manual-stat-field');
+    var manualRankField = container.querySelector('.dice-manual-rank-field');
+    var manualTagField = container.querySelector('.dice-manual-tag-field');
+    var manualStatEl = container.querySelector('.dice-manual-stat');
+    var manualRankEl = container.querySelector('.dice-manual-rank');
+    var manualTagEl = container.querySelector('.dice-manual-tag');
+    var skillEl = container.querySelector('.dice-skill');
+    var tnOutput = container.querySelector('.dice-tn-output');
+    var skillCountEl = container.querySelector('.dice-skill-count');
+    var skillRollBtn = container.querySelector('.dice-skill-roll-btn');
+    var freeTypeEl = container.querySelector('.dice-free-type');
+    var freeCountEl = container.querySelector('.dice-free-count');
+    var freeRollBtn = container.querySelector('.dice-free-roll-btn');
+    var damageCountEl = container.querySelector('.dice-damage-count');
+    var damageRollBtn = container.querySelector('.dice-damage-roll-btn');
     var resultArea = container.querySelector('.dice-result-area');
-    var broadcastCheck = container.querySelector('.dice-broadcast-check');
+
+    SPECIAL_ATTRS.forEach(function (attr) {
+      attrEl.innerHTML += '<option value="' + attr + '">' + attr + '</option>';
+    });
+    STAND_STATS.forEach(function (stat) {
+      standStatEl.innerHTML += '<option value="' + stat.id + '">' + stat.label + '</option>';
+    });
+
+    function setActiveTab(tab) {
+      activeTab = tab;
+      for (var i = 0; i < tabs.length; i++) {
+        var active = tabs[i].getAttribute('data-dice-tab') === tab;
+        tabs[i].classList.toggle('dice-tab--active', active);
+      }
+      setVisible(freePanel, tab === 'free');
+      setVisible(skillPanel, tab === 'skill');
+      setVisible(damagePanel, tab === 'damage');
+      resultArea.innerHTML = '';
+    }
+
+    function currentContext() {
+      return getContext(options, fallbackCatalog);
+    }
+
+    function availableSkills(ctx) {
+      var catalog = ctx.catalog || fallbackCatalog;
+      return (catalog.skills || []).slice();
+    }
+
+    function skillOptionLabel(skill, ctx) {
+      var data = selectedSkillData(ctx, skill.id);
+      var tagged = data.tagged ? ' (tagged)' : '';
+      return skill.name + ' (' + skill.attribute + ')' + tagged;
+    }
+
+    function populateSkills() {
+      var ctx = currentContext();
+      var skills = availableSkills(ctx);
+      var previous = skillEl.value;
+      skillEl.innerHTML = '';
+      skills.forEach(function (skill) {
+        skillEl.innerHTML += '<option value="' + escapeHtml(skill.id) + '">' + escapeHtml(skillOptionLabel(skill, ctx)) + '</option>';
+      });
+      if (previous) skillEl.value = previous;
+      if (!skillEl.value && skills.length > 0) skillEl.value = skills[0].id;
+      updateSkillControls();
+    }
+
+    function getSkillRollSetup() {
+      var ctx = currentContext();
+      var catalog = ctx.catalog || fallbackCatalog;
+      var mode = skillModeEl.value;
+      var skill = skillById(catalog, skillEl.value);
+      var skillData = selectedSkillData(ctx, skillEl.value);
+      var skillRank = hasSheetContext ? skillData.rank : toNumber(manualRankEl.value);
+      var tagged = hasSheetContext ? skillData.tagged : !!manualTagEl.checked;
+      var statLabel = '';
+      var statValue = 0;
+      var statDetail = '';
+
+      if (hasSheetContext && mode === 'normal') {
+        statLabel = attrEl.value;
+        statValue = toNumber(ctx.special[attrEl.value]);
+        statDetail = String(statValue);
+      } else if (hasSheetContext && mode === 'stand') {
+        var standStat = standStatEl.value;
+        var grade = ctx.standGrades[standStat] || 'D';
+        statLabel = standStatLabel(standStat);
+        statValue = gradeValue(catalog, grade);
+        statDetail = grade + ' = ' + statValue;
+      } else {
+        statLabel = mode === 'stand' ? standStatLabel(standStatEl.value) : attrEl.value;
+        statValue = toNumber(manualStatEl.value);
+        statDetail = String(statValue);
+      }
+
+      return {
+        mode: mode,
+        skill: skill,
+        skillName: skill ? skill.name : 'Skill',
+        skillRank: skillRank,
+        tagged: tagged,
+        statLabel: statLabel,
+        statValue: statValue,
+        statDetail: statDetail,
+        tn: computeTn(mode, statValue, skillRank)
+      };
+    }
+
+    function updateSkillControls() {
+      var mode = skillModeEl.value;
+      var setup = getSkillRollSetup();
+      setVisible(normalStatField, mode === 'normal');
+      setVisible(standStatField, mode === 'stand');
+      setVisible(manualStatField, !hasSheetContext);
+      setVisible(manualRankField, !hasSheetContext);
+      setVisible(manualTagField, !hasSheetContext);
+      skillRollBtn.disabled = !skillEl.value;
+      if (!skillEl.value) {
+        tnOutput.textContent = 'TN —';
+        return;
+      }
+      tnOutput.textContent = 'TN ' + setup.tn + ' = ' + setup.statDetail + ' + ' + setup.skillRank;
+    }
 
     function showSettled(entry) {
-      resultArea.innerHTML = buildPyramidHtml(entry.die, entry.results, false);
+      resultArea.innerHTML = resultHtml(entry, false);
     }
 
     function renderResults(entry, animate) {
       if (animate) {
-        var placeholders = [];
-        for (var i = 0; i < entry.count; i++) {
-          placeholders.push(0);
-        }
-        resultArea.innerHTML = buildPyramidHtml(entry.die, placeholders, true);
+        resultArea.innerHTML = resultHtml(entry, true);
         setTimeout(function () {
           showSettled(entry);
         }, ROLL_MS);
@@ -4272,48 +4957,139 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       }
     }
 
-    function doRoll() {
+    function finishRoll(entry, button) {
+      renderResults(entry, true);
+      setTimeout(function () {
+        rolling = false;
+        button.disabled = false;
+      }, ROLL_MS);
+    }
+
+    function doSkillRoll() {
+      if (rolling) return;
+      if (hasSheetContext) populateSkills();
+      var count = clampSkillCount(skillCountEl.value);
+      skillCountEl.value = String(count);
+      var setup = getSkillRollSetup();
+      if (!skillEl.value) return;
+      rolling = true;
+      skillRollBtn.disabled = true;
+
+      var results = makeResults(count, 20);
+      var resolved = resolveSkillPool(results, setup.tn, setup.skillRank, setup.tagged);
+      var entry = {
+        mode: 'skill-test',
+        rollMode: setup.mode,
+        label: setup.statLabel + ' + ' + setup.skillName,
+        die: 'd20',
+        count: count,
+        results: results,
+        tn: setup.tn,
+        skillRank: setup.skillRank,
+        tagged: setup.tagged,
+        totalSuccesses: resolved.totalSuccesses,
+        totalComplications: resolved.totalComplications,
+        perDie: resolved.perDie,
+        time: Date.now()
+      };
+      finishRoll(entry, skillRollBtn);
+    }
+
+    function doFreeRoll() {
       if (rolling) return;
       rolling = true;
-      rollBtn.disabled = true;
+      freeRollBtn.disabled = true;
 
-      var die = typeEl.value === 'd6' ? 'd6' : 'd20';
-      var count = clampCount(countEl.value);
-      countEl.value = String(count);
-      var sides = die === 'd6' ? 6 : 20;
-      var results = [];
-      for (var i = 0; i < count; i++) {
-        results.push(rollDie(sides));
-      }
+      var die = freeTypeEl.value === 'd6' ? 'd6' : 'd20';
+      var count = clampCount(freeCountEl.value);
+      freeCountEl.value = String(count);
+      var results = makeResults(count, die === 'd6' ? 6 : 20);
       var entry = {
+        mode: 'plain',
         die: die,
         count: count,
         results: results,
         time: Date.now()
       };
-
-      renderResults(entry, true);
-
-      setTimeout(function () {
-        rolling = false;
-        rollBtn.disabled = false;
-        if (showBroadcast && broadcastCheck && broadcastCheck.checked && onBroadcast) {
-          onBroadcast(entry);
-        }
-      }, ROLL_MS);
+      finishRoll(entry, freeRollBtn);
     }
 
-    rollBtn.addEventListener('click', doRoll);
-    countEl.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') doRoll();
+    function doDamageRoll() {
+      if (rolling) return;
+      rolling = true;
+      damageRollBtn.disabled = true;
+
+      var count = clampCount(damageCountEl.value);
+      damageCountEl.value = String(count);
+      var results = makeResults(count, 6);
+      var resolved = resolveDcPool(results);
+      var entry = {
+        mode: 'dc',
+        die: 'd6',
+        count: count,
+        results: results,
+        totalDamage: resolved.totalDamage,
+        totalEffects: resolved.totalEffects,
+        perDie: resolved.perDie,
+        time: Date.now()
+      };
+      finishRoll(entry, damageRollBtn);
+    }
+
+    for (var t = 0; t < tabs.length; t++) {
+      tabs[t].addEventListener('click', function () {
+        setActiveTab(this.getAttribute('data-dice-tab'));
+      });
+    }
+    skillRollBtn.addEventListener('click', doSkillRoll);
+    freeRollBtn.addEventListener('click', doFreeRoll);
+    damageRollBtn.addEventListener('click', doDamageRoll);
+    skillModeEl.addEventListener('change', function () {
+      populateSkills();
+      updateSkillControls();
     });
+    attrEl.addEventListener('change', updateSkillControls);
+    standStatEl.addEventListener('change', updateSkillControls);
+    skillEl.addEventListener('change', updateSkillControls);
+    manualStatEl.addEventListener('input', updateSkillControls);
+    manualRankEl.addEventListener('input', updateSkillControls);
+    manualTagEl.addEventListener('change', updateSkillControls);
+    skillCountEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doSkillRoll();
+    });
+    freeCountEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doFreeRoll();
+    });
+    damageCountEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doDamageRoll();
+    });
+    setActiveTab('free');
+    populateSkills();
+    if (!hasSheetContext) {
+      loadCatalog().then(function (catalog) {
+        fallbackCatalog = catalog || fallbackCatalog;
+        populateSkills();
+      });
+    }
 
     return {
-      roll: doRoll
+      roll: function () {
+        if (activeTab === 'skill') doSkillRoll();
+        else if (activeTab === 'damage') doDamageRoll();
+        else doFreeRoll();
+      }
     };
   }
 
-  global.DiceRoller = { mount: mount, MAX_DICE: MAX_DICE };
+  global.DiceRoller = {
+    mount: mount,
+    MAX_DICE: MAX_DICE,
+    computeTn: computeTn,
+    resolveDie: resolveDie,
+    resolveSkillPool: resolveSkillPool,
+    resolveDcDie: resolveDcDie,
+    resolveDcPool: resolveDcPool
+  };
 })(typeof window !== 'undefined' ? window : this);
 
 </script>
@@ -4898,6 +5674,7 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       autoOpenPlayer: !!state.autoOpenPlayer,
       npcs: deepClone(state.npcs || []),
       globalMaps: deepClone(state.globalMaps || {}),
+      snapshots: deepClone(state.snapshots || []),
       sessions: deepClone(state.sessions || {})
     };
   }
@@ -5091,7 +5868,6 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   var CHANNEL_NAME = 'jojo-gm';
   var RULES_CHAPTER_STORAGE_KEY = 'jojo-gm:rules-chapter';
   var PANEL_STORAGE_KEY = 'jojo-gm:panels';
-  var STICKY_COLORS = ['#e8c547', '#7ec8a4', '#c97b84', '#8eb4e8', '#d4a574'];
   var TOKEN_TYPES = [
     { id: 'player', label: 'Player', className: 'gm-token--player' },
     { id: 'npc', label: 'NPC', className: 'gm-token--npc' },
@@ -5125,8 +5901,6 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   var marquee = null;
   var marqueeEl = null;
   var dragOffset = { x: 0, y: 0 };
-  var stickyDrag = null;
-  var stickyOffset = { x: 0, y: 0 };
   var playerWindow = null;
   var mapSyncTimer = null;
   var currentRulesChapterIndex = 0;
@@ -5163,6 +5937,19 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   }
 
   function loadState() {
+    if (window.JOJO_INITIAL_WORKSPACE) {
+      try {
+        var ws = window.JOJO_INITIAL_WORKSPACE;
+        var merged = emptyState();
+        merged.activeSessionId = ws.activeSessionId || merged.activeSessionId;
+        merged.autoOpenPlayer = !!ws.autoOpenPlayer;
+        merged.npcs = ws.npcs || [];
+        merged.globalMaps = ws.globalMaps || {};
+        merged.sessions = ws.sessions || {};
+        merged.snapshots = ws.snapshots || [];
+        return GmState.migrateState(merged);
+      } catch (e) { /* fall through */ }
+    }
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
@@ -5178,6 +5965,12 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
 
   function saveState() {
     syncStateNpcsFromCatalog();
+    if (window.JojoGmStorage && typeof window.JojoGmStorage.save === 'function') {
+      try {
+        window.JojoGmStorage.save(GmState.workspacePayload(state));
+      } catch (e) { /* ignore */ }
+      return;
+    }
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (e) { /* ignore */ }
@@ -5225,7 +6018,14 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     if (mapSyncTimer) clearTimeout(mapSyncTimer);
     mapSyncTimer = setTimeout(function () {
       saveState();
+      pushServerMapShareIfActive();
     }, 100);
+  }
+
+  function pushServerMapShareIfActive() {
+    if (window.JOJO_STORAGE_MODE !== 'server') return;
+    if (!window.__jojoMapShareActive) return;
+    document.dispatchEvent(new CustomEvent('jojo-map-share-sync'));
   }
 
   function setPlayerStatus(connected) {
@@ -5296,17 +6096,26 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   }
 
   function closeRules() {
-    document.getElementById('rules-modal').classList.add('hidden');
-    document.getElementById('modal-overlay').classList.add('hidden');
+    var rulesModal = document.getElementById('rules-modal');
+    var overlay = document.getElementById('modal-overlay');
+    if (rulesModal) rulesModal.classList.add('hidden');
+    if (overlay) overlay.classList.add('hidden');
   }
 
   function openRules() {
-    document.getElementById('modal-overlay').classList.remove('hidden');
-    document.getElementById('rules-modal').classList.remove('hidden');
+    var overlay = document.getElementById('modal-overlay');
+    var rulesModal = document.getElementById('rules-modal');
+    if (!overlay || !rulesModal) return;
+    overlay.classList.remove('hidden');
+    rulesModal.classList.remove('hidden');
     showRulesChapter(currentRulesChapterIndex);
   }
 
   function initRulesModal() {
+    var btnRules = document.getElementById('btn-rules');
+    var overlay = document.getElementById('modal-overlay');
+    if (!btnRules || !overlay) return;
+
     var start = 0;
     try {
       var saved = parseInt(localStorage.getItem(RULES_CHAPTER_STORAGE_KEY), 10);
@@ -5329,9 +6138,10 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     if (sel) sel.addEventListener('change', function (e) {
       showRulesChapter(parseInt(e.target.value, 10) || 0);
     });
-    document.getElementById('btn-rules').addEventListener('click', openRules);
-    document.getElementById('btn-rules-close').addEventListener('click', closeRules);
-    document.getElementById('modal-overlay').addEventListener('click', function () {
+    btnRules.addEventListener('click', openRules);
+    var btnClose = document.getElementById('btn-rules-close');
+    if (btnClose) btnClose.addEventListener('click', closeRules);
+    overlay.addEventListener('click', function () {
       closeRules();
       closeNpcModal();
     });
@@ -5427,75 +6237,25 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     });
   }
 
-  function renderStickies() {
+  var gmStickyBoard = null;
+
+  function initGmStickyBoard() {
+    if (gmStickyBoard || typeof window.StickyBoard === 'undefined') return;
     var board = document.getElementById('gm-sticky-board');
-    var sess = activeSession();
-    if (!board || !sess) return;
-    board.innerHTML = '';
-    sess.stickies.forEach(function (note) {
-      var card = document.createElement('div');
-      card.className = 'gm-sticky';
-      card.style.background = note.color || STICKY_COLORS[0];
-      card.style.left = (note.x || 0) + 'px';
-      card.style.top = (note.y || 0) + 'px';
-      card.dataset.id = note.id;
-      card.innerHTML =
-        '<button type="button" class="gm-sticky-delete" title="Delete">&times;</button>' +
-        '<textarea class="gm-sticky-text sheet-input" rows="1"></textarea>';
-      var ta = card.querySelector('.gm-sticky-text');
-      ta.value = note.text || '';
-      board.appendChild(card);
-      autosizeStickyText(ta);
+    if (!board) return;
+    gmStickyBoard = window.StickyBoard.mount(board, {
+      getStickies: function () {
+        var sess = activeSession();
+        return sess ? sess.stickies : [];
+      },
+      onChange: function () { saveState(); },
+      addButtonEl: document.getElementById('gm-add-sticky'),
+      paletteEl: document.getElementById('gm-sticky-color-palette')
     });
   }
 
-  var stickyMirror = null;
-
-  function getStickyMirror() {
-    if (!stickyMirror) {
-      stickyMirror = document.createElement('div');
-      stickyMirror.className = 'gm-sticky-mirror';
-      stickyMirror.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(stickyMirror);
-    }
-    return stickyMirror;
-  }
-
-  function autosizeStickyText(ta) {
-    if (!ta) return;
-    var minWidth = 80;
-    var maxWidth = 168;
-    var text = ta.value.length ? ta.value : '\u00a0';
-    var style = window.getComputedStyle(ta);
-    var mirror = getStickyMirror();
-    mirror.style.font = style.font;
-    mirror.style.lineHeight = style.lineHeight;
-    mirror.style.padding = style.padding;
-    mirror.style.border = style.border;
-    mirror.style.boxSizing = style.boxSizing;
-    mirror.style.letterSpacing = style.letterSpacing;
-    mirror.style.display = 'inline-block';
-    mirror.style.whiteSpace = 'nowrap';
-    mirror.style.width = 'auto';
-    mirror.style.maxWidth = 'none';
-    var lines = text.split('\n');
-    var lineWidth = minWidth;
-    var i;
-    for (i = 0; i < lines.length; i++) {
-      mirror.textContent = lines[i].length ? lines[i] : '\u00a0';
-      lineWidth = Math.max(lineWidth, mirror.scrollWidth + 4);
-    }
-    var contentWidth = Math.min(maxWidth, Math.max(minWidth, lineWidth));
-    mirror.style.whiteSpace = 'pre-wrap';
-    mirror.style.overflowWrap = 'break-word';
-    mirror.style.wordBreak = 'break-word';
-    mirror.style.width = contentWidth + 'px';
-    mirror.style.maxWidth = maxWidth + 'px';
-    mirror.textContent = text;
-    ta.style.width = contentWidth + 'px';
-    ta.style.maxWidth = maxWidth + 'px';
-    ta.style.maxHeight = 'none';
-    ta.style.height = mirror.scrollHeight + 'px';
+  function renderStickies() {
+    if (gmStickyBoard) gmStickyBoard.render();
   }
 
   function escapeHtml(s) {
@@ -5504,20 +6264,6 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
-  }
-
-  function addSticky() {
-    var sess = activeSession();
-    if (!sess) return;
-    sess.stickies.push({
-      id: uid('note'),
-      text: '',
-      color: STICKY_COLORS[sess.stickies.length % STICKY_COLORS.length],
-      x: 20 + (sess.stickies.length * 12) % 120,
-      y: 20 + (sess.stickies.length * 18) % 80
-    });
-    saveState();
-    renderStickies();
   }
 
   /* ---- Map ---- */
@@ -6069,13 +6815,6 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
         });
         renderMap('gm-map-canvas', true);
       }
-      if (stickyDrag) {
-        var board = document.getElementById('gm-sticky-board');
-        var brect = board.getBoundingClientRect();
-        stickyDrag.x = Math.max(0, e.clientX - brect.left - stickyOffset.x);
-        stickyDrag.y = Math.max(0, e.clientY - brect.top - stickyOffset.y);
-        renderStickies();
-      }
     });
 
     window.addEventListener('mouseup', function () {
@@ -6090,10 +6829,6 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       if (dragState) {
         dragState = null;
         scheduleMapSync();
-      }
-      if (stickyDrag) {
-        stickyDrag = null;
-        saveState();
       }
     });
 
@@ -6200,14 +6935,19 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   }
 
   function closeNpcModal() {
-    document.getElementById('npc-modal').classList.add('hidden');
-    document.getElementById('modal-overlay').classList.add('hidden');
+    var modal = document.getElementById('npc-modal');
+    var overlay = document.getElementById('modal-overlay');
+    if (modal) modal.classList.add('hidden');
+    if (overlay) overlay.classList.add('hidden');
     npcEditId = null;
   }
 
   function openNpcModal(editId) {
     npcEditId = editId || null;
     var title = document.getElementById('npc-modal-title');
+    var overlay = document.getElementById('modal-overlay');
+    var modal = document.getElementById('npc-modal');
+    if (!title || !overlay || !modal) return;
     if (editId) {
       var npc = findNpc(editId);
       if (!npc) return;
@@ -6217,8 +6957,8 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       title.textContent = 'Add NPC';
       NpcSheet.fillForm(NpcSheet.emptyNpc());
     }
-    document.getElementById('modal-overlay').classList.remove('hidden');
-    document.getElementById('npc-modal').classList.remove('hidden');
+    overlay.classList.remove('hidden');
+    modal.classList.remove('hidden');
     var nameEl = document.getElementById('npc-f-name');
     if (nameEl) nameEl.focus();
   }
@@ -6282,11 +7022,25 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   function broadcastRoll(entry) {
     var msg = {
       type: 'roll',
+      mode: entry.mode,
+      rollMode: entry.rollMode,
+      label: entry.label,
       die: entry.die,
       count: entry.count,
-      results: entry.results.slice()
+      results: entry.results.slice(),
+      tn: entry.tn,
+      skillRank: entry.skillRank,
+      tagged: entry.tagged,
+      totalSuccesses: entry.totalSuccesses,
+      totalComplications: entry.totalComplications,
+      totalDamage: entry.totalDamage,
+      totalEffects: entry.totalEffects,
+      perDie: entry.perDie
     };
     broadcast(msg);
+    if (window.JOJO_STORAGE_MODE === 'server') {
+      document.dispatchEvent(new CustomEvent('jojo-roll-broadcast', { detail: msg }));
+    }
     try {
       var snap = JSON.parse(localStorage.getItem(SHARE_KEY) || '{}');
       snap.roll = msg;
@@ -6391,59 +7145,44 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     reader.onload = function () {
       try {
         var payload = JSON.parse(reader.result);
-        var err = GmState.validateImport(payload);
+        var data = payload.data && typeof payload.data === 'object' && payload.data.sessions
+          ? payload.data
+          : payload;
+        var err = GmState.validateImport(data);
         if (err) {
           alert(err);
           return;
         }
-        var name = prompt('Import as snapshot named:', payload.name || 'Imported backup');
-        if (!name) return;
-        if (!state.snapshots) state.snapshots = [];
-        if (state.snapshots.length >= GmState.MAX_SNAPSHOTS) {
-          if (!confirm('Snapshot limit reached. Oldest will be removed. Continue?')) return;
-        }
-        var data = {
-          schemaVersion: payload.schemaVersion || GmState.SCHEMA_VERSION,
-          activeSessionId: payload.activeSessionId,
-          autoOpenPlayer: !!payload.autoOpenPlayer,
-          npcs: GmState.deepClone(payload.npcs),
-          globalMaps: GmState.deepClone(payload.globalMaps || {}),
-          sessions: GmState.deepClone(payload.sessions)
+        var normalized = {
+          schemaVersion: data.schemaVersion || GmState.SCHEMA_VERSION,
+          activeSessionId: data.activeSessionId,
+          autoOpenPlayer: !!data.autoOpenPlayer,
+          npcs: GmState.deepClone(data.npcs),
+          globalMaps: GmState.deepClone(data.globalMaps || {}),
+          sessions: GmState.deepClone(data.sessions)
         };
-        Object.keys(data.sessions).forEach(function (sid) {
-          data.sessions[sid] = GmState.migrateSession(data.sessions[sid]);
+        Object.keys(normalized.sessions).forEach(function (sid) {
+          normalized.sessions[sid] = GmState.migrateSession(normalized.sessions[sid]);
         });
-        var snap = {
-          id: uid('snap'),
-          name: name,
-          createdAt: Date.now(),
-          data: data
-        };
-        state.snapshots.unshift(snap);
-        while (state.snapshots.length > GmState.MAX_SNAPSHOTS) {
-          state.snapshots.pop();
+
+        if (!confirm('Apply imported workspace? This replaces your current campaign data.')) {
+          return;
         }
+
+        GmState.applySnapshotData(state, normalized);
+        syncNpcCatalogFromState();
         saveState();
-        renderSnapshotSelect();
-        var snapSel = document.getElementById('gm-snapshot-select');
-        if (snapSel) snapSel.value = snap.id;
-        alert('Imported as snapshot “' + name + '”. Use Restore to apply.');
+        refreshAllUi();
+        alert('Imported workspace applied.');
       } catch (e) {
-        alert('Could not parse JSON file.');
+        var message = e && e.message ? e.message : 'Import failed.';
+        alert(message);
       }
     };
     reader.readAsText(file);
   }
 
-  function initBackupToolbar() {
-    var saveBtn = document.getElementById('gm-snapshot-save');
-    if (saveBtn) saveBtn.addEventListener('click', saveSnapshot);
-    var restoreBtn = document.getElementById('gm-snapshot-restore');
-    if (restoreBtn) restoreBtn.addEventListener('click', restoreSnapshot);
-    var deleteBtn = document.getElementById('gm-snapshot-delete');
-    if (deleteBtn) deleteBtn.addEventListener('click', deleteSnapshot);
-    var exportBtn = document.getElementById('gm-export-json');
-    if (exportBtn) exportBtn.addEventListener('click', exportWorkspaceJson);
+  function initImportToolbar() {
     var importInput = document.getElementById('gm-import-json');
     if (importInput) {
       importInput.addEventListener('change', function (e) {
@@ -6476,7 +7215,7 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     }
 
     renderSessionSelect();
-    renderStickies();
+    initGmStickyBoard();
     renderMapSelect();
     renderSnapshotSelect();
     renderMap('gm-map-canvas', true);
@@ -6485,7 +7224,7 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
     initNpcPanel();
     initMapEditor();
     initMapToolbar();
-    initBackupToolbar();
+    initImportToolbar();
     initPanelLayout();
     initRulesModal();
     initChannelListeners();
@@ -6544,57 +7283,23 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       renderMap('gm-map-canvas', true);
     });
 
-    document.getElementById('gm-add-sticky').addEventListener('click', addSticky);
-
-    var board = document.getElementById('gm-sticky-board');
-    board.addEventListener('mousedown', function (e) {
-      var card = e.target.closest('.gm-sticky');
-      if (!card || e.target.classList.contains('gm-sticky-delete')) return;
-      var id = card.dataset.id;
-      var sess = activeSession();
-      var note = sess.stickies.find(function (n) { return n.id === id; });
-      if (!note) return;
-      stickyDrag = note;
-      var brect = board.getBoundingClientRect();
-      stickyOffset.x = e.clientX - brect.left - note.x;
-      stickyOffset.y = e.clientY - brect.top - note.y;
-    });
-
-    board.addEventListener('input', function (e) {
-      if (!e.target.classList.contains('gm-sticky-text')) return;
-      autosizeStickyText(e.target);
-      var card = e.target.closest('.gm-sticky');
-      var sess = activeSession();
-      var note = sess.stickies.find(function (n) { return n.id === card.dataset.id; });
-      if (note) {
-        note.text = e.target.value;
-        saveState();
-      }
-    });
-
-    board.addEventListener('click', function (e) {
-      if (!e.target.classList.contains('gm-sticky-delete')) return;
-      var card = e.target.closest('.gm-sticky');
-      var sess = activeSession();
-      sess.stickies = sess.stickies.filter(function (n) { return n.id !== card.dataset.id; });
-      saveState();
-      renderStickies();
-    });
-
-    document.getElementById('gm-open-player').addEventListener('click', openPlayerView);
+    var openPlayerBtn = document.getElementById('gm-open-player');
+    if (openPlayerBtn) openPlayerBtn.addEventListener('click', openPlayerView);
 
     var autoOpen = document.getElementById('gm-auto-open-player');
-    autoOpen.checked = !!state.autoOpenPlayer;
-    autoOpen.addEventListener('change', function (e) {
-      state.autoOpenPlayer = e.target.checked;
-      saveState();
-    });
-    if (state.autoOpenPlayer) openPlayerView();
+    if (autoOpen) {
+      autoOpen.checked = !!state.autoOpenPlayer;
+      autoOpen.addEventListener('change', function (e) {
+        state.autoOpenPlayer = e.target.checked;
+        saveState();
+      });
+      if (state.autoOpenPlayer) openPlayerView();
+    }
 
     if (typeof DiceRoller !== 'undefined') {
       var diceRoot = document.getElementById('gm-dice-root');
       if (diceRoot) {
-        DiceRoller.mount(diceRoot, { showBroadcast: true, onBroadcast: broadcastRoll });
+        DiceRoller.mount(diceRoot);
       }
     }
 
@@ -6690,6 +7395,11 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
       initGmView();
     }
   }
+
+  window.__jojoGmBridge = {
+    getState: function () { return state; },
+    getActiveSession: activeSession
+  };
 
   init();
 })();

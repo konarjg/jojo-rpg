@@ -1861,56 +1861,44 @@ body.gm-body {
 
 .gm-layout {
   display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
   gap: 0.75em;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 0.25em;
 }
 
 .gm-column {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
   min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75em;
-  overflow: hidden;
-  transition: flex 0.28s ease, max-width 0.28s ease, opacity 0.25s ease, transform 0.28s ease;
-}
-
-.gm-column[data-panel="notes"] {
-  flex: 1 1 22%;
-  max-width: 32%;
-}
-
-.gm-column[data-panel="map"] {
-  flex: 2 1 46%;
-}
-
-.gm-column[data-panel="npc"] {
-  flex: 1 1 28%;
-  max-width: 36%;
+  overflow: visible;
+  transition: max-height 0.28s ease, opacity 0.25s ease, transform 0.28s ease;
 }
 
 .gm-column.gm-column--closed {
   flex: 0 0 0 !important;
-  max-width: 0 !important;
+  width: 0;
+  height: 0;
+  max-height: 0 !important;
   min-width: 0 !important;
+  min-height: 0 !important;
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
   gap: 0;
 }
 
-.gm-column--npc.gm-column--closed {
-  transform: translateX(100%);
-}
-
 .gm-layout--solo .gm-column:not(.gm-column--closed) {
-  flex: 1 1 100% !important;
-  max-width: none !important;
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(0);
 }
 
 .gm-column--left {
@@ -1918,8 +1906,9 @@ body.gm-body {
 }
 
 .gm-sticky-section {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 22rem;
+  min-height: 18rem;
+  height: 22rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -1928,7 +1917,7 @@ body.gm-body {
 
 .gm-column--center {
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
@@ -2233,9 +2222,9 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-map-section {
-  flex: 1 1 0;
-  flex-shrink: 0;
-  min-height: 0;
+  flex: 0 0 32rem;
+  min-height: 26rem;
+  height: 32rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2297,8 +2286,9 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-column--npc .gm-npc-section {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 28rem;
+  min-height: 22rem;
+  height: 28rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2973,39 +2963,6 @@ body.play-mode .sheet-viewport::-webkit-scrollbar-thumb:hover {
 }
 
 @media (max-width: 1100px) {
-  body.gm-body {
-    height: auto;
-    overflow: auto;
-  }
-
-  .gm-app {
-    height: auto;
-    max-height: none;
-    overflow: visible;
-  }
-
-  .gm-layout {
-    flex-direction: column;
-    overflow: visible;
-  }
-
-  .gm-column {
-    overflow: visible;
-    max-width: none !important;
-    flex: 1 1 auto !important;
-    transform: none !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
-  .gm-column.gm-column--closed {
-    display: none;
-  }
-
-  .gm-column--center {
-    overflow-y: visible;
-  }
-
   .gm-map-section .gm-map-canvas {
     min-height: 16rem;
   }
