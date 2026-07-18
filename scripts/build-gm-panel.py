@@ -14,6 +14,7 @@ GM_JS_PATH = os.path.join(BASE_DIR, "scripts", "gm-app.js")
 DICE_JS_PATH = os.path.join(BASE_DIR, "scripts", "dice-roller.js")
 NPC_SHEET_JS_PATH = os.path.join(BASE_DIR, "scripts", "npc-sheet.js")
 GM_STATE_JS_PATH = os.path.join(BASE_DIR, "scripts", "gm-state.js")
+STICKY_BOARD_JS_PATH = os.path.join(BASE_DIR, "scripts", "sticky-board.js")
 MARKDOWN_RENDER_JS_PATH = os.path.join(BASE_DIR, "scripts", "markdown-render.js")
 MARKED_JS_PATH = os.path.join(BASE_DIR, "scripts", "vendor", "marked.min.js")
 PURIFY_JS_PATH = os.path.join(BASE_DIR, "scripts", "vendor", "purify.min.js")
@@ -344,6 +345,8 @@ def main() -> None:
         npc_sheet_js = f.read()
     with open(GM_STATE_JS_PATH, encoding="utf-8") as f:
         gm_state_js = f.read()
+    with open(STICKY_BOARD_JS_PATH, encoding="utf-8") as f:
+        sticky_board_js = f.read()
     with open(MARKDOWN_RENDER_JS_PATH, encoding="utf-8") as f:
         markdown_render_js = f.read()
     with open(MARKED_JS_PATH, encoding="utf-8") as f:
@@ -365,6 +368,7 @@ def main() -> None:
         + f"<script>\n{dice_js}\n</script>\n"
         + f"<script>\n{npc_sheet_js}\n</script>\n"
         + f"<script>\n{gm_state_js}\n</script>\n"
+        + f"<script>\n{sticky_board_js}\n</script>\n"
         + f"<script>\n{gm_js}\n</script>\n</body>\n</html>\n"
     )
 

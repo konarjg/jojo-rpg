@@ -142,8 +142,18 @@
       return null;
     }
 
+    function syncBoardHeight() {
+      var minHeight = boardEl.getBoundingClientRect().height;
+      var contentHeight = minHeight;
+      boardEl.querySelectorAll('.gm-sticky').forEach(function (card) {
+        contentHeight = Math.max(contentHeight, card.offsetTop + card.offsetHeight + 16);
+      });
+      boardEl.style.height = Math.ceil(contentHeight) + 'px';
+    }
+
     function render() {
       var stickies = options.getStickies() || [];
+      boardEl.style.height = '';
       boardEl.innerHTML = '';
       stickies.forEach(function (note) {
         var card = document.createElement('div');
@@ -166,6 +176,7 @@
         boardEl.appendChild(card);
         autosizeStickyText(ta);
       });
+      syncBoardHeight();
     }
 
     function addSticky() {
@@ -208,6 +219,7 @@
         if (card) {
           card.style.left = stickyDrag.x + 'px';
           card.style.top = stickyDrag.y + 'px';
+          syncBoardHeight();
         }
       });
 
@@ -218,8 +230,9 @@
       });
 
       boardEl.addEventListener('input', function (e) {
-        if (!e.target.classList.contains('gm-sticky-text')) return;
-        autosizeStickyText(e.target);
+      if (!e.target.classList.contains('gm-sticky-text')) return;
+      autosizeStickyText(e.target);
+      syncBoardHeight();
         var card = e.target.closest('.gm-sticky');
         var note = findNote(card.dataset.id);
         if (note) {
