@@ -2236,9 +2236,10 @@ body.gm-body {
 }
 
 .gm-sticky-section {
-  flex: 0 0 max(40vh, 22rem);
+  flex: 0 0 auto;
   min-height: max(40vh, 22rem);
-  height: max(40vh, 22rem);
+  height: fit-content;
+  max-height: none;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2552,9 +2553,10 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-map-section {
-  flex: 0 0 32rem;
+  flex: 0 0 auto;
   min-height: 26rem;
-  height: 32rem;
+  height: fit-content;
+  max-height: none;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2562,9 +2564,9 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-map-section .gm-map-canvas {
-  flex: 1 1 auto;
-  min-height: 0;
-  height: 100%;
+  flex: 0 0 26rem;
+  min-height: 26rem;
+  height: 26rem;
 }
 
 .gm-tokens-section {
@@ -2616,9 +2618,10 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-column--npc .gm-npc-section {
-  flex: 0 0 max(40vh, 28rem);
+  flex: 0 0 auto;
   min-height: max(40vh, 28rem);
-  height: max(40vh, 28rem);
+  height: fit-content;
+  max-height: none;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
