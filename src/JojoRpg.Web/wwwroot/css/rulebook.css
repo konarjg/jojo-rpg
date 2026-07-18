@@ -2195,11 +2195,13 @@ body.gm-body {
   flex: 1 1 auto;
   min-height: 0;
   gap: 0.75em;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 0.25em;
 }
 
 .gm-column {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   width: 100%;
   max-width: none;
   min-width: 0;
@@ -2207,8 +2209,7 @@ body.gm-body {
   display: flex;
   flex-direction: column;
   gap: 0.75em;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: visible;
   transition: max-height 0.28s ease, opacity 0.25s ease, transform 0.28s ease;
 }
 
@@ -2235,8 +2236,9 @@ body.gm-body {
 }
 
 .gm-sticky-section {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 22rem;
+  min-height: 18rem;
+  height: 22rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2245,8 +2247,7 @@ body.gm-body {
 
 .gm-column--center {
   min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
@@ -2551,8 +2552,9 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-map-section {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 32rem;
+  min-height: 26rem;
+  height: 32rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -2614,8 +2616,9 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
 }
 
 .gm-column--npc .gm-npc-section {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 28rem;
+  min-height: 22rem;
+  height: 28rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
