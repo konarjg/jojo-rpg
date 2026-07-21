@@ -23,6 +23,7 @@
   function emptyNpc() {
     return {
       schema: SCHEMA,
+      id: '',
       scope: 'global',
       sessionId: '',
       name: '',

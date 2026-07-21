@@ -32,6 +32,7 @@
   var mapMode = 'select';
   var cursorGhost = null;
   var GRID_SIZE = 48;
+  var MAP_TARGET_COLUMNS = 24;
   var MIN_GRID_PX = 16;
   var TOKEN_INSET = 2;
   var dragState = null;
@@ -407,7 +408,10 @@
 
   function syncMapGrid(canvas) {
     if (!canvas) return GRID_SIZE;
-    var grid = Math.max(MIN_GRID_PX, GRID_SIZE);
+    // Preserve the original visual density (24 cells across), while deriving
+    // interaction bounds from the rendered canvas rather than a fixed 24x18 map.
+    var grid = Math.floor(canvas.clientWidth / MAP_TARGET_COLUMNS);
+    if (grid < MIN_GRID_PX) grid = MIN_GRID_PX;
     canvas.style.setProperty('--gm-grid-size', grid + 'px');
     return grid;
   }
@@ -415,8 +419,8 @@
   function mapGridBounds(canvas) {
     var grid = readGridSize(canvas);
     return {
-      cols: Math.max(1, Math.ceil(canvas.clientWidth / grid)),
-      rows: Math.max(1, Math.ceil(canvas.clientHeight / grid))
+      cols: Math.max(1, Math.floor(canvas.clientWidth / grid)),
+      rows: Math.max(1, Math.floor(canvas.clientHeight / grid))
     };
   }
 
