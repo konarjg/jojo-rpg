@@ -2534,7 +2534,7 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   width: 100%;
   min-height: 0;
   overflow: hidden;
-  --gm-grid-size: 48px;
+  --gm-grid-size: 24px;
   --gm-token-inset: 2px;
   background:
     linear-gradient(rgba(201, 162, 39, 0.14) 1px, transparent 1px),

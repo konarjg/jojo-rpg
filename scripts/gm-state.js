@@ -270,7 +270,13 @@
   function migrateNpcs(npcs) {
     if (!Array.isArray(npcs)) return [];
     if (typeof NpcSheet === 'undefined') return npcs;
-    return npcs.map(function (n) { return NpcSheet.migrate(n); });
+    return npcs.map(function (n) {
+      var npc = NpcSheet.migrate(n);
+      // Earlier normalization omitted ids from the editable NPC shape.
+      // Restore a stable id so old NPCs can be selected and edited again.
+      if (!npc.id) npc.id = uid('npc');
+      return npc;
+    });
   }
 
   global.GmState = {
