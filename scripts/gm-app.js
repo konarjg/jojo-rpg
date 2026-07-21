@@ -32,8 +32,6 @@
   var mapMode = 'select';
   var cursorGhost = null;
   var GRID_SIZE = 48;
-  var MAP_COLS = 24;
-  var MAP_ROWS = 18;
   var MIN_GRID_PX = 16;
   var TOKEN_INSET = 2;
   var dragState = null;
@@ -409,13 +407,17 @@
 
   function syncMapGrid(canvas) {
     if (!canvas) return GRID_SIZE;
-    var w = canvas.clientWidth;
-    var h = canvas.clientHeight;
-    if (w < 8 || h < 8) return GRID_SIZE;
-    var grid = Math.floor(Math.min(w / MAP_COLS, h / MAP_ROWS));
-    if (grid < MIN_GRID_PX) grid = MIN_GRID_PX;
+    var grid = Math.max(MIN_GRID_PX, GRID_SIZE);
     canvas.style.setProperty('--gm-grid-size', grid + 'px');
     return grid;
+  }
+
+  function mapGridBounds(canvas) {
+    var grid = readGridSize(canvas);
+    return {
+      cols: Math.max(1, Math.ceil(canvas.clientWidth / grid)),
+      rows: Math.max(1, Math.ceil(canvas.clientHeight / grid))
+    };
   }
 
   function readGridSize(canvas) {
@@ -439,9 +441,10 @@
 
   function pointerToCell(localX, localY, canvas) {
     var grid = readGridSize(canvas);
+    var bounds = mapGridBounds(canvas);
     return {
-      col: Math.min(MAP_COLS - 1, Math.max(0, Math.floor(localX / grid))),
-      row: Math.min(MAP_ROWS - 1, Math.max(0, Math.floor(localY / grid)))
+      col: Math.min(bounds.cols - 1, Math.max(0, Math.floor(localX / grid))),
+      row: Math.min(bounds.rows - 1, Math.max(0, Math.floor(localY / grid)))
     };
   }
 
@@ -472,8 +475,9 @@
       tok.col = snapped.col;
       tok.row = snapped.row;
     } else {
-      tok.col = Math.min(MAP_COLS - 1, Math.max(0, tok.col));
-      tok.row = Math.min(MAP_ROWS - 1, Math.max(0, tok.row));
+      var bounds = mapGridBounds(canvas);
+      tok.col = Math.min(bounds.cols - 1, Math.max(0, tok.col));
+      tok.row = Math.min(bounds.rows - 1, Math.max(0, tok.row));
     }
     var pos = tokenPixel(tok, canvas);
     tok.x = pos.left;
@@ -1053,19 +1057,39 @@
     if (!list) return;
     var q = (filter || '').toLowerCase();
     list.innerHTML = '';
+    var groups = {};
     NPC_CATALOG.filter(function (npc) {
       return !q || NpcSheet.searchText(npc).indexOf(q) >= 0;
     }).forEach(function (npc) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'gm-npc-item pick-btn' + (selectedNpcId === npc.id ? ' gm-npc-item--active' : '');
-      btn.textContent = npc.name;
-      btn.addEventListener('click', function () {
-        selectedNpcId = npc.id;
-        showNpcPreview(npc);
-        renderNpcList(document.getElementById('gm-npc-search').value);
+      var key = npc.scope === 'session' && npc.sessionId ? npc.sessionId : 'global';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(npc);
+    });
+    var groupKeys = Object.keys(groups).sort(function (a, b) {
+      if (a === 'global') return -1;
+      if (b === 'global') return 1;
+      return (state.sessions[a] ? state.sessions[a].name : a).localeCompare(state.sessions[b] ? state.sessions[b].name : b);
+    });
+    groupKeys.forEach(function (key) {
+      var group = document.createElement('section');
+      group.className = 'gm-npc-group';
+      var title = document.createElement('h3');
+      title.className = 'gm-npc-group-title';
+      title.textContent = key === 'global' ? 'Global' : (state.sessions[key] ? state.sessions[key].name : 'Deleted session');
+      group.appendChild(title);
+      groups[key].forEach(function (npc) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'gm-npc-item pick-btn' + (selectedNpcId === npc.id ? ' gm-npc-item--active' : '');
+        btn.textContent = npc.name;
+        btn.addEventListener('click', function () {
+          selectedNpcId = npc.id;
+          showNpcPreview(npc);
+          renderNpcList(document.getElementById('gm-npc-search').value);
+        });
+        group.appendChild(btn);
       });
-      list.appendChild(btn);
+      list.appendChild(group);
     });
     if (selectedNpcId && !findNpc(selectedNpcId)) {
       selectedNpcId = null;
@@ -1096,6 +1120,24 @@
       title.textContent = 'Add NPC';
       NpcSheet.fillForm(NpcSheet.emptyNpc());
     }
+    var groupSelect = document.getElementById('npc-f-session');
+    if (groupSelect) {
+      groupSelect.innerHTML = '';
+      var globalOption = document.createElement('option');
+      globalOption.value = 'global';
+      globalOption.textContent = 'Global';
+      groupSelect.appendChild(globalOption);
+      Object.values(state.sessions).forEach(function (sess) {
+        var option = document.createElement('option');
+        option.value = 'session:' + sess.id;
+        option.textContent = sess.name;
+        groupSelect.appendChild(option);
+      });
+      var savedNpc = editId ? findNpc(editId) : null;
+      groupSelect.value = savedNpc
+        ? (savedNpc.scope === 'session' && savedNpc.sessionId ? 'session:' + savedNpc.sessionId : 'global')
+        : 'session:' + state.activeSessionId;
+    }
     overlay.classList.remove('hidden');
     modal.classList.remove('hidden');
     var nameEl = document.getElementById('npc-f-name');
@@ -1108,6 +1150,9 @@
       alert('NPC name is required.');
       return;
     }
+    var groupValue = document.getElementById('npc-f-session').value;
+    data.scope = groupValue.indexOf('session:') === 0 ? 'session' : 'global';
+    data.sessionId = data.scope === 'session' ? groupValue.slice('session:'.length) : '';
     if (npcEditId) {
       var existing = findNpc(npcEditId);
       if (existing) {

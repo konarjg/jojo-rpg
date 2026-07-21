@@ -23,6 +23,8 @@
   function emptyNpc() {
     return {
       schema: SCHEMA,
+      scope: 'global',
+      sessionId: '',
       name: '',
       level: '',
       npcType: 'normal',
@@ -61,6 +63,8 @@
     }
     return {
       schema: SCHEMA,
+      scope: 'global',
+      sessionId: '',
       id: raw.id,
       name: raw.name || '',
       level: '',

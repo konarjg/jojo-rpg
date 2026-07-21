@@ -18,6 +18,7 @@
     return {
       id: uid('sess'),
       name: name || 'Session 1',
+      createdAt: Date.now(),
       notes: '',
       stickies: [],
       maps: {},
@@ -42,6 +43,7 @@
   }
 
   function migrateSession(sess) {
+    if (!sess.createdAt) sess.createdAt = Date.now();
     if (!sess.maps) {
       var mapId = uid('map');
       var tokens = (sess.map && sess.map.tokens) ? sess.map.tokens.slice() : [];

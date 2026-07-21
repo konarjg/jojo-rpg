@@ -2235,15 +2235,16 @@ body.gm-body {
   min-height: 0;
 }
 
-.gm-sticky-section {
+.gm-app .gm-sticky-section {
   flex: 0 0 auto;
-  min-height: max(40vh, 22rem);
-  height: fit-content;
-  max-height: none;
+  /* Keep the enlarged workspace predictable instead of growing with notes. */
+  height: 88rem;
+  min-height: 88rem;
+  max-height: 88rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .gm-column--center {
@@ -2424,11 +2425,11 @@ body.gm-body {
   display: none;
 }
 
-.gm-sticky-board {
+.gm-app .gm-sticky-board {
   position: relative;
   flex: 1 1 auto;
   min-height: 20rem;
-  overflow: visible;
+  overflow: auto;
   background:
     linear-gradient(rgba(201, 162, 39, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(201, 162, 39, 0.08) 1px, transparent 1px);
@@ -2552,21 +2553,21 @@ body.sheet-interactive textarea.gm-sticky-text.sheet-input:focus {
   gap: 4px;
 }
 
-.gm-map-section {
+.gm-app .gm-map-section {
   flex: 0 0 auto;
-  min-height: 26rem;
-  height: fit-content;
-  max-height: none;
+  height: 104rem;
+  min-height: 104rem;
+  max-height: 104rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
   overflow: hidden;
 }
 
-.gm-map-section .gm-map-canvas {
-  flex: 0 0 26rem;
-  min-height: 26rem;
-  height: 26rem;
+.gm-app .gm-map-section .gm-map-canvas {
+  flex: 0 0 104rem;
+  min-height: 104rem;
+  height: 104rem;
 }
 
 .gm-tokens-section {
@@ -3048,6 +3049,24 @@ body.sheet-interactive .gm-npc-modal .gm-attack-add {
   gap: 0.25em;
   min-height: 0;
   overflow-y: auto;
+}
+
+.gm-npc-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.gm-npc-group + .gm-npc-group {
+  margin-top: 0.5em;
+}
+
+.gm-npc-group-title {
+  margin: 0.25em 0 0;
+  color: var(--jojo-gold);
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .gm-npc-item {
